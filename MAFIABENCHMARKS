@@ -1,0 +1,32 @@
+Benchmarks				Abbr.	Original Suite
+——————————				—————	——————————————
+Ray Tracing				RAY	CUDA
+JPEG Compression			JPEG	CUDA
+Neural Network				NN	CUDA
+MUMmerGPU				MUM	CUDA/rodinia
+Scalar Product				SCP	CUDA
+Hotspot					HS	rodinia
+Histogram				HISTO	parboil
+Separable Convolution			CONS	CUDA
+Computational Fluid Dynamics		CFD	rodinia
+Back Propogation			BP	rodinia
+Breadth-first Search			BFS2	CUDA (cache_sense)
+Black-Scholes Pricing			BLK	CUDA
+Giga Updates Per Second			GUPS	CUDA (randomaccess)
+3D Stencil				3DS	CUDA?
+Fast Walsh Convolution			FWT	CUDA
+Lulesh					LUH	Lawrence Livermore Lulesh (cache_sense from MeDiC repo)
+Reduction				RED	SHOC
+Needle-Wunsch				NW	rodinia (old)
+Scan					SCAN	SHOC
+Triad Steam				TRD	SHOC
+Quality Threshold Clustering 		QTC	SHOC
+LUD decomposation			LUD	rodinia
+Sum of Absolute Differences 		SAD	parboil
+Matrix Multiplication 			MM	parboil
+Laplace 3D Transform			LPS	CUDA
+Libor					LIB	CUDA
+Streamcluster				SC	rodinia (old)
+Speckle Reducing Anisotropic Diffusion 	SRAD	rodinia
+					SPMV	parboil
+					FFT	parboil (old)

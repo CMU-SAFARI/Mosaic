@@ -1,0 +1,27 @@
+pthread_benchmark/MUM/suffix-tree.cpp://FIXME: needs to be reinitialized to zero at the beginning of each round of printing.
+pthread_benchmark/MUM/suffix-tree.cpp://FIXME: hardcoded path buffer, needs to be as long as the longest query in the query set.
+src/gpgpu-sim/icnt_wrapper.cc:         //FIXME: delete the object: may add icnt_done wrapper
+src/gpgpu-sim/l2cache.h:        mf->set_status(IN_PARTITION_L2_TO_DRAM_QUEUE,0/*FIXME*/);
+src/gpgpu-sim/memory_owner.cc:    page * released_page = occupied_pages[appID_target]->front(); //FIXME: fix get_evicted_target when we have page replacement policy. Always assume this app has an occupied page
+src/gpgpu-sim/memory_owner.cc:  //FIXME: Always evict page from app 0, for now -- This is not supported atm
+src/gpgpu-sim/shader.cc:        // Adwait: FIXME: this is an inefficient way. Fix select_kernel function to pass m_cluster_id and check
+src/gpuwattch/logic.cc:			//FIXME: The first area_t = is from updated McAPAT, the second is from our changes (conflict from base)
+src/gpuwattch/logic.cc:			//FIXME: The first area_t = is from updated McPAT. The second is from our McPAT changes. Fix after merge
+src/gpuwattch/cacti/wire.cc:  sense_amp.power.readOp.leakage = 0; //FIXME
+src/gpuwattch/cacti/uca.cc:        (MAX((g_ip->burst_len / g_ip->int_prefetch_w), 1) - 1); //FIXME
+src/gpuwattch/cacti/nuca.cc:      if (minval->min_leakage == 0) minval->min_leakage = 0.1; //FIXME remove this after leakage modeling
+src/gpuwattch/cacti/highradix.cc:  //FIXME change cb power to per input
+src/gpuwattch/cacti/highradix.cc:  dyn_p.V_b_sense = deviceType->Vdd; // FIXME check power calc.
+src/gpuwattch/cacti/router.cc:  dyn_p.V_b_sense = Vdd; // FIXME check power calc.
+src/gpuwattch/cacti/router.cc:  buffer.power.writeOp = buffer.power.readOp; //FIXME
+src/gpuwattch/cacti/Ucache.cc:      //if (minval->min_leakage == 0) minval->min_leakage = 0.1; //FIXME remove this after leakage modeling
+src/gpuwattch/cacti/arbiter.cc:  power.readOp.leakage = (nor1_leak + nor2_leak + not_leak)*Vdd; //FIXME include priority table leakage
+src/intersim2/.svn/pristine/f8/f88e58811f1c40d35b795e6d317579cc2c3668d0.svn-base:	      // FIXME: This check should probably be performed in Evaluate(), 
+src/intersim2/.svn/pristine/42/42777bd5ccda83625dfbf29e7aec13f2e773373a.svn-base:  FIXME: This is broken (note that f->dr is never actually modified).
+src/intersim2/.svn/pristine/42/42777bd5ccda83625dfbf29e7aec13f2e773373a.svn-base:  // FIXME: This is broken.
+src/intersim2/routers/iq_router.cpp:	      // FIXME: This check should probably be performed in Evaluate(), 
+src/intersim2/interconnect_interface.cpp:        //FIXME: if this cannot make sure _partial_packets is empty
+src/intersim2/interconnect_interface.cpp:  //FIXME: should compatible with non-squre number
+src/intersim2/routefunc.cpp:  FIXME: This is broken (note that f->dr is never actually modified).
+src/intersim2/routefunc.cpp:  // FIXME: This is broken.
+src/abstract_hardware_model.cc:                //FIXME: deferred allocation of shared memory should not accumulate across kernel launches
