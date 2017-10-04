@@ -19,6 +19,11 @@ The updated pthread_benchmark allows unlimited number of concurrent applications
 4) run ./gpgpu_ptx_sim [benchmark name list] 
 4.1) [benchmark name list] should contain a list of benchmarks that will be run, seperate by space. For example, running ./gpgpu_ptx_sim HS HS CONS will run launch the simulation with three concurrently executing benchmarks, where there are two copies of HS (each with their own separate address space) and one copy of CONS across GPU SMs. Note that the current policy split the GPU cores evenly for each application.
 
+
+Please send questions to rachata@cmu.edu
+
+The current version of the simulator is provided as is, and should be treated as an alpha version. 
+
 Please cite the following paper when using Mosaic simulator:
 
 - Rachata Ausavarungnirun, Joshua Landgraf, Vance Miller, Saugata Ghose, Jayneel Gandhi, Christopher J. Rossbach, and Onur Mutlu. "Mosaic: A GPU Memory Manager with Application-Transparent Support for Multiple Page Sizes". In the Proceedings of the 50th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO 2017), Boston, MA, October 2017. 
