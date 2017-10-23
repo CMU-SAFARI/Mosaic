@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <vector>
 
+
+
 App::App(appid_t appid, FILE* output, unsigned warp_size) : appid(appid), output(output) {
   shader_cycle_distro = (uint64_t*) calloc(warp_size + 3, sizeof(uint64_t));
   tlb_concurrent_total_time_app = (uint64_t*) calloc(200, sizeof(uint64_t));
@@ -26,6 +28,7 @@ uint32_t appid_t::next_identifier = 666; // arbitrary
 std::map<appid_t, App*> App::apps;
 std::map<int, appid_t> App::sm_to_app;
 std::map<int, appid_t> App::creation_index_to_app;
+std::map<void*, appid_t> App::thread_id_to_app_id;
 // special apps
 App App::noapp(appid_t(), NULL, 0);
 App App::pt_space(appid_t(), NULL, 0);
