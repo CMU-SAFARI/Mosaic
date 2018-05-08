@@ -16,19 +16,19 @@ QUANT  = /usr/bin/quantify
 OUTPUT_DIR=$(SIM_OBJ_FILES_DIR)/intersim
 
 INTERFACE = interconnect_interface.cpp
-DEBUG = 0
-CPPFLAGS = -g -Wall -std=c++0x
+DEBUG = 0 
+CPPFLAGS = -g -Wall
 ifneq ($(DEBUG),1)
-CPPFLAGS = -O3 -g
+CPPFLAGS = -O3 -g 
 else
-CPPFLAGS +=
+CPPFLAGS += 
 endif
 
 CPPFLAGS += -I$(OUTPUT_DIR) -I.
 
-TEST = -DUNIT_TEST
+TEST = -DUNIT_TEST 
 ifneq ($(UNIT_TEST),1)
-TEST =
+TEST = 
 endif
 
         CPPFLAGS += -fPIC
@@ -98,7 +98,7 @@ $(OUTPUT_DIR)/%.o: %.cpp
 
 $(OUTPUT_DIR)/%.o: $(OUTPUT_DIR)/%.cpp
 	$(CPP) $(EXTRA) $(CPPFLAGS) $(TEST) -c $< -o $@
-
+ 
 $(OUTPUT_DIR)/%.o: %.c
 	$(CPP) $(CPPFLAGS) $(TEST) $(VCSFLAGS) -c $< -o $@
 
@@ -117,9 +117,9 @@ $(OUTPUT_DIR)/%lex.cpp: %.l
 clean:
 	rm -f $(OBJS) *_tab.cpp *_tab.hpp *.tab.c *.tab.h *lex.cpp
 	rm -f $(PROG)
-	rm -f lib$(PROG).a
+	rm -f lib$(PROG).a 
 	rm -f lib$(PROG).so
-	rm -f $(OBJS) *.o
+	rm -f $(OBJS) *.o 
 
 $(OUTPUT_DIR)/interconnect_interface.o: $(OUTPUT_DIR)/../cuda-sim/ptx.tab.h
 

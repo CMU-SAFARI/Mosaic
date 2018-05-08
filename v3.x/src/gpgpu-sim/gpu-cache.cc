@@ -52,7 +52,7 @@ void l2_cache_config::init(linear_to_raw_address_translation *address_mapping) {
   m_address_mapping = address_mapping;
 }
 
-unsigned l2_cache_config::set_index(new_addr_type addr, appid_t core_id_l2, unsigned level) const {
+unsigned l2_cache_config::set_index(new_addr_type addr, unsigned core_id_l2, unsigned level) const {
   if (!m_address_mapping) {
     return (addr >> m_line_sz_log2) & (m_nset - 1);
   } else {
@@ -77,7 +77,9 @@ void tag_array::update_cache_parameters(cache_config &config) {
 
 tag_array::tag_array(cache_config &config, int core_id, int type_id) :
     m_config(config) {
+  //assert( m_config.m_write_policy == READ_ONLY ); Old assert
   m_lines = new cache_block_t[MAX_DEFAULT_CACHE_SIZE_MULTIBLIER * config.get_num_lines()];
+  // Rachata: For TLB way partitioning, if set to true, way 0 contains TLB-related data
   m_lines_is_tlb = new bool[MAX_DEFAULT_CACHE_SIZE_MULTIBLIER * config.get_num_lines()];
   for (int i = 0; i < MAX_DEFAULT_CACHE_SIZE_MULTIBLIER * config.get_num_lines(); i++)
     m_lines_is_tlb[i] = false;
@@ -103,7 +105,9 @@ void tag_array::init(int core_id, int type_id) {
 
 enum cache_request_status tag_array::probe(new_addr_type addr, unsigned &idx,
     unsigned core_id_l2) const {
+  //assert( m_config.m_write_policy == READ_ONLY );
   unsigned set_index = m_config.set_index(addr);
+  //unsigned set_index = m_config.set_index(addr,core_id_l2);
   new_addr_type tag = m_config.tag(addr);
 
   unsigned invalid_line = (unsigned) -1;
@@ -130,6 +134,7 @@ enum cache_request_status tag_array::probe(new_addr_type addr, unsigned &idx,
   }
 
   // check for hit or pending hit
+  //for (unsigned way=0; way<m_config.m_assoc; way++) {
   if (core_id_l2 == -2) {
     for (unsigned way = way_start; way < way_end; way++) { //new
       unsigned index = set_index * m_config.m_assoc + way;
@@ -235,7 +240,9 @@ enum cache_request_status tag_array::access(new_addr_type addr, unsigned time, u
   }
   shader_cache_access_log(m_core_id, m_type_id, 0); // log accesses to cache
   assert(mf->get_sid() != -1);
+  //Rachata-new
   enum cache_request_status status;
+  //if(mf->get_tlb_depth_count() > 0) status = probe(addr,idx,-2); //TLB
   if (mf->get_tlb_depth_count() > m_config.tlb_prio_max_level)
     status = probe(addr, idx, -2);
   else
@@ -248,6 +255,7 @@ enum cache_request_status tag_array::access(new_addr_type addr, unsigned time, u
       m_lines[idx].m_last_access_time = time;
       break;
     case MISS:
+      //m_miss++;
       shader_cache_access_log(m_core_id, m_type_id, 1); // log cache misses
       if (m_config.m_alloc_policy == ON_MISS) {
         if (m_lines[idx].m_status == MODIFIED) {
@@ -290,11 +298,12 @@ void tag_array::fill(unsigned index, unsigned time) {
   m_lines[index].fill(time);
 }
 
+// new
 bool tag_array::fill(mem_fetch *mf, new_addr_type addr, unsigned time) {
   assert(m_config.m_alloc_policy == ON_FILL);
   unsigned idx;
   if (mf->bypass_L2)
-    return true; 
+    return true; // Bypass L2 fill
   if (m_config.l2_tlb_way_reset == 0)
     m_config.l2_tlb_way_reset = mf->get_mem_config()->l2_tlb_way_reset;
   if (m_config.tlb_cache_part == 0)
@@ -303,7 +312,9 @@ bool tag_array::fill(mem_fetch *mf, new_addr_type addr, unsigned time) {
     m_config.tlb_cache_part = mf->get_mem_config()->tlb_prio_max_level;
   bool filled = false;
   assert(mf->get_sid() != -1);
+//    enum cache_request_status status = probe(addr,idx,mf->get_sid());
   enum cache_request_status status;
+//    if(mf->get_tlb_depth_count() > 0 )
   if (mf->get_tlb_depth_count() > m_config.tlb_prio_max_level)
     status = probe(addr, idx, -2);
   else
@@ -316,6 +327,7 @@ bool tag_array::fill(mem_fetch *mf, new_addr_type addr, unsigned time) {
     filled = true;
   } else {
     if (m_config.tlb_cache_part && (mf->get_sid() != -1)) {
+      //if(mf->get_tlb_depth_count() > 0) //TLB-related data
       if (mf->get_tlb_depth_count() > m_config.tlb_prio_max_level) {
         m_lines[idx].allocate(m_config.tag(addr), m_config.block_addr(addr), time);
         m_lines[idx].fill(time);
@@ -348,6 +360,8 @@ void tag_array::flush() {
 float tag_array::windowed_miss_rate() const {
   unsigned n_access = m_access - m_prev_snapshot_access;
   unsigned n_miss = m_miss - m_prev_snapshot_miss;
+  // unsigned n_pending_hit = m_pending_hit - m_prev_snapshot_pending_hit;
+
   float missrate = 0.0f;
   if (n_access != 0)
     missrate = (float) n_miss / n_access;
@@ -383,8 +397,8 @@ void tag_array::get_missr(unsigned &total_access, unsigned &total_misses) {
 }
 
 void tag_array::get_missr_stream(unsigned &total_access_s, unsigned &total_misses_s,
-    appid_t stream_idx) {
-  App* app = App::get_app(stream_idx);
+    unsigned stream_idx) {
+  App* app = App::get_app(App::get_app_id(stream_idx));
   total_access_s = app->m_access_s - app->m_access_s_previous;
   total_misses_s = app->m_miss_s - app->m_miss_s_previous;
   app->m_access_s_previous = app->m_access_s;
@@ -448,13 +462,13 @@ bool was_read_sent(const std::list<cache_event> &events) {
 }
 /****************************************************************** MSHR ******************************************************************/
 
-// Checks if there is a pending request to the lower memory level already
+/// Checks if there is a pending request to the lower memory level already
 bool mshr_table::probe(new_addr_type block_addr) const {
   table::const_iterator a = m_data.find(block_addr);
   return a != m_data.end();
 }
 
-// Checks if there is space for tracking a new memory access
+/// Checks if there is space for tracking a new memory access
 bool mshr_table::full(new_addr_type block_addr) const {
   table::const_iterator i = m_data.find(block_addr);
   if (i != m_data.end())
@@ -463,7 +477,7 @@ bool mshr_table::full(new_addr_type block_addr) const {
     return m_data.size() >= m_num_entries;
 }
 
-// Add or merge this access
+/// Add or merge this access
 void mshr_table::add(new_addr_type block_addr, mem_fetch *mf) {
   m_data[block_addr].m_list.push_back(mf);
   assert(m_data.size() <= m_num_entries);
@@ -474,7 +488,7 @@ void mshr_table::add(new_addr_type block_addr, mem_fetch *mf) {
   }
 }
 
-// Accept a new cache fill response: mark entry ready for processing
+/// Accept a new cache fill response: mark entry ready for processing
 void mshr_table::mark_ready(new_addr_type block_addr, bool &has_atomic) {
   assert(!busy());
   table::iterator a = m_data.find(block_addr);
@@ -484,7 +498,7 @@ void mshr_table::mark_ready(new_addr_type block_addr, bool &has_atomic) {
   assert(m_current_response.size() <= m_data.size());
 }
 
-// Returns next ready access
+/// Returns next ready access
 mem_fetch *mshr_table::next_access() {
   assert(access_ready());
   new_addr_type block_addr = m_current_response.front();
@@ -526,7 +540,9 @@ cache_stats::cache_stats() {
 }
 
 void cache_stats::clear() {
-  // Zero out all current cache statistics
+  ///
+  /// Zero out all current cache statistics
+  ///
   for (unsigned i = 0; i < NUM_MEM_ACCESS_TYPE; ++i) {
     std::fill(m_stats[i].begin(), m_stats[i].end(), 0);
   }
@@ -536,7 +552,9 @@ void cache_stats::clear() {
 }
 
 void cache_stats::inc_stats(int access_type, int access_outcome) {
-  // Increment the stat corresponding to (access_type, access_outcome) by 1.
+  ///
+  /// Increment the stat corresponding to (access_type, access_outcome) by 1.
+  ///
   if (!check_valid(access_type, access_outcome))
     assert(0 && "Unknown cache access type or access outcome");
 
@@ -545,8 +563,10 @@ void cache_stats::inc_stats(int access_type, int access_outcome) {
 
 enum cache_request_status cache_stats::select_stats_status(enum cache_request_status probe,
     enum cache_request_status access) const {
-  // This function selects how the cache access outcome should be counted. HIT_RESERVED is considered as a MISS
-  // in the cores, however, it should be counted as a HIT_RESERVED in the caches.
+  ///
+  /// This function selects how the cache access outcome should be counted. HIT_RESERVED is considered as a MISS
+  /// in the cores, however, it should be counted as a HIT_RESERVED in the caches.
+  ///
   if (probe == HIT_RESERVED && access != RESERVATION_FAIL)
     return probe;
   else
@@ -554,8 +574,10 @@ enum cache_request_status cache_stats::select_stats_status(enum cache_request_st
 }
 
 unsigned &cache_stats::operator()(int access_type, int access_outcome) {
-  // Simple method to read/modify the stat corresponding to (access_type, access_outcome)
-  // Used overloaded () to avoid the need for separate read/write member functions
+  ///
+  /// Simple method to read/modify the stat corresponding to (access_type, access_outcome)
+  /// Used overloaded () to avoid the need for separate read/write member functions
+  ///
   if (!check_valid(access_type, access_outcome))
     assert(0 && "Unknown cache access type or access outcome");
 
@@ -563,7 +585,9 @@ unsigned &cache_stats::operator()(int access_type, int access_outcome) {
 }
 
 unsigned cache_stats::operator()(int access_type, int access_outcome) const {
-  // Const accessor into m_stats.
+  ///
+  /// Const accessor into m_stats.
+  ///
   if (!check_valid(access_type, access_outcome))
     assert(0 && "Unknown cache access type or access outcome");
 
@@ -571,7 +595,9 @@ unsigned cache_stats::operator()(int access_type, int access_outcome) const {
 }
 
 cache_stats cache_stats::operator+(const cache_stats &cs) {
-  // Overloaded + operator to allow for simple stat accumulation
+  ///
+  /// Overloaded + operator to allow for simple stat accumulation
+  ///
   cache_stats ret;
   for (unsigned type = 0; type < NUM_MEM_ACCESS_TYPE; ++type) {
     for (unsigned status = 0; status < NUM_CACHE_REQUEST_STATUS; ++status) {
@@ -588,7 +614,9 @@ cache_stats cache_stats::operator+(const cache_stats &cs) {
 }
 
 cache_stats &cache_stats::operator+=(const cache_stats &cs) {
-  // Overloaded += operator to allow for simple stat accumulation
+  ///
+  /// Overloaded += operator to allow for simple stat accumulation
+  ///
   for (unsigned type = 0; type < NUM_MEM_ACCESS_TYPE; ++type) {
     for (unsigned status = 0; status < NUM_CACHE_REQUEST_STATUS; ++status) {
       m_stats[type][status] += cs(type, status);
@@ -601,10 +629,12 @@ cache_stats &cache_stats::operator+=(const cache_stats &cs) {
 }
 
 void cache_stats::print_stats(FILE *fout, const char *cache_name) const {
-  // Print out each non-zero cache statistic for every memory access type and status
-  // "cache_name" defaults to "Cache_stats" when no argument is provided, otherwise
-  // the provided name is used.
-  // The printed format is "<cache_name>[<request_type>][<request_status>] = <stat_value>"
+  ///
+  /// Print out each non-zero cache statistic for every memory access type and status
+  /// "cache_name" defaults to "Cache_stats" when no argument is provided, otherwise
+  /// the provided name is used.
+  /// The printed format is "<cache_name>[<request_type>][<request_status>] = <stat_value>"
+  ///
   std::string m_cache_name = cache_name;
   for (unsigned type = 0; type < NUM_MEM_ACCESS_TYPE; ++type) {
     for (unsigned status = 0; status < NUM_CACHE_REQUEST_STATUS; ++status) {
@@ -632,9 +662,11 @@ void cache_sub_stats::print_port_stats(FILE *fout, const char *cache_name) const
 
 unsigned cache_stats::get_stats(enum mem_access_type *access_type, unsigned num_access_type,
     enum cache_request_status *access_status, unsigned num_access_status) const {
-  // Returns a sum of the stats corresponding to each "access_type" and "access_status" pair.
-  // "access_type" is an array of "num_access_type" mem_access_types.
-  // "access_status" is an array of "num_access_status" cache_request_statuses.
+  ///
+  /// Returns a sum of the stats corresponding to each "access_type" and "access_status" pair.
+  /// "access_type" is an array of "num_access_type" mem_access_types.
+  /// "access_status" is an array of "num_access_status" cache_request_statuses.
+  ///
   unsigned total = 0;
   for (unsigned type = 0; type < num_access_type; ++type) {
     for (unsigned status = 0; status < num_access_status; ++status) {
@@ -646,7 +678,9 @@ unsigned cache_stats::get_stats(enum mem_access_type *access_type, unsigned num_
   return total;
 }
 void cache_stats::get_sub_stats(struct cache_sub_stats &css) const {
-  // Overwrites "css" with the appropriate statistics from this cache.
+  ///
+  /// Overwrites "css" with the appropriate statistics from this cache.
+  ///
   struct cache_sub_stats t_css;
   t_css.clear();
 
@@ -676,7 +710,9 @@ void cache_stats::get_sub_stats(struct cache_sub_stats &css) const {
 }
 
 bool cache_stats::check_valid(int type, int status) const {
-  // Verify a valid access_type/access_status
+  ///
+  /// Verify a valid access_type/access_status
+  ///
   if ((type >= 0) && (type < NUM_MEM_ACCESS_TYPE) && (status >= 0)
       && (status < NUM_CACHE_REQUEST_STATUS))
     return true;
@@ -700,7 +736,7 @@ baseline_cache::bandwidth_management::bandwidth_management(cache_config &config)
   m_fill_port_occupied_cycles = 0;
 }
 
-// use the data port based on the outcome and events generated by the mem_fetch request
+/// use the data port based on the outcome and events generated by the mem_fetch request
 void baseline_cache::bandwidth_management::use_data_port(mem_fetch *mf,
     enum cache_request_status outcome, const std::list<cache_event> &events) {
   unsigned data_size = mf->get_data_size();
@@ -729,14 +765,14 @@ void baseline_cache::bandwidth_management::use_data_port(mem_fetch *mf,
   }
 }
 
-// use the fill port
+/// use the fill port
 void baseline_cache::bandwidth_management::use_fill_port(mem_fetch *mf) {
   // assume filling the entire line with the returned request
   unsigned fill_cycles = m_config.m_line_sz / m_config.m_data_port_width;
   m_fill_port_occupied_cycles += fill_cycles;
 }
 
-// called every cache cycle to free up the ports
+/// called every cache cycle to free up the ports
 void baseline_cache::bandwidth_management::replenish_port_bandwidth() {
   if (m_data_port_occupied_cycles > 0) {
     m_data_port_occupied_cycles -= 1;
@@ -749,17 +785,17 @@ void baseline_cache::bandwidth_management::replenish_port_bandwidth() {
   assert(m_fill_port_occupied_cycles >= 0);
 }
 
-// query for data port availability
+/// query for data port availability
 bool baseline_cache::bandwidth_management::data_port_free() const {
   return (m_data_port_occupied_cycles == 0);
 }
 
-// query for fill port availability
+/// query for fill port availability
 bool baseline_cache::bandwidth_management::fill_port_free() const {
   return (m_fill_port_occupied_cycles == 0);
 }
 
-// Sends next request to lower level of memory
+/// Sends next request to lower level of memory
 void baseline_cache::cycle() {
 
   if (m_tlb_miss_queue != NULL && !m_tlb_miss_queue->empty()) {
@@ -772,7 +808,14 @@ void baseline_cache::cycle() {
 
   if (!m_miss_queue.empty()) {
     mem_fetch *mf = m_miss_queue.front();
+//        //Rachata -- For testing purposes. For TLB-related requests going to DRAM
+//        if(mf->get_parent_tlb_request()!=NULL){
+//            mf->done_tlb_req(mf->get_parent_tlb_request());
+//            m_miss_queue.pop_front();
+//            delete mf;
+//        }
     if (!m_memport->full(mf->size(), mf->get_is_write())) {
+      //else if ( !m_memport->full(mf->size(),mf->get_is_write()) ) {
       m_miss_queue.pop_front();
       m_memport->push(mf);
     }
@@ -783,9 +826,11 @@ void baseline_cache::cycle() {
   m_bandwidth_management.replenish_port_bandwidth();
 }
 
-// Interface for response from lower memory level (model bandwidth restictions in caller)
+/// Interface for response from lower memory level (model bandwidth restictions in caller)
 void baseline_cache::fill(mem_fetch *mf, unsigned time) {
+
   extra_mf_fields_lookup::iterator e = m_extra_mf_fields.find(mf);
+
   assert(e != m_extra_mf_fields.end());
   assert(e->second.m_valid);
   mf->set_data_size(e->second.m_data_size);
@@ -812,6 +857,7 @@ void l2_cache::fill(mem_fetch *mf, unsigned time) {
   bool l2_filled = false;
   extra_mf_fields_lookup::iterator e = m_extra_mf_fields.find(mf);
 
+
   assert(e != m_extra_mf_fields.end());
   assert(e->second.m_valid);
   mf->set_data_size(e->second.m_data_size);
@@ -819,12 +865,14 @@ void l2_cache::fill(mem_fetch *mf, unsigned time) {
     m_tag_array->fill(e->second.m_cache_index, time);
   else if (m_config.m_alloc_policy == ON_FILL) { // this policy is used == can pass miss rates as well here
     l2_filled = m_tag_array->fill(mf, e->second.m_block_addr, time);
+//                m_shader_stat->tlb_yield_to_data = m_tag_array->tlb_data_cache_yield;
   } else
     abort();
   bool has_atomic = false;
   m_mshrs.mark_ready(e->second.m_block_addr, has_atomic);
 
   if (has_atomic) {
+    // assert(m_config.m_alloc_policy == ON_MISS);
     if (m_config.m_alloc_policy == ON_MISS) {
       cache_block_t &block = m_tag_array->get_block(e->second.m_cache_index);
       block.m_status = MODIFIED; // mark line as dirty for atomic operation
@@ -836,7 +884,7 @@ void l2_cache::fill(mem_fetch *mf, unsigned time) {
   m_extra_mf_fields.erase(mf);
 }
 
-// Checks if mf is waiting to be filled by lower memory level
+/// Checks if mf is waiting to be filled by lower memory level
 bool baseline_cache::waiting_for_fill(mem_fetch *mf) {
   extra_mf_fields_lookup::iterator e = m_extra_mf_fields.find(mf);
   return e != m_extra_mf_fields.end();
@@ -852,7 +900,7 @@ void baseline_cache::get_missr(unsigned &accesses, unsigned &misses) {
   m_tag_array->get_missr(accesses, misses);
 }
 void baseline_cache::get_missr_stream(unsigned &accesses_1, unsigned &misses_1,
-    appid_t stream_idx) {
+    unsigned stream_idx) {
   m_tag_array->get_missr_stream(accesses_1, misses_1, stream_idx);
 }
 void baseline_cache::get_missr_core(unsigned &total_access_core, unsigned &total_misses_core,
@@ -876,7 +924,7 @@ void baseline_cache::display_state(FILE *fp) const {
   fprintf(fp, "\n");
 }
 
-// Read miss handler without writeback
+/// Read miss handler without writeback
 void baseline_cache::send_read_request(new_addr_type addr, new_addr_type block_addr,
     unsigned cache_index, mem_fetch *mf, unsigned time, bool &do_miss,
     std::list<cache_event> &events, bool read_only, bool wa) {
@@ -886,7 +934,7 @@ void baseline_cache::send_read_request(new_addr_type addr, new_addr_type block_a
   send_read_request(addr, block_addr, cache_index, mf, time, do_miss, wb, e, events, read_only, wa);
 }
 
-// Read miss handler. Check MSHR hit or MSHR available
+/// Read miss handler. Check MSHR hit or MSHR available
 void baseline_cache::send_read_request(new_addr_type addr, new_addr_type block_addr,
     unsigned cache_index, mem_fetch *mf, unsigned time, bool &do_miss, bool &wb,
     cache_block_t &evicted, std::list<cache_event> &events, bool read_only, bool wa) {
@@ -922,7 +970,7 @@ void data_cache::add_tlb_miss_to_queue(mem_fetch * mf) {
   m_tlb_miss_queue->push_back(mf);
 }
 
-// Sends write request to lower level memory (write or writeback)
+/// Sends write request to lower level memory (write or writeback)
 void data_cache::send_write_request(mem_fetch *mf, cache_event request, unsigned time,
     std::list<cache_event> &events) {
   events.push_back(request);
@@ -932,7 +980,7 @@ void data_cache::send_write_request(mem_fetch *mf, cache_event request, unsigned
 
 /****** Write-hit functions (Set by config file) ******/
 
-// Write-back hit: Mark block as modified
+/// Write-back hit: Mark block as modified
 cache_request_status data_cache::wr_hit_wb(new_addr_type addr, unsigned cache_index, mem_fetch *mf,
     unsigned time, std::list<cache_event> &events, enum cache_request_status status) {
   new_addr_type block_addr = m_config.block_addr(addr);
@@ -943,7 +991,7 @@ cache_request_status data_cache::wr_hit_wb(new_addr_type addr, unsigned cache_in
   return HIT;
 }
 
-// Write-through hit: Directly send request to lower level memory
+/// Write-through hit: Directly send request to lower level memory
 cache_request_status data_cache::wr_hit_wt(new_addr_type addr, unsigned cache_index, mem_fetch *mf,
     unsigned time, std::list<cache_event> &events, enum cache_request_status status) {
   if (miss_queue_full(0)) {
@@ -961,7 +1009,7 @@ cache_request_status data_cache::wr_hit_wt(new_addr_type addr, unsigned cache_in
   return HIT;
 }
 
-// Write-evict hit: Send request to lower level memory and invalidate corresponding block
+/// Write-evict hit: Send request to lower level memory and invalidate corresponding block
 cache_request_status data_cache::wr_hit_we(new_addr_type addr, unsigned cache_index, mem_fetch *mf,
     unsigned time, std::list<cache_event> &events, enum cache_request_status status) {
   if (miss_queue_full(0)) {
@@ -978,7 +1026,7 @@ cache_request_status data_cache::wr_hit_we(new_addr_type addr, unsigned cache_in
   return HIT;
 }
 
-// Global write-evict, local write-back: Useful for private caches
+/// Global write-evict, local write-back: Useful for private caches
 enum cache_request_status data_cache::wr_hit_global_we_local_wb(new_addr_type addr,
     unsigned cache_index, mem_fetch *mf, unsigned time, std::list<cache_event> &events,
     enum cache_request_status status) {
@@ -991,7 +1039,7 @@ enum cache_request_status data_cache::wr_hit_global_we_local_wb(new_addr_type ad
 
 /****** Write-miss functions (Set by config file) ******/
 
-// Write-allocate miss: Send write request to lower level memory
+/// Write-allocate miss: Send write request to lower level memory
 // and send a read request for the same block
 enum cache_request_status data_cache::wr_miss_wa(new_addr_type addr, unsigned cache_index,
     mem_fetch *mf, unsigned time, std::list<cache_event> &events,
@@ -1008,8 +1056,11 @@ enum cache_request_status data_cache::wr_miss_wa(new_addr_type addr, unsigned ca
     return RESERVATION_FAIL;
   }
 
+
   send_write_request(mf, WRITE_REQUEST_SENT, time, events);
   // Tries to send write allocate request, returns true on success and false on failure
+  //if(!send_write_allocate(mf, addr, block_addr, cache_index, time, events))
+  //    return RESERVATION_FAIL;
 
   const mem_access_t *ma = new mem_access_t(m_wr_alloc_type, mf->get_addr(), mf->get_data_size(),
       false, // Now performing a read
@@ -1017,6 +1068,7 @@ enum cache_request_status data_cache::wr_miss_wa(new_addr_type addr, unsigned ca
 
   mem_fetch *n_mf = new mem_fetch(*ma,
   NULL, mf->get_ctrl_size(), mf->get_wid(), mf->get_sid(), mf->get_tpc(), mf->get_mem_config());
+
 
   bool do_miss = false;
   bool wb = false;
@@ -1041,7 +1093,7 @@ enum cache_request_status data_cache::wr_miss_wa(new_addr_type addr, unsigned ca
   return RESERVATION_FAIL;
 }
 
-// No write-allocate miss: Simply send write request to lower level memory
+/// No write-allocate miss: Simply send write request to lower level memory
 enum cache_request_status data_cache::wr_miss_no_wa(new_addr_type addr, unsigned cache_index,
     mem_fetch *mf, unsigned time, std::list<cache_event> &events,
     enum cache_request_status status) {
@@ -1056,7 +1108,7 @@ enum cache_request_status data_cache::wr_miss_no_wa(new_addr_type addr, unsigned
 
 /****** Read hit functions (Set by config file) ******/
 
-// Baseline read hit: Update LRU status of block.
+/// Baseline read hit: Update LRU status of block.
 // Special case for atomic instructions -> Mark block as modified
 enum cache_request_status data_cache::rd_hit_base(new_addr_type addr, unsigned cache_index,
     mem_fetch *mf, unsigned time, std::list<cache_event> &events,
@@ -1075,7 +1127,7 @@ enum cache_request_status data_cache::rd_hit_base(new_addr_type addr, unsigned c
 
 /****** Read miss functions (Set by config file) ******/
 
-// Baseline read miss: Send read request to lower level memory,
+/// Baseline read miss: Send read request to lower level memory,
 // perform write-back as necessary
 enum cache_request_status data_cache::rd_miss_base(new_addr_type addr, unsigned cache_index,
     mem_fetch *mf, unsigned time, std::list<cache_event> &events,
@@ -1091,6 +1143,7 @@ enum cache_request_status data_cache::rd_miss_base(new_addr_type addr, unsigned 
   cache_block_t evicted;
   send_read_request(addr, block_addr, cache_index, mf, time, do_miss, wb, evicted, events, false,
       false);
+
   if (do_miss) {
     // If evicted block is modified and not a write-through
     // (already modified lower level)
@@ -1104,7 +1157,7 @@ enum cache_request_status data_cache::rd_miss_base(new_addr_type addr, unsigned 
   return RESERVATION_FAIL;
 }
 
-// Access cache for read_only_cache: returns RESERVATION_FAIL if
+/// Access cache for read_only_cache: returns RESERVATION_FAIL if
 // request could not be accepted (for any reason)
 enum cache_request_status read_only_cache::access(new_addr_type addr, mem_fetch *mf, unsigned time,
     std::list<cache_event> &events) {
@@ -1161,6 +1214,7 @@ enum cache_request_status data_cache::process_tag_probe(bool wr,
     }
   }
 
+
   m_bandwidth_management.use_data_port(mf, access_status, events);
   return access_status;
 }
@@ -1178,13 +1232,8 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
   new_addr_type block_addr = m_config.block_addr(addr);
   unsigned cache_index = (unsigned) -1;
 
-//    //For testing purposes, automatically make L2 TLB-related access to data cache a cache hit
-//    if(mf->get_parent_tlb_request()!=NULL && mf->beenThroughL1)
-//    {
-//        return HIT;
-//    }
-
   enum cache_request_status probe_status;
+  //if(mf->get_tlb_depth_count() > 0) probe_status = m_tag_array->probe( block_addr, cache_index, -2 ); // TLB
   if (mf->get_tlb_depth_count() > mf->get_mem_config()->tlb_prio_max_level)
     probe_status = m_tag_array->probe(block_addr, cache_index, -2);
   else
@@ -1192,9 +1241,10 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
   enum tlb_request_status tlb_probe_status;
 
   App* app = App::get_app(mf->get_appID());
+  //App* app = App::get_app(App::get_app_id(mf->get_appID()));
 
   //Increment total number of cache accesses. For flushing
-  if (m_isL1) { //Need to do this otherwise will get segfault because L2 does not have TLB
+  if (m_isL1) {//Need to do this otherwise will get segfault because L2 does not have TLB
     app->total_access_cache++;
   }
   if (m_isL1 && mf->get_mem_config()->TLB_flush_enable
@@ -1205,24 +1255,32 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
     m_tlb_tag_array->flush(mf->get_appID()); // Send the flush command to itself
   }
 
-  if (m_isL1 && mf->get_mem_config()->TLB_flush_enable && (flush_count < app->flush_count)) // This last case is for other slices to flush its own TLB as well
+  if (m_isL1 && mf->get_mem_config()->TLB_flush_enable
+      && (flush_count < app->flush_count)) // This last case is for other slices to flush its own TLB as well
       {
     flush_count++;
+    printf(
+        "In gpu-cache.cc, trigger flush due to origin core flush (count = %d). This core flush count = %d, total cache accesses = %d, flush freq = %d\n",
+        app->flush_count, flush_count, app->total_access_cache, mf->get_mem_config()->TLB_flush_freq);
     m_tlb_tag_array->flush(); // Send the flush command to itself
   }
+
 
   // Bypass TLB checking if this is a cache requests generated by a TLB miss
   if (!mf->been_through_tlb && (m_tlb_tag_array != NULL || mf->get_tlb_depth_count() > 0)) {
     if (mf->get_tlb_depth_count() > 0 || mf->been_through_tlb)
       tlb_probe_status = TLB_HIT; // If this is a TLB-related access --> bypass TLB check
-
+    //else if(m_tlb_tag_array->bypass_TLB(mf, mf->get_appID)){
     else {
+//        tlb_probe_status = m_tlb_tag_array->probe( addr, cache_index, mf->get_appID());
       //set the cache to this slice
       mf->set_cache(this);
       mf->set_events(events);
       mf->set_tlb(m_tlb_tag_array);
       mf->set_tlb_miss(true);
+// Probe if the page is already in the TLB
       tlb_probe_status = m_tlb_tag_array->probe(addr, mf->get_appID(), mf);
+
       if (tlb_probe_status == TLB_MISS) {
         mf->pt_walk(mf);
         return TLB;
@@ -1231,6 +1289,9 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
   } else {
     tlb_probe_status = TLB_HIT; // This is a hack for l2_cache
   }
+//    tlb_probe_status = TLB_HIT; // This literally disable the TLB, everything should go in that if statement
+
+
 
   if (tlb_probe_status == TLB_HIT_RESERVED) {
     return RESERVATION_FAIL;
@@ -1252,6 +1313,7 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
 
   if (tlb_probe_status == TLB_HIT || tlb_probe_status == TLB_HIT_RESERVED) // HIT_RESERVED should not arrive here
       {
+
     m_stats.inc_stats(mf->get_access_type(),
         m_stats.select_stats_status(probe_status, access_status));
     return access_status;
@@ -1259,12 +1321,14 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
 
   // What to do if TLB fault -- As of now this is not modeled in the simlation --> Will need to synthetically add this
   else if (tlb_probe_status == TLB_FAULT) {
-    m_tlb_tag_array->flush(mf->get_appID()); // Need to keep the list of which TLB arrays get flush
+    m_tlb_tag_array->flush(mf->get_addr()); // Need to keep the list of which TLB arrays get flush
   } else {
     if (access_status != MISS) {
       m_tlb_tag_array->fill(addr, mf);
     }
 
+
+    // tlb_tag_array->access_TLB( addr, cache_index , mf);
     m_stats.inc_stats(mf->get_access_type(),
         m_stats.select_stats_status(probe_status, access_status));
     mf->set_tlb_miss(true);
@@ -1274,10 +1338,10 @@ enum cache_request_status data_cache::access(new_addr_type addr, mem_fetch *mf, 
   }
 }
 
-// This is meant to model the first level data cache in Fermi.
-// It is write-evict (global) or write-back (local) at the
-// granularity of individual blocks (Set by GPGPU-Sim configuration file)
-// (the policy used in fermi according to the CUDA manual)
+/// This is meant to model the first level data cache in Fermi.
+/// It is write-evict (global) or write-back (local) at the
+/// granularity of individual blocks (Set by GPGPU-Sim configuration file)
+/// (the policy used in fermi according to the CUDA manual)
 enum cache_request_status l1_cache::access(new_addr_type addr, mem_fetch *mf, unsigned time,
     std::list<cache_event> &events) {
   return data_cache::access(addr, mf, time, events);
@@ -1291,11 +1355,11 @@ enum cache_request_status l2_cache::access(new_addr_type addr, mem_fetch *mf, un
   return data_cache::access(addr, mf, time, events);
 }
 
-// Access function for tex_cache
-// return values: RESERVATION_FAIL if request could not be accepted
-// otherwise returns HIT_RESERVED or MISS; NOTE: *never* returns HIT
-// since unlike a normal CPU cache, a "HIT" in texture cache does not
-// mean the data is ready (still need to get through fragment fifo)
+/// Access function for tex_cache
+/// return values: RESERVATION_FAIL if request could not be accepted
+/// otherwise returns HIT_RESERVED or MISS; NOTE: *never* returns HIT
+/// since unlike a normal CPU cache, a "HIT" in texture cache does not
+/// mean the data is ready (still need to get through fragment fifo)
 enum cache_request_status tex_cache::access(new_addr_type addr, mem_fetch *mf, unsigned time,
     std::list<cache_event> &events) {
   if (m_fragment_fifo.full() || m_request_fifo.full() || m_rob.full())

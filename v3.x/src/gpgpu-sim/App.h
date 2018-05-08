@@ -9,43 +9,19 @@
 #define SRC_GPGPU_SIM_APP_H_
 
 #include <stdint.h>
-#include <functional>
-#include <iostream>
-#include <list>
 #include <map>
-#include <set>
 #include <vector>
+#include <list>
+#include <set>
 #include "../abstract_hardware_model.h" // For new_addr_type...
 
-class appid_t {
-public:
-  appid_t() : my_id(appid_t::next_identifier++) {}
-  bool operator==(const appid_t& other) const { return this->my_id == other.my_id; }
-  bool operator!=(const appid_t& other) const { return this->my_id != other.my_id; }
-  bool operator<(const appid_t& other) const { return this->my_id < other.my_id; }
-  bool operator>(const appid_t& other) const { return this->my_id > other.my_id; }
-  friend std::ostream& operator<<(std::ostream& os, const appid_t& appid);
-  friend struct std::hash<appid_t>;
-private:
-  static uint32_t next_identifier;
-  uint32_t my_id;
-};
-
-namespace std {
-  // hash function for appid_t
-  template<> struct hash<appid_t> {
-    size_t operator()(const appid_t &o) const {
-      return std::hash<int>()(o.my_id);
-    }
-  };
-}
+typedef uint32_t appid_t;
 
 class App {
 public:
   static App* get_app(appid_t);
   static appid_t get_app_id(int);
   static appid_t get_app_id_from_sm(int);
-  static appid_t get_app_id_from_thread(void* tid);
   static appid_t create_app(appid_t, FILE*, unsigned);
   static appid_t register_app(int);
   static std::map<appid_t, App*>& get_apps(void);
@@ -53,17 +29,10 @@ public:
   static void set_app_sms(appid_t appid, std::vector<int>& sms);
   static bool is_registered(int);
 
-  // Special apps for memory operations requiring an Appid
-  static App noapp;
-  static App pt_space;
-  static App mixapp;
-  static App prefrag;
-
 private:
   static std::map<appid_t, App*> apps;
   static std::map<int, appid_t> sm_to_app;
   static std::map<int, appid_t> creation_index_to_app;
-  static std::map<void*, appid_t> thread_id_to_app_id;
   static appid_t next_app_id;
 
 private:
@@ -216,8 +185,7 @@ public:
   uint64_t m_access_s_previous;
   uint64_t m_miss_s_previous;
 
-  // From mem_fetch
-  uint32_t addr_offset;
+
 };
 
 #endif /* SRC_GPGPU_SIM_APP_H_ */

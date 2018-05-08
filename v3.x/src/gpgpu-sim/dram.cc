@@ -47,205 +47,219 @@ int PRINT_CYCLE = 0;
 #define RC_DEBUG 1
 #define MERGE_DEBUG 0
 
-template class fifo_pipeline<mem_fetch> ;
-template class fifo_pipeline<dram_req_t> ;
 
-dram_cmd::dram_cmd(int cmd, int from_bk, int to_bk, int from_ch, int to_ch, int from_subarray,
-    int to_subarray, int pk_size, appid_t app_ID, const struct memory_config * config) {
-  command = cmd;
-  from_bank = from_bk;
-  from_channel = from_ch;
-  from_sa = from_subarray;
-  to_sa = to_subarray;
-  to_bank = to_bk;
-  to_channel = to_ch;
-  size = pk_size;
-  appID = app_ID;
-  m_config = config;
+template class fifo_pipeline<mem_fetch>;
+template class fifo_pipeline<dram_req_t>;
+
+dram_cmd::dram_cmd(int cmd, int from_bk, int to_bk, int from_ch, int to_ch, int from_subarray, int to_subarray, int pk_size, int app_ID, const struct memory_config * config) {
+   command = cmd;
+   from_bank = from_bk;
+   from_channel = from_ch;
+   from_sa = from_subarray;
+   to_sa = to_subarray;
+   to_bank = to_bk;
+   to_channel = to_ch;
+   size = pk_size;
+   appID = app_ID;
+   m_config = config;
 }
 
-dram_cmd::dram_cmd(int cmd, page * from_page, page * to_page, const struct memory_config * config) {
-  command = cmd;
-  appID = from_page->appID;
-  size = from_page->size;
-  new_addr_type from_addr = from_page->starting_addr;
-  addrdec_t from_raw_addr;
 
-  m_config = config;
+dram_cmd::dram_cmd(int cmd, page * from_page, page * to_page, const struct memory_config * config)
+{
+   command = cmd;
+   appID = from_page->appID;
+   size = from_page->size;    
+   new_addr_type from_addr = from_page->starting_addr; 
+   addrdec_t from_raw_addr;
 
-  m_config->m_address_mapping.addrdec_tlx(from_addr, &from_raw_addr, appID, DRAM_CMD, 0);
-  from_channel = from_raw_addr.chip;
-  from_bank = from_raw_addr.bk;
-  from_sa = from_raw_addr.subarray;
-  if (to_page != NULL) //Zero command
-  {
-    new_addr_type to_addr = to_page->starting_addr;
-    addrdec_t to_raw_addr;
-    m_config->m_address_mapping.addrdec_tlx(to_addr, &to_raw_addr, appID, DRAM_CMD, 0);
-    to_channel = to_raw_addr.chip;
-    to_bank = to_raw_addr.bk;
-    to_sa = to_raw_addr.subarray;
-  } else {
-    to_channel = from_channel;
-    to_bank = from_bank;
-    to_sa = from_sa;
-  }
+   m_config = config;
+
+   m_config->m_address_mapping.addrdec_tlx(from_addr,&from_raw_addr, appID, DRAM_CMD, 0);
+   from_channel = from_raw_addr.chip;
+   from_bank = from_raw_addr.bk;
+   from_sa = from_raw_addr.subarray;
+   if(to_page != NULL) //Zero command
+   {
+       new_addr_type to_addr = to_page->starting_addr;
+       addrdec_t to_raw_addr;
+       m_config->m_address_mapping.addrdec_tlx(to_addr,&to_raw_addr, appID, DRAM_CMD, 0);
+       to_channel = to_raw_addr.chip;
+       to_bank = to_raw_addr.bk;
+       to_sa = to_raw_addr.subarray;
+   }
+   else
+   {
+       to_channel = from_channel;
+       to_bank = from_bank;
+       to_sa = from_sa;
+   }
 }
 
-dram_t::dram_t(unsigned int partition_id, const struct memory_config *config, memory_stats_t *stats,
-    memory_partition_unit *mp, mmu * page_manager, tlb_tag_array * shared_tlb) {
-  id = partition_id;
-  m_memory_partition_unit = mp;
-  m_stats = stats;
-  m_config = config;
+dram_t::dram_t( unsigned int partition_id, const struct memory_config *config, memory_stats_t *stats,
+                memory_partition_unit *mp, mmu * page_manager, tlb_tag_array * shared_tlb)
+{
+   id = partition_id;
+   m_memory_partition_unit = mp;
+   m_stats = stats;
+   m_config = config;
 
-  compaction_bank_id = 0;
+   compaction_bank_id = 0;
 
-  m_shared_tlb = shared_tlb;
+   m_shared_tlb = shared_tlb;
 
-  m_page_manager = page_manager;
+   m_page_manager = page_manager;
 
 // Should be created in gpu-sim
 //   page_manager = new virtual_address_translation(m_config);
 
-  CCDc = 0;
-  RRDc = 0;
-  RTWc = 0;
-  WTRc = 0;
+   CCDc = 0;
+   RRDc = 0;
+   RTWc = 0;
+   WTRc = 0;
 
-  data_bus_busy = 0;
+   data_bus_busy = 0;
 
-  rw = READ; //read mode is default
+   rw = READ; //read mode is default
 
-  bkgrp = (bankgrp_t**) calloc(sizeof(bankgrp_t*), m_config->nbkgrp);
-  bkgrp[0] = (bankgrp_t*) calloc(sizeof(bank_t), m_config->nbkgrp);
-  for (unsigned i = 1; i < m_config->nbkgrp; i++) {
-    bkgrp[i] = bkgrp[0] + i;
-  }
-  for (unsigned i = 0; i < m_config->nbkgrp; i++) {
-    bkgrp[i]->CCDLc = 0;
-    bkgrp[i]->RTPLc = 0;
-  }
+	bkgrp = (bankgrp_t**) calloc(sizeof(bankgrp_t*), m_config->nbkgrp);
+	bkgrp[0] = (bankgrp_t*) calloc(sizeof(bank_t), m_config->nbkgrp);
+	for (unsigned i=1; i<m_config->nbkgrp; i++) {
+		bkgrp[i] = bkgrp[0] + i;
+	}
+	for (unsigned i=0; i<m_config->nbkgrp; i++) {
+		bkgrp[i]->CCDLc = 0;
+		bkgrp[i]->RTPLc = 0;
+	}
+	
+    for (unsigned i=0;i<=31;i++) {
+  		mem_state_blp_alarm[i] = 0; // new
+  		mem_state_blp_ncmd[i] = 0;
+    } 
 
-  for (unsigned i = 0; i <= 31; i++) {
-    mem_state_blp_alarm[i] = 0; // new
-    mem_state_blp_ncmd[i] = 0;
-  }
+   bk = (bank_t**) calloc(sizeof(bank_t*),m_config->nbk);
+   bk[0] = (bank_t*) calloc(sizeof(bank_t),m_config->nbk);
+   for (unsigned i=1;i<m_config->nbk;i++) 
+      bk[i] = bk[0] + i;
+   for (unsigned i=0;i<m_config->nbk;i++) {
+      bk[i]->state = BANK_IDLE;
+      bk[i]->bkgrpindex = i/(m_config->nbk/m_config->nbkgrp);
+      bk[i]->blocked = 0;
+      bk[i]->transfer = 0;
+   }
+   prio = 0;  
+   rwq = new fifo_pipeline<dram_req_t>("rwq",m_config->CL,m_config->CL+1);
+   mrqq = new fifo_pipeline<dram_req_t>("mrqq",0,2);
+   returnq = new fifo_pipeline<mem_fetch>("dramreturnq",0,m_config->gpgpu_dram_return_queue_size==0?1024:m_config->gpgpu_dram_return_queue_size); 
+   m_frfcfs_scheduler = NULL;
+   if ( m_config->scheduler_type == DRAM_FRFCFS )
+      m_frfcfs_scheduler = new frfcfs_scheduler(m_config,this,stats, m_shared_tlb);
+   
+   
+   n_cmd = 0;
+   n_activity = 0;
+   n_nop = 0; 
+   n_act = 0; 
+   n_pre = 0; 
+   n_rd = 0;
+   n_wr = 0;
+   
+   max_mrqs_temp = 0;
+   
+   max_mrqs = 0;
+   ave_mrqs = 0;
+   n_cmd_blp = 0;
+   n_req = 0;
+   bwutil = 0;
+   bwutil_data = 0;
+   bwutil_tlb = 0;
+   n_cmd_blp = 0;
+   mem_state_blp = 0;
+   dram_cycles_active = 0;
 
-  bk = (bank_t**) calloc(sizeof(bank_t*), m_config->nbk);
-  bk[0] = (bank_t*) calloc(sizeof(bank_t), m_config->nbk);
-  for (unsigned i = 1; i < m_config->nbk; i++)
-    bk[i] = bk[0] + i;
-  for (unsigned i = 0; i < m_config->nbk; i++) {
-    bk[i]->state = BANK_IDLE;
-    bk[i]->bkgrpindex = i / (m_config->nbk / m_config->nbkgrp);
-    bk[i]->blocked = 0;
-    bk[i]->transfer = 0;
-  }
-  prio = 0;
-  rwq = new fifo_pipeline<dram_req_t>("rwq", m_config->CL, m_config->CL + 1);
-  mrqq = new fifo_pipeline<dram_req_t>("mrqq", 0, 2);
-  returnq = new fifo_pipeline<mem_fetch>("dramreturnq", 0,
-      m_config->gpgpu_dram_return_queue_size == 0 ? 1024 : m_config->gpgpu_dram_return_queue_size);
-  m_frfcfs_scheduler = NULL;
-  if (m_config->scheduler_type == DRAM_FRFCFS)
-    m_frfcfs_scheduler = new frfcfs_scheduler(m_config, this, stats, m_shared_tlb);
+   // till here
+   for (unsigned i=0;i<10;i++) {
+      dram_util_bins[i]=0;
+      dram_eff_bins[i]=0;
+   }
+   last_n_cmd = last_n_activity = last_bwutil = 0;
 
-  n_cmd = 0;
-  n_activity = 0;
-  n_nop = 0;
-  n_act = 0;
-  n_pre = 0;
-  n_rd = 0;
-  n_wr = 0;
+   n_cmd_partial = 0;
+   n_activity_partial = 0;
+   n_nop_partial = 0;  
+   n_act_partial = 0;  
+   n_pre_partial = 0;  
+   n_req_partial = 0;
+   ave_mrqs_partial = 0;
+   bwutil_partial = 0;
 
-  max_mrqs_temp = 0;
+   if ( queue_limit() )
+      mrqq_Dist = StatCreate("mrqq_length",1, queue_limit());
+   else //queue length is unlimited; 
+      mrqq_Dist = StatCreate("mrqq_length",1,64); //track up to 64 entries
 
-  max_mrqs = 0;
-  ave_mrqs = 0;
-  n_cmd_blp = 0;
-  n_req = 0;
-  bwutil = 0;
-  bwutil_data = 0;
-  bwutil_tlb = 0;
-  n_cmd_blp = 0;
-  mem_state_blp = 0;
-  dram_cycles_active = 0;
-
-  // till here
-  for (unsigned i = 0; i < 10; i++) {
-    dram_util_bins[i] = 0;
-    dram_eff_bins[i] = 0;
-  }
-  last_n_cmd = last_n_activity = last_bwutil = 0;
-
-  n_cmd_partial = 0;
-  n_activity_partial = 0;
-  n_nop_partial = 0;
-  n_act_partial = 0;
-  n_pre_partial = 0;
-  n_req_partial = 0;
-  ave_mrqs_partial = 0;
-  bwutil_partial = 0;
-
-  if (queue_limit())
-    mrqq_Dist = StatCreate("mrqq_length", 1, queue_limit());
-  else
-    //queue length is unlimited;
-    mrqq_Dist = StatCreate("mrqq_length", 1, 64); //track up to 64 entries
-
-//subarray
-  for (unsigned i = 0; i < m_config->nbk; i++) {
-    bk[i]->cmd_queue = new std::list<dram_cmd*>();
-  }
+//subarray 
+   
+   for (unsigned i=0;i<m_config->nbk;i++) {
+      bk[i]->cmd_queue = new std::list<dram_cmd*>();
+   }
 
 }
 
-bool dram_t::full() const {
-  if (m_config->scheduler_type == DRAM_FRFCFS) {
-    if (m_config->gpgpu_frfcfs_dram_sched_queue_size == 0)
-      return false;
-    return m_frfcfs_scheduler->num_pending() >= m_config->gpgpu_frfcfs_dram_sched_queue_size;
-  } else
-    return mrqq->full();
+bool dram_t::full() const 
+{
+    if(m_config->scheduler_type == DRAM_FRFCFS ){
+        if(m_config->gpgpu_frfcfs_dram_sched_queue_size == 0 ) return false;
+        return m_frfcfs_scheduler->num_pending() >= m_config->gpgpu_frfcfs_dram_sched_queue_size;
+    }
+   else return mrqq->full();
 }
 
-unsigned dram_t::que_length() const {
-  unsigned nreqs = 0;
-  if (m_config->scheduler_type == DRAM_FRFCFS) {
-    nreqs = m_frfcfs_scheduler->num_pending();
-  } else {
-    nreqs = mrqq->get_length();
-  }
-  return nreqs;
+unsigned dram_t::que_length() const
+{
+   unsigned nreqs = 0;
+   if (m_config->scheduler_type == DRAM_FRFCFS ) {
+      nreqs = m_frfcfs_scheduler->num_pending();
+   } else {
+      nreqs = mrqq->get_length();
+   }
+   return nreqs;
 }
 
-bool dram_t::returnq_full() const {
-  return returnq->full();
+bool dram_t::returnq_full() const
+{
+   return returnq->full();
 }
 
-unsigned int dram_t::queue_limit() const {
-  return m_config->gpgpu_frfcfs_dram_sched_queue_size;
+unsigned int dram_t::queue_limit() const 
+{ 
+   return m_config->gpgpu_frfcfs_dram_sched_queue_size; 
 }
 
-dram_req_t::dram_req_t(class mem_fetch *mf) {
-  txbytes = 0;
-  dqbytes = 0;
-  data = mf;
 
-  const addrdec_t &tlx = mf->get_tlx_addr();
+dram_req_t::dram_req_t( class mem_fetch *mf )
+{
+   txbytes = 0;
+   dqbytes = 0;
+   data = mf;
 
-  bk = tlx.bk;
-  row = tlx.row;
-  col = tlx.col;
-  nbytes = mf->get_data_size();
+   const addrdec_t &tlx = mf->get_tlx_addr();
 
-  timestamp = gpu_tot_sim_cycle + gpu_sim_cycle;
-  addr = mf->get_addr();
-  insertion_time = (unsigned) gpu_sim_cycle;
-  rw = data->get_is_write() ? WRITE : READ;
+   bk  = tlx.bk; 
+   row = tlx.row; 
+   col = tlx.col; 
+   nbytes = mf->get_data_size();
+
+   timestamp = gpu_tot_sim_cycle + gpu_sim_cycle;
+   addr = mf->get_addr();
+   insertion_time = (unsigned) gpu_sim_cycle;
+   rw = data->get_is_write()?WRITE:READ;
 }
 
+
+// --> If there is a mem_fetch that miss in the TLB --> Add two requests, 
+// --> If there is a mem_fetch to a page that doesn't exist --> page fault
+//                                    --> Hand this mf to memory_owner.cc
 void dram_t::push(class mem_fetch *data) {
   if (mrqq->full()) { //make sure that we have enough room to fill into the queue
     wait_list.push_back(data);
@@ -256,11 +270,11 @@ void dram_t::push(class mem_fetch *data) {
       data->set_page_fault(false);
       data->set_tlb_miss(false);
       data->set_DRAM(this);
-    } else { // TLB hit and page in DRAM
+    } else {// TLB hit and page in DRAM
       if (data->get_tlb_depth_count() == 0 && data->get_wid() != -1) { //Only check if it is the actual requests, not TLB related request
         if (MERGE_DEBUG)
           printf(
-              "Got a memory request in DRAM before issuing. VA = %llx, channelID = %d, DRAM ID = %d\n",
+              "Got a memory request in DRAM before issuing. VA = %x, channelID = %d, DRAM ID = %d\n",
               data->get_addr(), data->get_tlx_addr().chip, id);
         assert(id == data->get_tlx_addr().chip); // Ensure request is in correct memory partition
       }
@@ -277,6 +291,7 @@ void dram_t::push(class mem_fetch *data) {
       if (data->get_sid() != -1) {
         n_req += 1;
         App* app = App::get_app(data->get_appID());
+        //App* app = App::get_app(App::get_app_id(data->get_sid()));
         app->n_req++;
       }
 
@@ -292,25 +307,30 @@ void dram_t::push(class mem_fetch *data) {
   }
 }
 
-void dram_t::insert_dram_command(dram_cmd * cmd) {
-  bk[cmd->to_bank]->cmd_queue->push_back(cmd);
+void dram_t::insert_dram_command(dram_cmd * cmd)
+{
+    bk[cmd->to_bank]->cmd_queue->push_back(cmd);
 }
 
-void dram_t::scheduler_fifo() {
-  if (!mrqq->empty()) {
-    unsigned int bkn;
-    dram_req_t *head_mrqq = mrqq->top();
-    head_mrqq->data->set_status(IN_PARTITION_MC_BANK_ARB_QUEUE, gpu_sim_cycle + gpu_tot_sim_cycle);
-    bkn = head_mrqq->bk;
-    if (!bk[bkn]->mrq)
-      bk[bkn]->mrq = mrqq->pop();
-  }
+void dram_t::scheduler_fifo()
+{
+   if (!mrqq->empty()) {
+      unsigned int bkn;
+      dram_req_t *head_mrqq = mrqq->top();
+      head_mrqq->data->set_status(IN_PARTITION_MC_BANK_ARB_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
+      bkn = head_mrqq->bk;
+      if (!bk[bkn]->mrq) 
+         bk[bkn]->mrq = mrqq->pop();
+   }
 }
+
 
 #define DEC2ZERO(x) x = (x)? (x-1) : 0;
 #define SWAP(a,b) a ^= b; b ^= a; a ^= b;
 
 void dram_t::cycle() {
+
+  //if(RC_DEBUG) printf("Check for compaction random DRAM probe. Enabled = %d, probe cycle = %lld, compacted value (random read if less than this value = %lld, current cycle = %lld, bankid = %d, channelid = %d, blocking this for %d cycles. Current cycles = %lld\n", m_config->enable_compaction, m_config->compaction_probe_cycle, (gpu_sim_cycle + gpu_tot_sim_cycle - m_page_manager->m_compaction_last_probed), gpu_sim_cycle + gpu_tot_sim_cycle, compaction_bank_id, id, m_config->tRC, gpu_sim_cycle + gpu_tot_sim_cycle);
   // Check if we need to trigger the scanner
   if (m_config->enable_compaction
       && (m_config->compaction_probe_cycle
@@ -322,8 +342,8 @@ void dram_t::cycle() {
     m_page_manager->m_compaction_last_probed = gpu_sim_cycle + gpu_tot_sim_cycle;
 
     m_page_manager->send_scan_request(); //Trigger the scan request
-
   }
+
 
   while (!mrqq->full() && !wait_list.empty()) {
     mem_fetch *temp = wait_list.front();
@@ -334,7 +354,7 @@ void dram_t::cycle() {
   if (!returnq->full()) {
     dram_req_t *cmd = rwq->pop();
     if (cmd) {
-#ifdef DRAM_VIEWCMD
+#ifdef DRAM_VIEWCMD 
       printf("\tDQ: BK%d Row:%03x Col:%03x", cmd->bk, cmd->row, cmd->col + cmd->dqbytes);
 #endif
       cmd->dqbytes += m_config->dram_atom_size;
@@ -342,21 +362,25 @@ void dram_t::cycle() {
         mem_fetch *data = cmd->data;
         data->set_status(IN_PARTITION_MC_RETURNQ, gpu_sim_cycle + gpu_tot_sim_cycle);
         if (data->get_access_type() != L1_WRBK_ACC && data->get_access_type() != L2_WRBK_ACC) {
+
+
           if (data->get_parent_tlb_request() == NULL) {
             data->set_reply();
           }
           returnq->push(data);
+//                } 
         } else {
           m_memory_partition_unit->set_done(data);
           delete data;
         }
         delete cmd;
       }
-#ifdef DRAM_VIEWCMD
+#ifdef DRAM_VIEWCMD 
       printf("\n");
 #endif
     }
   }
+
 
   /* check if the upcoming request is on an idle bank */
   /* Should we modify this so that multiple requests are checked? */
@@ -395,6 +419,7 @@ void dram_t::cycle() {
 
   bool issued = false;
 
+
   // check if any bank is ready to issue a new read
   for (unsigned i = 0; i < m_config->nbk; i++) {
     unsigned j = (i + prio) % m_config->nbk;
@@ -402,6 +427,7 @@ void dram_t::cycle() {
 
     if (bk[i]->blocked > 0) //Blocked due to copying
         {
+//         if(RC_DEBUG) printf("Bank %d channel %d is blocked, bank state = %d, current_cycle = %lld\n",i,id,bk[i]->state, gpu_sim_cycle + gpu_tot_sim_cycle);
       bk[i]->blocked--;
       if (bk[i]->blocked == 0) {
         if (RC_DEBUG)
@@ -484,6 +510,7 @@ void dram_t::cycle() {
       }
     }
 
+
     if (bk[j]->mrq) { //if currently servicing a read/write memory request
       bk[j]->mrq->data->set_status(IN_PARTITION_DRAM, gpu_sim_cycle + gpu_tot_sim_cycle);
 
@@ -494,6 +521,7 @@ void dram_t::cycle() {
 
       if (bk[j]->mrq->data->get_sid() != -1) { //new
         App* app = App::get_app(bk[j]->mrq->data->get_appID());
+        //App* app = App::get_app(App::get_app_id(bk[j]->mrq->data->get_sid()));
         app->blp++;
       }
 
@@ -538,6 +566,7 @@ void dram_t::cycle() {
             bwutil_periodic_data += m_config->BL / m_config->data_command_freq_ratio;
           }
           App* app = App::get_app(bk[j]->mrq->data->get_appID());
+          //App* app = App::get_app(App::get_app_id(bk[j]->mrq->data->get_sid()));
           app->bwutil += m_config->BL / m_config->data_command_freq_ratio;
           app->bwutil_periodic += m_config->BL / m_config->data_command_freq_ratio;
           if (bk[j]->mrq->data->get_tlb_depth_count() > 0) { //TLB-related data
@@ -553,7 +582,7 @@ void dram_t::cycle() {
         printf("\tRD  Bk:%d Row:%03x Col:%03x \n",
             j, bk[j]->curr_row,
             bk[j]->mrq->col + bk[j]->mrq->txbytes - m_config->dram_atom_size);
-#endif
+#endif            
         // transfer done
         if (!(bk[j]->mrq->txbytes < bk[j]->mrq->nbytes)) {
           bk[j]->mrq = NULL;
@@ -580,6 +609,8 @@ void dram_t::cycle() {
         bk[j]->WTPc = (same_subarray ? m_config->sWTP : m_config->tWTP);
         issued = true;
         n_wr++;
+        //bwutil += m_config->BL/m_config->data_command_freq_ratio;
+        //bwutil_partial += m_config->BL/m_config->data_command_freq_ratio;
         if (bk[j]->mrq->data->get_sid() != -1) {            //new
           bwutil += m_config->BL / m_config->data_command_freq_ratio;
           if (bk[j]->mrq->data->get_tlb_depth_count() > 0) {           //TLB-related data
@@ -588,6 +619,7 @@ void dram_t::cycle() {
             bwutil_data += m_config->BL / m_config->data_command_freq_ratio;
           }
           App* app = App::get_app(bk[j]->mrq->data->get_appID());
+          //App* app = App::get_app(App::get_app_id(bk[j]->mrq->data->get_sid()));
           app->bwutil += m_config->BL / m_config->data_command_freq_ratio;
           if (bk[j]->mrq->data->get_tlb_depth_count() > 0) {			//TLB-related data
             app->bwutil_tlb += m_config->BL / m_config->data_command_freq_ratio;
@@ -600,7 +632,7 @@ void dram_t::cycle() {
         printf("\tWR  Bk:%d Row:%03x Col:%03x \n",
             j, bk[j]->curr_row,
             bk[j]->mrq->col + bk[j]->mrq->txbytes - m_config->dram_atom_size);
-#endif
+#endif  
         // transfer done
         if (!(bk[j]->mrq->txbytes < bk[j]->mrq->nbytes)) {
           bk[j]->mrq = NULL;
@@ -702,6 +734,7 @@ void dram_t::cycle() {
     }
   }
 
+
   // decrements counters once for each time dram_issueCMD is called
   DEC2ZERO(RRDc);
   DEC2ZERO(CCDc);
@@ -721,18 +754,21 @@ void dram_t::cycle() {
     DEC2ZERO(bkgrp[j]->RTPLc);
   }
 
+
 #ifdef DRAM_VISUALIZE
   visualize();
 #endif
 }
 
 //if mrq is being serviced by dram, gets popped after CL latency fulfilled
-class mem_fetch* dram_t::return_queue_pop() {
-  return returnq->pop();
+class mem_fetch* dram_t::return_queue_pop() 
+{
+    return returnq->pop();
 }
 
-class mem_fetch* dram_t::return_queue_top() {
-  return returnq->top();
+class mem_fetch* dram_t::return_queue_top() 
+{
+    return returnq->top();
 }
 
 void dram_t::print(FILE* simFile) const {
@@ -775,16 +811,18 @@ void dram_t::print(FILE* simFile) const {
   }
   fprintf(simFile, "\n");
   fprintf(simFile, "bw_dist = ");
-  fprintf(simFile, "%4.3f\t%4.3f\n", ((float) dram_cycles_active / n_cmd - (float) bwutil / n_cmd),
+  fprintf(simFile, "%4.3f\t%4.3f\n",
+      ((float) dram_cycles_active / n_cmd - (float) bwutil / n_cmd),
       (1 - (float) dram_cycles_active / n_cmd));
 
   fprintf(simFile, "bw_dist_detailed (tlb,data)= ");
-  fprintf(simFile, "%4.3f\t%4.3f", ((float) dram_cycles_active / n_cmd - (float) bwutil / n_cmd),
+  fprintf(simFile, "%4.3f\t%4.3f",
+      ((float) dram_cycles_active / n_cmd - (float) bwutil / n_cmd),
       (1 - (float) dram_cycles_active / n_cmd));
 
   fprintf(simFile, "\n");
 
-  fprintf(simFile, "mrqq: %d %.4g mrqsmax=%d ", max_mrqs, (float) ave_mrqs / n_cmd, max_mrqs_temp);
+  fprintf(simFile, "mrqq: %d %.4g mrqsmax=%d ", max_mrqs, (float)ave_mrqs/n_cmd, max_mrqs_temp);
   fprintf(simFile, "\n");
   fprintf(simFile, "dram_util_bins:");
   for (int i = 0; i < 10; i++)
@@ -797,83 +835,96 @@ void dram_t::print(FILE* simFile) const {
     fprintf(simFile, "mrqq: max=%d avg=%g\n", max_mrqs, (float) ave_mrqs / n_cmd);
 }
 
-void dram_t::visualize() const {
-  printf("RRDc=%d CCDc=%d mrqq.Length=%d rwq.Length=%d\n", RRDc, CCDc, mrqq->get_length(),
-      rwq->get_length());
-  for (unsigned i = 0; i < m_config->nbk; i++) {
-    printf("BK%d: state=%c curr_row=%03x, %2d %2d %2d %2d %p ", i, bk[i]->state, bk[i]->curr_row,
-        bk[i]->RCDc, bk[i]->RASc, bk[i]->RPc, bk[i]->RCc, bk[i]->mrq);
-    if (bk[i]->mrq)
-      printf("txf: %d %d", bk[i]->mrq->nbytes, bk[i]->mrq->txbytes);
-    printf("\n");
-  }
-  if (m_frfcfs_scheduler)
-    m_frfcfs_scheduler->print(stdout);
+void dram_t::visualize() const
+{
+   printf("RRDc=%d CCDc=%d mrqq.Length=%d rwq.Length=%d\n", 
+          RRDc, CCDc, mrqq->get_length(),rwq->get_length());
+   for (unsigned i=0;i<m_config->nbk;i++) {
+      printf("BK%d: state=%c curr_row=%03x, %2d %2d %2d %2d %p ", 
+             i, bk[i]->state, bk[i]->curr_row,
+             bk[i]->RCDc, bk[i]->RASc,
+             bk[i]->RPc, bk[i]->RCc,
+             bk[i]->mrq );
+      if (bk[i]->mrq)
+         printf("txf: %d %d", bk[i]->mrq->nbytes, bk[i]->mrq->txbytes);
+      printf("\n");
+   }
+   if ( m_frfcfs_scheduler ) 
+      m_frfcfs_scheduler->print(stdout);
 }
 
-void dram_t::print_stat(FILE* simFile) {
+void dram_t::print_stat( FILE* simFile ) 
+{
   return print(simFile);
 }
 
-void dram_t::visualizer_print(gzFile visualizer_file) {
-  // dram specific statistics
-  gzprintf(visualizer_file, "dramncmd: %u %u\n", id, n_cmd_partial);
-  gzprintf(visualizer_file, "dramnop: %u %u\n", id, n_nop_partial);
-  gzprintf(visualizer_file, "dramnact: %u %u\n", id, n_act_partial);
-  gzprintf(visualizer_file, "dramnpre: %u %u\n", id, n_pre_partial);
-  gzprintf(visualizer_file, "dramnreq: %u %u\n", id, n_req_partial);
-  gzprintf(visualizer_file, "dramavemrqs: %u %u\n", id,
-      n_cmd_partial ? (ave_mrqs_partial / n_cmd_partial) : 0);
+void dram_t::visualizer_print( gzFile visualizer_file )
+{
+   // dram specific statistics
+   gzprintf(visualizer_file,"dramncmd: %u %u\n",id, n_cmd_partial);  
+   gzprintf(visualizer_file,"dramnop: %u %u\n",id,n_nop_partial);
+   gzprintf(visualizer_file,"dramnact: %u %u\n",id,n_act_partial);
+   gzprintf(visualizer_file,"dramnpre: %u %u\n",id,n_pre_partial);
+   gzprintf(visualizer_file,"dramnreq: %u %u\n",id,n_req_partial);
+   gzprintf(visualizer_file,"dramavemrqs: %u %u\n",id,
+            n_cmd_partial?(ave_mrqs_partial/n_cmd_partial ):0);
 
-  // utilization and efficiency
-  gzprintf(visualizer_file, "dramutil: %u %u\n", id,
-      n_cmd_partial ? 100 * bwutil_partial / n_cmd_partial : 0);
-  gzprintf(visualizer_file, "drameff: %u %u\n", id,
-      n_activity_partial ? 100 * bwutil_partial / n_activity_partial : 0);
+   // utilization and efficiency
+   gzprintf(visualizer_file,"dramutil: %u %u\n",  
+            id,n_cmd_partial?100*bwutil_partial/n_cmd_partial:0);
+   gzprintf(visualizer_file,"drameff: %u %u\n", 
+            id,n_activity_partial?100*bwutil_partial/n_activity_partial:0);
 
-  // reset for next interval
-  bwutil_partial = 0;
-  n_activity_partial = 0;
-  ave_mrqs_partial = 0;
-  n_cmd_partial = 0;
-  n_nop_partial = 0;
-  n_act_partial = 0;
-  n_pre_partial = 0;
-  n_req_partial = 0;
+   // reset for next interval
+   bwutil_partial = 0;
+   n_activity_partial = 0;
+   ave_mrqs_partial = 0; 
+   n_cmd_partial = 0;
+   n_nop_partial = 0;
+   n_act_partial = 0;
+   n_pre_partial = 0;
+   n_req_partial = 0;
 
-  // dram access type classification
-  for (unsigned j = 0; j < m_config->nbk; j++) {
-    gzprintf(visualizer_file, "dramglobal_acc_r: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[GLOBAL_ACC_R][id][j]);
-    gzprintf(visualizer_file, "dramglobal_acc_w: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[GLOBAL_ACC_W][id][j]);
-    gzprintf(visualizer_file, "dramlocal_acc_r: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[LOCAL_ACC_R][id][j]);
-    gzprintf(visualizer_file, "dramlocal_acc_w: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[LOCAL_ACC_W][id][j]);
-    gzprintf(visualizer_file, "dramconst_acc_r: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[CONST_ACC_R][id][j]);
-    gzprintf(visualizer_file, "dramtexture_acc_r: %u %u %u\n", id, j,
-        m_stats->mem_access_type_stats[TEXTURE_ACC_R][id][j]);
-  }
+   // dram access type classification
+   for (unsigned j = 0; j < m_config->nbk; j++) {
+      gzprintf(visualizer_file,"dramglobal_acc_r: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[GLOBAL_ACC_R][id][j]);
+      gzprintf(visualizer_file,"dramglobal_acc_w: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[GLOBAL_ACC_W][id][j]);
+      gzprintf(visualizer_file,"dramlocal_acc_r: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[LOCAL_ACC_R][id][j]);
+      gzprintf(visualizer_file,"dramlocal_acc_w: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[LOCAL_ACC_W][id][j]);
+      gzprintf(visualizer_file,"dramconst_acc_r: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[CONST_ACC_R][id][j]);
+      gzprintf(visualizer_file,"dramtexture_acc_r: %u %u %u\n", id, j, 
+               m_stats->mem_access_type_stats[TEXTURE_ACC_R][id][j]);
+   }
 }
 
-void dram_t::set_dram_power_stats(unsigned &cmd, unsigned &activity, unsigned &nop, unsigned &act,
-    unsigned &pre, unsigned &rd, unsigned &wr, unsigned &req) const {
 
-  // Point power performance counters to low-level DRAM counters
-  cmd = n_cmd;
-  activity = n_activity;
-  nop = n_nop;
-  act = n_act;
-  pre = n_pre;
-  rd = n_rd;
-  wr = n_wr;
-  req = n_req;
+void dram_t::set_dram_power_stats(	unsigned &cmd,
+									unsigned &activity,
+									unsigned &nop,
+									unsigned &act,
+									unsigned &pre,
+									unsigned &rd,
+									unsigned &wr,
+									unsigned &req) const{
+
+	// Point power performance counters to low-level DRAM counters
+	cmd = n_cmd;
+	activity = n_activity;
+	nop = n_nop;
+	act = n_act;
+	pre = n_pre;
+	rd = n_rd;
+	wr = n_wr;
+	req = n_req;
 }
 
 void dram_t::set_miss(float m) {
-  miss_rate_d = m;
+    miss_rate_d = m;
 }
 
 void dram_t::set_miss_r(appid_t appid, float m) {
@@ -881,12 +932,14 @@ void dram_t::set_miss_r(appid_t appid, float m) {
   app->miss_rate_d = m;
 }
 
-void dram_t::set_miss_core(float m, unsigned i) {
-  miss_rate_d_core[i] = m;
+
+void dram_t::set_miss_core(float m, unsigned i)
+{
+   miss_rate_d_core[i] = m;
 }
 
 float dram_t::get_miss() {
-  return miss_rate_d;
+    return miss_rate_d;
 }
 
 unsigned dram_t::dram_bwutil_data() {
@@ -927,4 +980,3 @@ unsigned dram_t::dram_bwutil(appid_t appid) {
   app->bwutil_periodic = 0;
   return temp;
 }
-

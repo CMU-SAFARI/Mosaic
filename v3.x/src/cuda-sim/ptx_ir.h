@@ -1029,7 +1029,6 @@ private:
    void set_fp_or_int_archop();
    void set_mul_div_or_other_archop();
 
-   // fault flag. If true, this instruction trigger a page fault
    bool m_fault;
 
    basic_block_t        *m_basic_block;

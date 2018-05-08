@@ -7,7 +7,7 @@ Requirements:
 - gcc 4.4 and g++ 4.8
 -- Note that the Makefile in pthread_benchmark as well as NVIDIA CUDA SDK folder can potentially be updated to enforce gcc and g++ to use the same version. However, it is not supported at the moment. g++4.8 is needed for Mosaic main simulator as we have been using newer funcationalities of g++.
 
-How to run Mosaic:
+How to run Mosaic and MASK:
 
 1) Modify CUDAHOME and NVIDIA_CUDA_SDK_LOCATION in v3.x/setup_environment to the location where NVIDIA CUDA SDK and CUDA 4.0 are installed.
 
@@ -27,6 +27,10 @@ The current version of the simulator is provided as is, and should be treated as
 Please cite the following paper when using Mosaic simulator:
 
 - Rachata Ausavarungnirun, Joshua Landgraf, Vance Miller, Saugata Ghose, Jayneel Gandhi, Christopher J. Rossbach, and Onur Mutlu. "Mosaic: A GPU Memory Manager with Application-Transparent Support for Multiple Page Sizes". In the Proceedings of the 50th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO 2017), Boston, MA, October 2017. 
+
+Please cite the following paper when running MASK:
+
+- Rachata Ausavarungnirun, Vance Miller, Joshua Landgraf, Saugata Ghose, Jayneel Gandhi, Adwait Jog, Christopher J. Rossbach, and Onur Mutlu, "MASK: Redesigning the GPU Memory Hierarchy to Support Multi-Application Concurrency". In the Proceedings of the 23rd ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2018), Williamsburg, VA, March 2018. 
 
 Please credit the following paper when using the Mafia benchmark suite:
 

@@ -212,8 +212,7 @@ uint64_t memory_stats_t::memlatstat_done(mem_fetch *mf )
   if (mf->get_tlb_depth_count() > 0) {
     tlb_mf_total_num_lat_pw++;
     tlb_mf_total_tot_lat_pw += mf_latency;
-  } // TODO remove zeroth entry
-
+  } 
   if (mf->get_sid() != -1) {
     App* app = App::get_app(mf->get_appID());
     //App* app = App::get_app(App::get_app_id(mf->get_sid()));
@@ -279,7 +278,6 @@ void memory_stats_t::memlatstat_dram_access(mem_fetch *mf)
    }
    if (mf->get_pc() != (unsigned)-1)
       ptx_file_line_stats_add_dram_traffic(mf->get_pc(), mf->get_data_size());
-
 }
 
 void memory_stats_t::memlatstat_icnt2mem_pop(mem_fetch *mf)

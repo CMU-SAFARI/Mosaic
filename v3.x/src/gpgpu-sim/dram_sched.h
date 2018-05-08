@@ -69,7 +69,7 @@ private:
 
   tlb_tag_array * m_shared_tlb;
 
-  appid_t current_prioritize;
+  unsigned current_prioritize;
   unsigned current_prioritize_total;
   unsigned epoch_total_concurrent;
 

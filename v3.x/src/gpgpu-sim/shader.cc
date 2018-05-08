@@ -475,7 +475,6 @@ void shader_core_stats::print(FILE* fout) const {
     fprintf(fout, "number_of_TLB_prefetch_hit_app%u  = %lu\n", i, app->tlb_prefetch_hit_app);
   }
 
-
   fprintf(fout, "number_of_max_available_warp_each_tlb = {");
   for (int i = 0; i < 200; i++) {
     fprintf(fout, "%d ", avail_warp_tlb_max[i]);
@@ -543,7 +542,7 @@ void shader_core_stats::print(FILE* fout) const {
     fprintf(fout, "}\n");
   }
 
-  // TLB-related stats
+  //  TLB-related stats
   fprintf(fout, "max_concurrent_tlb_accesses  = %d\n", tlb_concurrent_max);
   for (unsigned i = 0; i < ConfigOptions::n_apps; i++) {
     App* app = App::get_app(App::get_app_id(i));
@@ -901,7 +900,6 @@ void scheduler_unit::order_by_priority(std::vector<T>& result_list,
   }
 }
 
-// Check if a warp is schedulable.
 bool scheduler_unit::check_schedulable(shd_warp_t* thiswarp) {
   unsigned warp_id = thiswarp->get_warp_id();
   unsigned checked = 0;
@@ -943,7 +941,6 @@ bool scheduler_unit::check_schedulable(shd_warp_t* thiswarp) {
   return false; //Not schedulable
 }
 
-// Check if a warp is schedulable.
 bool scheduler_unit::no_mem_stall(shd_warp_t* thiswarp) {
   unsigned warp_id = thiswarp->get_warp_id();
   unsigned checked = 0;
@@ -974,18 +971,22 @@ bool scheduler_unit::no_mem_stall(shd_warp_t* thiswarp) {
 }
 
 void scheduler_unit::cycle() {
+
+
   SCHED_DPRINTF("scheduler_unit::cycle()\n");
   bool valid_inst = false; // there was one warp with a valid instruction to issue (didn't require flush due to control hazard)
   bool ready_inst = false; // of the valid instructions, there was one not waiting for pending register writes
   bool issued_inst = false; // of these we issued one
+
+
   order_warps();
+
 
   if (m_shader->get_mem_config()->get_shader_avail_warp_stat) {
     unsigned total_warps = 0; //Stat collection
     unsigned schedulable_warps = 0; //Stat collection
     unsigned no_mem_stall_warps = 0; //Stat collection
 
-    // Stat collection. Check the total number of warps schedulable during this cycle
     for (std::vector<shd_warp_t*>::const_iterator iter = m_next_cycle_prioritized_warps.begin();
         iter != m_next_cycle_prioritized_warps.end(); iter++) {
       if (!((*iter) == NULL || (*iter)->done_exit())) {
@@ -998,6 +999,9 @@ void scheduler_unit::cycle() {
     }
 
     float fraction_schedulable = (float) schedulable_warps / (float) total_warps;
+
+
+//        float avail_warp_per_tlb_misses_core = (float)schedulable_warps/(float)m_stats->tlb_current_concurrent_serviced_core[get_sid()];
     float sched_avg = m_stats->avail_warp_tlb_avg[m_stats->tlb_current_concurrent_serviced];
     float mem_avg = m_stats->nonmem_warp_tlb_avg[m_stats->tlb_current_concurrent_serviced];
     sched_avg = sched_avg
@@ -1015,12 +1019,19 @@ void scheduler_unit::cycle() {
     if (schedulable_warps > m_stats->avail_warp_tlb_max[m_stats->tlb_current_concurrent_serviced]) {
       m_stats->avail_warp_tlb_max[m_stats->tlb_current_concurrent_serviced] = schedulable_warps;
     }
+
+//        if(schedulable_warps < m_stats->avail_warp_tlb_min[m_stats->tlb_current_concurrent_serviced])
+//        {
+//            m_stats->avail_warp_tlb_min[m_stats->tlb_current_concurrent_serviced] = schedulable_warps;
+//        }
+
     if (no_mem_stall_warps
         > m_stats->nonmem_warp_tlb_max[m_stats->tlb_current_concurrent_serviced]) {
       m_stats->nonmem_warp_tlb_max[m_stats->tlb_current_concurrent_serviced] = no_mem_stall_warps;
     }
 
   }
+
 
   for (std::vector<shd_warp_t*>::const_iterator iter = m_next_cycle_prioritized_warps.begin();
       iter != m_next_cycle_prioritized_warps.end(); iter++) {
@@ -1480,9 +1491,9 @@ mem_stage_stall_type ldst_unit::process_cache_access(cache_t* cache, new_addr_ty
     warp_inst_t &inst, std::list<cache_event>& events, mem_fetch *mf,
     enum cache_request_status status) {
 
-  if (m_memory_config->capture_VA && (mf->get_tlb_depth_count() == 0)) 
+  if (m_memory_config->capture_VA && (mf->get_tlb_depth_count() == 0)) // Collect VA trace
       {
-    fprintf(m_va_trace_file, "%llx %d %d %d %d\n", mf->get_addr(), mf->get_appID(), mf->get_wid(),
+    fprintf(m_va_trace_file, "%x %d %d %d %d\n", mf->get_addr(), mf->get_appID(), mf->get_wid(),
         mf->get_sid(), mf->get_tpc());
   }
 
@@ -1632,12 +1643,15 @@ bool ldst_unit::response_buffer_full() const {
 
 void ldst_unit::fill(mem_fetch *mf) {
   mf->set_status(IN_SHADER_LDST_RESPONSE_FIFO, gpu_sim_cycle + gpu_tot_sim_cycle);
+
+
   m_response_fifo.push_back(mf);
 }
 
 void ldst_unit::flush() {
   // Flush L1D cache
   m_L1D->flush();
+
   //m_L1C->flush(); //new
 }
 
@@ -1938,13 +1952,15 @@ unsigned ldst_unit::clock_multiplier() const {
  */
 void ldst_unit::cycle() {
 
+  //  Reset epoch based stats periodically
   if ((gpu_sim_cycle + gpu_tot_sim_cycle) % m_memory_config->epoch_length == 0) {
-    printf("Resetting epoch statistics at cycle %llx\n", gpu_sim_cycle + gpu_tot_sim_cycle);
+    printf("Resetting epoch statistics at cycle %x\n", gpu_sim_cycle + gpu_tot_sim_cycle);
     if (m_memory_config->epoch_enabled)
       m_stats->write_epoch_stat(m_memory_config->epoch_file, gpu_sim_cycle + gpu_tot_sim_cycle); //Write epoch statistics to the output file
     m_stats->reset_epoch_stat();
   }
 
+  //  PW-cache, enqueue all pw_cache hit reqs that are done to icnt
   if (m_memory_config->pw_cache_enable && m_shared_tlb != NULL) {
     m_shared_tlb->remove_pw_cache_lat_queue();
   }
@@ -1974,6 +1990,7 @@ void ldst_unit::cycle() {
         m_response_fifo.pop_front();
         delete mf;
       } else {
+
         if (mf->get_tlb_depth_count() == 0)
           assert(!mf->get_is_write()); // L1 cache is write evict, allocate line on load miss only
 
@@ -1992,8 +2009,10 @@ void ldst_unit::cycle() {
           }
         } else {
           if (m_L1D->fill_port_free()) {
+//                       if(mf->get_tlb_depth_count()==0)
             m_L1D->fill(mf, gpu_sim_cycle + gpu_tot_sim_cycle);
             m_response_fifo.pop_front();
+//                       if(mf->get_tlb_depth_count()>0) delete mf;
           }
         }
       }
@@ -3280,6 +3299,7 @@ unsigned simt_core_cluster::get_n_active_sms() const {
 }
 
 unsigned simt_core_cluster::issue_block2core() {
+
   unsigned num_blocks_issued = 0;
 
   for (unsigned i = 0; i < m_config->n_simt_cores_per_cluster; i++) {
@@ -3290,7 +3310,6 @@ unsigned simt_core_cluster::issue_block2core() {
         // Adwait: FIXME: this is an inefficient way. Fix select_kernel function to pass m_cluster_id and check
         // there first with the stream id.
         if (k) {
-          // TODO not sure about the correctness of this.
           unsigned id = k->get_stream_id();
           m_core[core]->set_kernel(k);
         }

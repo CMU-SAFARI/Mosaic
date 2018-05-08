@@ -43,12 +43,14 @@ endif
 
 include ../../version_detection.mk
 
-CXXFLAGS += -std=c++11
+ifeq ($(GNUC_CPP0X), 1)
+    CXXFLAGS += -std=c++0x
+endif
 
 ifneq ($(DEBUG),1)
 	OPTFLAGS += -O3
 else
-	CXXFLAGS +=
+	CXXFLAGS += 
 endif
 
 POWER_FLAGS=
@@ -65,7 +67,7 @@ OUTPUT_DIR=$(SIM_OBJ_FILES_DIR)/gpgpu-sim
 
 SRCS = $(shell ls *.cc)
 
-EXCLUDES =
+EXCLUDES = 
 
 ifeq ($(GPGPUSIM_POWER_MODEL), )
 EXCLUDES += power_interface.cc
@@ -74,7 +76,7 @@ endif
 CSRCS = $(filter-out $(EXCLUDES), $(SRCS))
 
 OBJS = $(CSRCS:%.cc=$(OUTPUT_DIR)/%.$(OEXT))
-
+ 
 libgpu_uarch_sim.a:$(OBJS)
 	ar rcs  $(OUTPUT_DIR)/libgpu_uarch_sim.a $(OBJS)
 
@@ -88,7 +90,7 @@ $(OUTPUT_DIR)/%.$(OEXT): %.cc
 	$(CPP) $(OPTFLAGS) $(CXXFLAGS) $(POWER_FLAGS) -o $(OUTPUT_DIR)/$*.$(OEXT) -c $*.cc
 
 clean:
-	rm -f *.o core *~ *.a
+	rm -f *.o core *~ *.a 
 	rm -f Makefile.makedepend Makefile.makedepend.bak
 
 $(OUTPUT_DIR)/option_parser.$(OEXT): option_parser.h

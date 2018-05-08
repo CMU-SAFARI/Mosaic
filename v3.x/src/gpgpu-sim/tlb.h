@@ -34,8 +34,6 @@
 #include <queue>
 #include <set>
 
-#include "App.h"
-
 #define GLOBAL_SPACE 0
 #define TEXTURE_SPACE 1
 #define SHARED_SPACE 2
@@ -96,7 +94,7 @@ public:
   std::list<unsigned long long> * prefetch_queue_time[256];
   std::set<unsigned> stride_set;
 
-  std::map<appid_t, std::set<new_addr_type>*> promoted_pages; //List of coalesced pages, key = page_base_addr | appID
+  std::map<int,std::set<new_addr_type>*> promoted_pages; //List of coalesced pages, key = page_base_addr | appID
 
   //For multiple page size metadata tracking
   std::map<new_addr_type, unsigned long long> * hotness_track;
@@ -112,6 +110,9 @@ public:
   unsigned prev_stride;
   unsigned stride;
   unsigned long long last_update_concurrent_stat;
+  std::list<new_addr_type> * bypass_done_REG;
+  std::list<unsigned long long> * bypass_done_REG_time;
+  //std::set<new_addr_type> * bypass_done_queue;
 
   unsigned long long tlb_occupancy_last_updated; //Don't think we need this
   unsigned long long tlb_demotion_last_checked;
@@ -121,19 +122,19 @@ public:
   void set_l1_tlb(int coreID, tlb_tag_array * l1); //Called from L1 TLB to L2 TLB. So that L2 TLB can send invalidate commands to L1 TLBs
   tlb_tag_array ** l1_tlb;
 
-  void invalidate_entries(appid_t appID, new_addr_type base_entry);
+  void invalidate_entries(int appID, new_addr_type base_entry);
 
   unsigned long long ready_cycle;
 
   void check_threshold(mem_fetch * mf);
 
-  unsigned get_concurrent_tlb_app(appid_t appID);
+  unsigned get_concurrent_tlb_app(int appID);
 
   void add_mf_to_done(mem_fetch * mf); //Add to remove_list for deletion later
 
   void remove_done_mf();
 
-  int promotion(new_addr_type va, appid_t appID); //Called from the MMU
+  int promotion(new_addr_type va, int appID); //Called from the MMU
 
   void handle_pending_prefetch();
 
@@ -146,26 +147,27 @@ public:
   unsigned long long last_shifted_page_stat;
 
   const memory_config * m_config;
-  enum tlb_request_status probe(new_addr_type addr, appid_t accessor, mem_fetch * mf);
+  enum tlb_request_status probe(new_addr_type addr, unsigned accessor, mem_fetch * mf);
 
+  void remove_done_REG();
 
   bool bypass_dir; //True == more aggressive, false = less aggressive
 
   void fill(new_addr_type addr, mem_fetch * mf);
-  int remove_miss_queue(new_addr_type addr, appid_t appID);
-  void fill(new_addr_type addr, appid_t accessor, mem_fetch * mf); // L2 TLB fill
-  void l2_fill(new_addr_type addr, appid_t accessor, mem_fetch * mf); // L2 TLB fill
+  int remove_miss_queue(new_addr_type addr, int appID);
+  void fill(new_addr_type addr, unsigned accessor, mem_fetch * mf); // L2 TLB fill
+  void l2_fill(new_addr_type addr, unsigned accessor, mem_fetch * mf); // L2 TLB fill
 
-  bool bypass_TLB(mem_fetch * mf, appid_t appID);
+  bool bypass_TLB(mem_fetch * mf, unsigned appID);
 
   new_addr_type get_tlbreq_addr(mem_fetch * mf);
 
   // Get the actual physical address of a TLB access
-  new_addr_type assign_pa(new_addr_type original, unsigned tlb_level, appid_t appID);
+  new_addr_type assign_pa(new_addr_type original, unsigned tlb_level, unsigned appID);
   // Parse the assiciated memory access (location of the page dir/table)
   new_addr_type parse_tlb_access(mem_fetch * mf);
 
-  unsigned flush(appid_t appID); // flash invalidate all entries
+  unsigned flush(int appID); // flash invalidate all entries
   unsigned flush(); // flash invalidate all entries, for non-triggering slice
 
   unsigned m_access;
@@ -180,9 +182,10 @@ public:
   tlb_tag_array * m_shared_tlb;
   unsigned tlb_level;
 
+  void send_dram_cmd(new_addr_type from_addr, new_addr_type to_addr, int command, int appID);
   //Resize the page belong to base_addr, appID. MMU will automatically detect the size
-  void resize_page(appid_t appID, new_addr_type base_addr, new_addr_type original_addr);
-  bool demote_page(new_addr_type va, appid_t appID);
+  void resize_page(int appID, new_addr_type base_addr, new_addr_type original_addr);
+  bool demote_page(new_addr_type va, int appID);
 
   tlb_tag_array * get_shared_tlb() {
     return m_shared_tlb;
@@ -196,7 +199,7 @@ public:
   unsigned long long L2_ready_cycle;
   unsigned long long bypass_cache_ready_cycle;
 
-  void update_L1_ready_cycle(appid_t appID, unsigned long long time);
+  void update_L1_ready_cycle(int appID, unsigned long long time);
 
   bool previous_bypass_enabled;
 
@@ -207,6 +210,7 @@ public:
 
   void print_statistics();
 
+  void reset_bypass_stats(unsigned appID);
 
   bool pw_cache_access(mem_fetch * mf);
   void pw_cache_fill(mem_fetch * mf);

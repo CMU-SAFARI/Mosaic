@@ -68,7 +68,7 @@ void my_cuda_printf(const char *fmtstr,const char *arg_list)
    }
 }
 
-void gpgpusim_cuda_vprintf(const ptx_instruction * pI, ptx_thread_info * thread, const function_info * target_func )
+void gpgpusim_cuda_vprintf(const ptx_instruction * pI, ptx_thread_info * thread, const function_info * target_func ) 
 {
       char *fmtstr = NULL;
       char *arg_list = NULL;
@@ -84,7 +84,7 @@ void gpgpusim_cuda_vprintf(const ptx_instruction * pI, ptx_thread_info * thread,
          addr_t from_addr = actual_param_op.get_symbol()->get_address();
          unsigned long long buffer[1024];
          assert(size<1024*sizeof(unsigned long long));
-         thread->m_local_mem->read(from_addr,size,buffer);
+         thread->m_local_mem->read(from_addr,size,buffer, thread->get_appID());
          addr_t addr = (addr_t)buffer[0]; // should be pointer to generic memory location
          memory_space *mem=NULL;
          memory_space_t space = generic_space;
@@ -93,18 +93,18 @@ void gpgpusim_cuda_vprintf(const ptx_instruction * pI, ptx_thread_info * thread,
             unsigned len = 0;
             char b = 0;
             do { // figure out length
-               mem->read(addr+len,1,&b);
+               mem->read(addr+len,1,&b, thread->get_appID());
                len++;
             } while(b);
             fmtstr = (char*)malloc(len+64);
-            for( int i=0; i < len; i++ )
-               mem->read(addr+i,1,fmtstr+i);
+            for( int i=0; i < len; i++ ) 
+               mem->read(addr+i,1,fmtstr+i, thread->get_appID());
             //mem->read(addr,len,fmtstr);
          } else {
             unsigned len = thread->get_finfo()->local_mem_framesize();
             arg_list = (char*)malloc(len+64);
-            for( int i=0; i < len; i++ )
-               mem->read(addr+i,1,arg_list+i);
+            for( int i=0; i < len; i++ ) 
+               mem->read(addr+i,1,arg_list+i, thread->get_appID());
             //mem->read(addr,len,arg_list);
          }
       }

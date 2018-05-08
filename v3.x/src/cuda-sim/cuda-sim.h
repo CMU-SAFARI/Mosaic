@@ -29,7 +29,6 @@
 #define CUDASIM_H_INCLUDED
 
 #include "../abstract_hardware_model.h"
-#include "../gpgpu-sim/App.h"
 #include"../gpgpu-sim/shader.h"
 #include <stdlib.h>
 #include <map>
@@ -46,13 +45,13 @@ extern int g_debug_execution;
 extern int g_debug_thread_uid;
 extern void ** g_inst_classification_stat;
 extern void ** g_inst_op_classification_stat;
-extern int g_ptx_kernel_count; // used for classification stat collection purposes
+extern int g_ptx_kernel_count; // used for classification stat collection purposes 
 
 void ptx_opcocde_latency_options (option_parser_t opp);
 extern class kernel_info_t *gpgpu_opencl_ptx_sim_init_grid(class function_info *entry,
-                                            gpgpu_ptx_sim_arg_list_t args,
-                                            struct dim3 gridDim,
-                                            struct dim3 blockDim,
+                                            gpgpu_ptx_sim_arg_list_t args, 
+                                            struct dim3 gridDim, 
+                                            struct dim3 blockDim, 
                                                           class gpgpu_t *gpu );
 extern void gpgpu_cuda_ptx_sim_main_func( kernel_info_t &kernel, bool openCL = false );
 extern void   print_splash();
@@ -67,9 +66,9 @@ unsigned ptx_sim_init_thread( kernel_info_t &kernel,
                               int sid,
                               unsigned tid,
                               unsigned threads_left,
-                              unsigned num_threads,
-                              class core_t *core,
-                              unsigned hw_cta_id,
+                              unsigned num_threads, 
+                              class core_t *core, 
+                              unsigned hw_cta_id, 
                               unsigned hw_warp_id,
                               gpgpu_t *gpu,
                               bool functionalSimulationMode = false);
@@ -90,24 +89,24 @@ class Hub {
    uint64_t page_size; // base page size in bytes
    uint64_t huge_page_size; // huge page size in number of base pages
    uint64_t start_vaddr; // starting virtual address for allocations for each application, default is 0
-   std::map<appid_t, VMM*> vmms;
+   std::map<uint64_t, VMM*> vmms;
    PMM* pmm;
    // tp is size of memory in base pages, tf is the target fragmentation %
-   Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv, float tf, uint64_t fppf);
-   void* allocate(appid_t ID, uint64_t bytes);
-   void free(appid_t ID, void* addr);
+   Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv, float tf, uint64_t fppf); 
+   void* allocate(uint64_t ID, uint64_t bytes);
+   void free(uint64_t ID, void* addr);
    void print();
-   void* translate(appid_t ID, void* vaddr);
-   void modify_mapping(bool adding, bool promotion, appid_t ID, uint64_t vaddr, uint64_t paddr);
-   void transfer_page(appid_t ID, uint64_t vaddr, uint64_t old_paddr, uint64_t new_paddr);
+   void* translate(uint64_t ID, void* vaddr);
+   void modify_mapping(bool adding, bool promotion, uint64_t ID, uint64_t vaddr, uint64_t paddr);
+   void transfer_page(uint64_t ID, uint64_t vaddr, uint64_t old_paddr, uint64_t new_paddr);
 };
 
 
 /*!
- * This class functionally executes a kernel. It uses the basic data structures and procedures in core_t
+ * This class functionally executes a kernel. It uses the basic data structures and procedures in core_t 
  */
 class functionalCoreSim: public core_t
-{
+{    
 public:
     functionalCoreSim(kernel_info_t * kernel, gpgpu_sim *g, unsigned warp_size)
         : core_t( g, kernel, warp_size, kernel->threads_per_cta() )
@@ -120,14 +119,14 @@ public:
         delete[] m_liveThreadCount;
         delete[] m_warpAtBarrier;
     }
-    //! executes all warps till completion
+    //! executes all warps till completion 
     void execute();
     virtual void warp_exit( unsigned warp_id );
-    virtual bool warp_waiting_at_barrier( unsigned warp_id ) const
+    virtual bool warp_waiting_at_barrier( unsigned warp_id ) const  
     {
         return (m_warpAtBarrier[warp_id] || !(m_liveThreadCount[warp_id]>0));
     }
-
+    
 private:
     void executeWarp(unsigned, bool &, bool &);
     //initializes threads in the CTA block which we are executing
@@ -138,10 +137,10 @@ private:
         m_liveThreadCount[tid/m_warp_size]--;
         }
     }
-
+    
     // lunches the stack and set the threads count
     void  createWarp(unsigned warpId);
-
+    
     //each warp live thread count and barrier indicator
     unsigned * m_liveThreadCount;
     bool* m_warpAtBarrier;

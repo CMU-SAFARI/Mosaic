@@ -94,7 +94,7 @@ unsigned long long  gpu_tot_sim_cycle = 0;
 // performance counter for stalls due to congestion.
 unsigned int gpu_stall_dramfull = 0;
 unsigned int gpu_stall_icnt2sh = 0;
-
+//new
 int gpu_sms = 32;
 
 int my_active_sms = 0;
@@ -170,7 +170,7 @@ void memory_config::reg_options(class OptionParser * opp)
   option_parser_register(opp, "-gpgpu_dram_return_queue_size", OPT_INT32, &gpgpu_dram_return_queue_size,
       "0 = unlimited (default); # entries per chip",
       "0");
-  option_parser_register(opp, "-gpgpu_num_groups", OPT_INT32, &gpgpu_num_groups,
+  option_parser_register(opp, "-gpgpu_num_groups", OPT_INT32, &gpgpu_num_groups, //new
       "number of containers (application equal partitions)",
       "2");
   option_parser_register(opp, "-gpgpu_dram_buswidth", OPT_UINT32, &busW,
@@ -194,227 +194,241 @@ void memory_config::reg_options(class OptionParser * opp)
   option_parser_register(opp, "-dram_latency", OPT_UINT32, &dram_latency,
       "DRAM latency (default 30)",
       "30");
-  option_parser_register(opp, "-gpu_char", OPT_INT32, &gpu_char,
+  option_parser_register(opp, "-gpu_char", OPT_INT32, &gpu_char,  //new
       "gpu char activated",
       "0");
   //Page/TLB studies
-  option_parser_register(opp, "-page_queue_size", OPT_UINT32, &page_queue_size,
+  option_parser_register(opp, "-page_queue_size", OPT_UINT32, &page_queue_size,  //new
       "Size of the page queue", "2048");
-  option_parser_register(opp, "-tlb_flush_enable", OPT_UINT32, &TLB_flush_enable,
+  option_parser_register(opp, "-tlb_flush_enable", OPT_UINT32, &TLB_flush_enable,  //new
       "Enabling TLB flush", "0");
-  option_parser_register(opp, "-get_shader_warp_stat", OPT_UINT32, &get_shader_avail_warp_stat,
+  option_parser_register(opp, "-get_shader_warp_stat", OPT_UINT32, &get_shader_avail_warp_stat,  //new
       "Collect number of schedulable warps statistics in shader.cc", "0");
-  option_parser_register(opp, "-tlb_flush_freq", OPT_UINT32, &TLB_flush_freq,
+  option_parser_register(opp, "-tlb_flush_freq", OPT_UINT32, &TLB_flush_freq,  //new
       "If TLB flush is enabled, what is the frequency (per L1 cache accesse)", "10000000");
-  option_parser_register(opp, "-page_stat_update_cycle", OPT_UINT32, &page_stat_update_cycle,
+  option_parser_register(opp, "-page_stat_update_cycle", OPT_UINT32, &page_stat_update_cycle,  //new
       "How often superpage stats are cleared (Default = 100k cycles)", "100000");
-  option_parser_register(opp, "-demotion_check_cycle", OPT_UINT32, &demotion_check_cycle,
+  option_parser_register(opp, "-demotion_check_cycle", OPT_UINT32, &demotion_check_cycle,  //new
       "How often demotion is being checked for clearing (Default = 100k cycles)", "100000");
-  option_parser_register(opp, "-l1_tlb_invalidate_latency", OPT_UINT32, &l1_tlb_invalidate_latency,
+  option_parser_register(opp, "-l1_tlb_invalidate_latency", OPT_UINT32, &l1_tlb_invalidate_latency,  //new
       "Latency for L1 TLB invalidation (Default = 15 cycles)", "15");
-  option_parser_register(opp, "-l2_tlb_invalidate_latency", OPT_UINT32, &l2_tlb_invalidate_latency,
+  option_parser_register(opp, "-l2_tlb_invalidate_latency", OPT_UINT32, &l2_tlb_invalidate_latency,  //new
       "Latency for L1 TLB invalidation (Default = 200 cycles)", "200");
-  option_parser_register(opp, "-enable_PCIe", OPT_BOOL, &enable_PCIe,
+  option_parser_register(opp, "-enable_PCIe", OPT_BOOL, &enable_PCIe,  //new
       "Enable PCIe latency (otherwise PCIe latency = 0)", "false");
-  option_parser_register(opp, "-capture_VA", OPT_BOOL, &capture_VA,
+  option_parser_register(opp, "-capture_VA", OPT_BOOL, &capture_VA,  //new
       "Tracing Virtual Address from the runs (true/false)", "false");
-  option_parser_register(opp, "-va_trace_file", OPT_CSTR, &va_trace_file,
+  option_parser_register(opp, "-va_trace_file", OPT_CSTR, &va_trace_file,  //new
       "Output file of the virtual address", "VA.trace");
-  option_parser_register(opp, "-va_mask", OPT_CSTR, &va_mask,
+  option_parser_register(opp, "-va_mask", OPT_CSTR, &va_mask,  //new
       "Mask of the virtual address for PT walk routine (should match with tlb_levels)", "11111222223333344444000000000000");
-  option_parser_register(opp, "-page_mapping_policy", OPT_UINT32, &page_mapping_policy,
+  option_parser_register(opp, "-page_mapping_policy", OPT_UINT32, &page_mapping_policy,  //new
       "VA to PA mapping policy (default is 1 (random), 0 = for debugging", "1");
-  option_parser_register(opp, "-pw_cache_enable", OPT_BOOL, &pw_cache_enable,
+  option_parser_register(opp, "-pw_cache_enable", OPT_BOOL, &pw_cache_enable,  //new
       "Enabling PW cache (0 = false, 1 = true)", "0");
-  option_parser_register(opp, "-enable_subarray", OPT_UINT32, &enable_subarray,
+  option_parser_register(opp, "-enable_subarray", OPT_UINT32, &enable_subarray,  //new
       "Enabling Subarray (0 = false, 1 = true)", "0");
-  option_parser_register(opp, "-channel_partition", OPT_UINT32, &channel_partition,
+  option_parser_register(opp, "-channel_partition", OPT_UINT32, &channel_partition,  //new
       "Enabling Channel Partitioning (0 = false, 1 = policy 1, etc.)", "0");
+  option_parser_register(opp, "-app1_channel", OPT_UINT32, &app1_channel,  //new
+      "If Channel partitioning, initial app1 channel", "2");
+  option_parser_register(opp, "-app2_channel", OPT_UINT32, &app2_channel,  //new
+      "If Channel partitioning, initial app1 channel", "2");
+  option_parser_register(opp, "-app3_channel", OPT_UINT32, &app3_channel,  //new
+      "If Channel partitioning, initial app1 channel", "2");
+  option_parser_register(opp, "-app1_bank", OPT_UINT32, &app1_bank,  //new
+      "If Bank partitioning, initial app1 bank", "2");
+  option_parser_register(opp, "-app2_bank", OPT_UINT32, &app2_bank,  //new
+      "If Bank partitioning, initial app1 bank", "2");
+  option_parser_register(opp, "-app3_bank", OPT_UINT32, &app3_bank,  //new
+      "If Bank partitioning, initial app1 bank", "2");
   //Copy/Zero
-  option_parser_register(opp, "-RC_enabled", OPT_UINT32, &RC_enabled,
+  option_parser_register(opp, "-RC_enabled", OPT_UINT32, &RC_enabled,  //new
       "Enable Row Clone", "0");
-  option_parser_register(opp, "-LISA_enabled", OPT_UINT32, &LISA_enabled,
+  option_parser_register(opp, "-LISA_enabled", OPT_UINT32, &LISA_enabled,  //new
       "Enable LISA", "0");
-  option_parser_register(opp, "-MASA_enabled", OPT_UINT32, &MASA_enabled,
+  option_parser_register(opp, "-MASA_enabled", OPT_UINT32, &MASA_enabled,  //new
       "Enabling Subarray (0 = false, 1 = true)", "0");
-  option_parser_register(opp, "-SALP_enabled", OPT_UINT32, &SALP_enabled,
+  option_parser_register(opp, "-SALP_enabled", OPT_UINT32, &SALP_enabled,  //new
       "Enabling Subarray (0 = false, 1 = true)", "0");
-  option_parser_register(opp, "-interSA_latency", OPT_UINT32, &interSA_latency,
+  option_parser_register(opp, "-interSA_latency", OPT_UINT32, &interSA_latency,  //new
       "Inter subarray copy latency", "50");
-  option_parser_register(opp, "-intraSA_latency", OPT_UINT32, &intraSA_latency,
+  option_parser_register(opp, "-intraSA_latency", OPT_UINT32, &intraSA_latency,  //new
       "Intra subarray copy latency", "1000");
-  option_parser_register(opp, "-lisa_latency", OPT_UINT32, &lisa_latency,
+  option_parser_register(opp, "-lisa_latency", OPT_UINT32, &lisa_latency,  //new
       "Intra subarray copy latency using LISA", "100");
-  option_parser_register(opp, "-RCintraSA_latency", OPT_UINT32, &RCintraSA_latency,
+  option_parser_register(opp, "-RCintraSA_latency", OPT_UINT32, &RCintraSA_latency,  //new
       "Intra subarray copy latency using RC", "1000");
-  option_parser_register(opp, "-RCzero_latency", OPT_UINT32, &RCzero_latency,
+  option_parser_register(opp, "-RCzero_latency", OPT_UINT32, &RCzero_latency,  //new
       "Zero a page latency using RC", "100");
-  option_parser_register(opp, "-zero_latency", OPT_UINT32, &zero_latency,
+  option_parser_register(opp, "-zero_latency", OPT_UINT32, &zero_latency,  //new
       "Zeroing a page latency", "1000");
-  option_parser_register(opp, "-interBank_latency", OPT_UINT32, &interBank_latency,
+  option_parser_register(opp, "-interBank_latency", OPT_UINT32, &interBank_latency,  //new
       "Copy a page across bank", "1000");
-  option_parser_register(opp, "-RCpsm_latency", OPT_UINT32, &RCpsm_latency,
+  option_parser_register(opp, "-RCpsm_latency", OPT_UINT32, &RCpsm_latency,  //new
       "Copy a page across bank using RC psm", "1000");
-  option_parser_register(opp, "-bank_partition", OPT_UINT32, &bank_partition,
+  option_parser_register(opp, "-bank_partition", OPT_UINT32, &bank_partition,  //new
       "Enabling Bank Partitioning (0 = false, 1 = policy 1, etc.)", "0");
-  option_parser_register(opp, "-subarray_partition", OPT_UINT32, &subarray_partition,
+  option_parser_register(opp, "-subarray_partition", OPT_UINT32, &subarray_partition,  //new
       "Enabling Subarray Partitioning (0 = false, 1 = policy 1, etc.)", "0");
-  option_parser_register(opp, "-pw_cache_latency", OPT_UINT32, &pw_cache_latency,
+  option_parser_register(opp, "-pw_cache_latency", OPT_UINT32, &pw_cache_latency,  //new
       "PW cache latency", "10");
-  option_parser_register(opp, "-pw_cache_num_ports", OPT_UINT32, &pw_cache_num_ports,
+  option_parser_register(opp, "-pw_cache_num_ports", OPT_UINT32, &pw_cache_num_ports,  //new
       "Number of ports for the PW cache", "4");
-  option_parser_register(opp, "-tlb_pw_cache_entries", OPT_UINT32, &tlb_pw_cache_entries,
+  option_parser_register(opp, "-tlb_pw_cache_entries", OPT_UINT32, &tlb_pw_cache_entries,  //new
       "Number of PW cache entries", "64");
-  option_parser_register(opp, "-tlb_pw_cache_ways", OPT_UINT32, &tlb_pw_cache_ways,
+  option_parser_register(opp, "-tlb_pw_cache_ways", OPT_UINT32, &tlb_pw_cache_ways,  //new
       "Number of PW cache ways", "8");
-  option_parser_register(opp, "-tlb_replacement_policy", OPT_UINT32, &tlb_replacement_policy,
+  option_parser_register(opp, "-tlb_replacement_policy", OPT_UINT32, &tlb_replacement_policy,  //new
       "TLB Replacement policy (0 = LRU (default), 1 = WID based", "0");
-  option_parser_register(opp, "-tlb_replacement_hash_size", OPT_UINT32, &tlb_replacement_hash_size,
+  option_parser_register(opp, "-tlb_replacement_hash_size", OPT_UINT32, &tlb_replacement_hash_size,  //new
       "TLB Replacement policy hashed size for policy 3 and 4", "127");
-  option_parser_register(opp, "-tlb_replacement_high_threshold", OPT_UINT32, &tlb_replacement_high_threshold,
+  option_parser_register(opp, "-tlb_replacement_high_threshold", OPT_UINT32, &tlb_replacement_high_threshold,  //new
       "More than XX WID share this entry", "20");
-  option_parser_register(opp, "-tlb_core_index", OPT_UINT32, &tlb_core_index,
+  option_parser_register(opp, "-tlb_core_index", OPT_UINT32, &tlb_core_index,  //new
       "Scramble coreID to TLB Index bits", "0");
-  option_parser_register(opp, "-tlb_prefetch", OPT_UINT32, &tlb_prefetch,
+  option_parser_register(opp, "-tlb_prefetch", OPT_UINT32, &tlb_prefetch,  //new
       "Enabling TLB Prefetch", "0");
-  option_parser_register(opp, "-tlb_fixed_latency_enabled", OPT_UINT32, &tlb_fixed_latency_enabled,
+  option_parser_register(opp, "-tlb_fixed_latency_enabled", OPT_UINT32, &tlb_fixed_latency_enabled,  //new
       "Enabling TLB Fixed latency instead of consecutive DRAM requests (0=disable, 1=enable (applies to TLB miss))", "0");
-  option_parser_register(opp, "-tlb_fixed_latency", OPT_UINT32, &tlb_fixed_latency,
+  option_parser_register(opp, "-tlb_fixed_latency", OPT_UINT32, &tlb_fixed_latency,  //new
       "If TLB latency is a fixed number, what is the latency (default = 100)", "100");
-  option_parser_register(opp, "-tlb_L1_flush_cycles", OPT_UINT32, &tlb_L1_flush_cycles,
+  option_parser_register(opp, "-tlb_L1_flush_cycles", OPT_UINT32, &tlb_L1_flush_cycles,  //new
       "How long L1 TLB is blocked during TLB flush (default = 1000)", "1000");
-  option_parser_register(opp, "-tlb_L2_flush_cycles", OPT_UINT32, &tlb_L2_flush_cycles,
+  option_parser_register(opp, "-tlb_L2_flush_cycles", OPT_UINT32, &tlb_L2_flush_cycles,  //new
       "How long L2 TLB is blocked during TLB flush (default = 50000)", "50000");
-  option_parser_register(opp, "-tlb_bypass_cache_flush_cycles", OPT_UINT32, &tlb_bypass_cache_flush_cycles,
+  option_parser_register(opp, "-tlb_bypass_cache_flush_cycles", OPT_UINT32, &tlb_bypass_cache_flush_cycles,  //new
       "How long bypass cache in L2 TLB is blocked during TLB flush (default = 1000)", "1000");
-  option_parser_register(opp, "-tlb_prefetch_set", OPT_UINT32, &tlb_prefetch_set,
+  option_parser_register(opp, "-tlb_prefetch_set", OPT_UINT32, &tlb_prefetch_set,  //new
       "If prefetch policy = 3, how many prefetch buffer set", "16");
-  option_parser_register(opp, "-tlb_prefetch_buffer_size", OPT_UINT32, &tlb_prefetch_buffer_size,
+  option_parser_register(opp, "-tlb_prefetch_buffer_size", OPT_UINT32, &tlb_prefetch_buffer_size,  //new
       "TLB Prefetch buffer size (per core)", "16");
-  option_parser_register(opp, "-capture_VA_map", OPT_BOOL, &capture_VA_map,
+  option_parser_register(opp, "-capture_VA_map", OPT_BOOL, &capture_VA_map,  //new
       "Tracing Virtual Address from the runs (true/false)", "false");
-  option_parser_register(opp, "-pt_file", OPT_CSTR, &pt_file,
+  option_parser_register(opp, "-pt_file", OPT_CSTR, &pt_file,  //new
       "Input page table trace", "pt_map.trace");
-  option_parser_register(opp, "-epoch_file", OPT_CSTR, &epoch_file,
+  option_parser_register(opp, "-epoch_file", OPT_CSTR, &epoch_file,  //new
       "Input page table trace", "epoch.trace");
-  option_parser_register(opp, "-epoch_length", OPT_UINT32, &epoch_length,
+  option_parser_register(opp, "-epoch_length", OPT_UINT32, &epoch_length,  //new
       "Stat collection epoch length", "10000");
-  option_parser_register(opp, "-epoch_length", OPT_BOOL, &epoch_enabled,
+  option_parser_register(opp, "-epoch_length", OPT_BOOL, &epoch_enabled,  //new
       "Stat collection epoch (true/false), default - true", "true");
-  option_parser_register(opp, "-tlb_cache_depth", OPT_UINT32, &max_tlb_cache_depth,
+  option_parser_register(opp, "-tlb_cache_depth", OPT_UINT32, &max_tlb_cache_depth,  //new
       "How many levels is the TLB cache", "0");
-  option_parser_register(opp, "-tlb_victim_size", OPT_UINT32, &tlb_victim_size,
+  option_parser_register(opp, "-tlb_victim_size", OPT_UINT32, &tlb_victim_size,  //new
       "Size of the TLB victim cache", "32");
-  option_parser_register(opp, "-tlb_victim_size_large", OPT_UINT32, &tlb_victim_size_large,
+  option_parser_register(opp, "-tlb_victim_size_large", OPT_UINT32, &tlb_victim_size_large,  //new
       "Size of the TLB victim cache for huge page", "8");
-  option_parser_register(opp, "-l2_tlb_ways", OPT_UINT32, &l2_tlb_ways,
+  option_parser_register(opp, "-l2_tlb_ways", OPT_UINT32, &l2_tlb_ways,  //new
       "L2 TLB ways total (shared)", "16");
-  option_parser_register(opp, "-l2_tlb_ways_large", OPT_UINT32, &l2_tlb_ways_large,
+  option_parser_register(opp, "-l2_tlb_ways_large", OPT_UINT32, &l2_tlb_ways_large,  //new
       "L2 huge page TLB ways total (shared)", "8");
-  option_parser_register(opp, "-l2data_tlb_way_reset", OPT_UINT32, &l2_tlb_way_reset,
+  option_parser_register(opp, "-l2data_tlb_way_reset", OPT_UINT32, &l2_tlb_way_reset,  //new
       "When will L2 data TLB way yield to normal data", "100000");
-  option_parser_register(opp, "-tlb_cache_part", OPT_UINT32, &tlb_cache_part,
+  option_parser_register(opp, "-tlb_cache_part", OPT_UINT32, &tlb_cache_part,  //new
       "L2 partitioning for TLB", "0");
-  option_parser_register(opp, "-l2_tlb_entries", OPT_UINT32, &l2_tlb_entries,
+  option_parser_register(opp, "-l2_tlb_entries", OPT_UINT32, &l2_tlb_entries,  //new
       "L2 TLB entires (total entries) (shared)", "1024");
-  option_parser_register(opp, "-l2_tlb_entries_large", OPT_UINT32, &l2_tlb_entries_large,
+  option_parser_register(opp, "-use_old_Alloc", OPT_UINT32, &use_old_Alloc,  //new
+      "Using the old Allocator from memory_owner.cc", "0");
+  option_parser_register(opp, "-l2_tlb_entries_large", OPT_UINT32, &l2_tlb_entries_large,  //new
       "L2 TLB entires for huge page (total entries) (shared)", "256");
-  option_parser_register(opp, "-tlb_lookup_bypass", OPT_UINT32, &tlb_lookup_bypass,
+  option_parser_register(opp, "-tlb_lookup_bypass", OPT_UINT32, &tlb_lookup_bypass,  //new
       "Bypass TLB lookup", "0");
-  option_parser_register(opp, "-tlb_miss_rate_ratio", OPT_UINT32, &tlb_miss_rate_ratio,
+  option_parser_register(opp, "-tlb_miss_rate_ratio", OPT_UINT32, &tlb_miss_rate_ratio,  //new
       "Safety need to avoid ping-ponging between not bypass and bypass TLB lookup", "2");
-  option_parser_register(opp, "-tlb_stat_resets", OPT_UINT32, &tlb_stat_resets,
+  option_parser_register(opp, "-tlb_stat_resets", OPT_UINT32, &tlb_stat_resets,  //new
       "Reassign tokens every XX", "2000");
-  option_parser_register(opp, "-max_tlb_miss", OPT_UINT32, &max_tlb_miss,
+  option_parser_register(opp, "-max_tlb_miss", OPT_UINT32, &max_tlb_miss,  //new
       "Kicks in TLB bypass when TLB miss of (in percentage)", "5");
-  option_parser_register(opp, "-tlb_bypass_initial_tokens", OPT_UINT32, &tlb_bypass_initial_tokens,
+  option_parser_register(opp, "-tlb_bypass_initial_tokens", OPT_UINT32, &tlb_bypass_initial_tokens,  //new
       "Number of tokens available in TLB bypassing", "1000");
-  option_parser_register(opp, "-tlb_high_prio_level", OPT_UINT32, &tlb_high_prio_level,
+  option_parser_register(opp, "-tlb_high_prio_level", OPT_UINT32, &tlb_high_prio_level,  //new
       "At which level tlb gets more priority in DRAM", "2");
-  option_parser_register(opp, "-tlb_dram_aware", OPT_UINT32, &tlb_dram_aware,
+  option_parser_register(opp, "-tlb_dram_aware", OPT_UINT32, &tlb_dram_aware,  //new
       "DRAM treat tlb differently", "0");
-  option_parser_register(opp, "-dram_switch_factor", OPT_UINT32, &dram_switch_factor,
+  option_parser_register(opp, "-dram_switch_factor", OPT_UINT32, &dram_switch_factor,  //new
       "DRAM policy 5, how often apps prioritization is switched (random factor = this_factor/100 ops (bw_factor), default = 100)", "100");
-  option_parser_register(opp, "-dram_switch_max", OPT_UINT32, &dram_switch_max,
+  option_parser_register(opp, "-dram_switch_max", OPT_UINT32, &dram_switch_max,  //new
       "DRAM policy 5, maximum before DRAM sched switch the app, default = 1000)", "1000");
-  option_parser_register(opp, "-dram_switch_threshold", OPT_UINT32, &dram_switch_threshold,
+  option_parser_register(opp, "-dram_switch_threshold", OPT_UINT32, &dram_switch_threshold,  //new
       "DRAM policy 5, threshold before DRAM sched switch the app, default = 100)", "100");
-  option_parser_register(opp, "-dram_high_prio_chance", OPT_UINT32, &dram_high_prio_chance,
+  option_parser_register(opp, "-dram_high_prio_chance", OPT_UINT32, &dram_high_prio_chance,  //new
       "DRAM policy 6, how likely a data request goes into high prio queue (probability = concurrent_request/this number, default = 100)", "100");
-  option_parser_register(opp, "-dram_scheduling_policy", OPT_UINT32, &dram_scheduling_policy,
+  option_parser_register(opp, "-dram_scheduling_policy", OPT_UINT32, &dram_scheduling_policy,  //new
       "DRAM scheduling policy (new for MASK), 0 = FR-FCFS, 1=FCFS", "0");
-  option_parser_register(opp, "-dram_always_prioritize_app", OPT_UINT32, &dram_always_prioritize_app,
+  option_parser_register(opp, "-dram_always_prioritize_app", OPT_UINT32, &dram_always_prioritize_app,  //new
       "DRAM always put request from this app to high priority queue (only for tlb_dram_aware policy 4: first app = 0, second app = 1, etc.", "100");
-  option_parser_register(opp, "-max_DRAM_high_prio_wait", OPT_UINT32, &max_DRAM_high_prio_wait,
+  option_parser_register(opp, "-max_DRAM_high_prio_wait", OPT_UINT32, &max_DRAM_high_prio_wait,  //new
       "DRAM row coalescing for high_prio queue", "100");
-  option_parser_register(opp, "-max_DRAM_high_prio_combo", OPT_UINT32, &max_DRAM_high_prio_combo,
+  option_parser_register(opp, "-max_DRAM_high_prio_combo", OPT_UINT32, &max_DRAM_high_prio_combo,  //new
       "How many consecutive high prio requests are issued", "8");
-  option_parser_register(opp, "-dram_batch", OPT_BOOL, &dram_batch,
+  option_parser_register(opp, "-dram_batch", OPT_BOOL, &dram_batch,  //new
       "Batch high priority DRAM requests (true/false)", "false");
-  option_parser_register(opp, "-page_transfer_time", OPT_UINT32, &page_transfer_time,
+  option_parser_register(opp, "-page_transfer_time", OPT_UINT32, &page_transfer_time,  //new
       "PCIe latency to transfer a page (default = 1000)", "1000");
-  option_parser_register(opp, "-tlb_size", OPT_UINT32, &tlb_size,
+  option_parser_register(opp, "-tlb_size", OPT_UINT32, &tlb_size,  //new
       "Size of TLB per SM", "64");
-  option_parser_register(opp, "-tlb_size_large", OPT_UINT32, &tlb_size_large,
+  option_parser_register(opp, "-tlb_size_large", OPT_UINT32, &tlb_size_large,  //new
       "Size of huge page TLB per SM", "16");
-  option_parser_register(opp, "-tlb_prio_max_level", OPT_UINT32, &tlb_prio_max_level,
+  option_parser_register(opp, "-tlb_prio_max_level", OPT_UINT32, &tlb_prio_max_level,  //new
       "Max level of TLBs that gets high priority", "0");
   // Parse from va_mask (or page_size_list) instead
-  //    option_parser_register(opp, "-tlb_levels", OPT_UINT32, &tlb_levels,
+  //    option_parser_register(opp, "-tlb_levels", OPT_UINT32, &tlb_levels,  //new
   //                 "Number of VA to PA levels", "4");
-  option_parser_register(opp, "-tlb_bypass_enabled", OPT_UINT32, &tlb_bypass_enabled,
+  option_parser_register(opp, "-tlb_bypass_enabled", OPT_UINT32, &tlb_bypass_enabled,  //new
       "Bypass L2 Cache for TLB requests (0 = Disable, 1 = Static policy, 2 = dynamic policy using threshold)", "0");
-  option_parser_register(opp, "-tlb_bypass_level", OPT_UINT32, &tlb_bypass_level,
+  option_parser_register(opp, "-tlb_bypass_level", OPT_UINT32, &tlb_bypass_level,  //new
       "Bypass L2 cache for TLB level starting at N", "2");
-  option_parser_register(opp, "-data_cache_bypass_threshold", OPT_UINT32, &data_cache_bypass_threshold,
+  option_parser_register(opp, "-data_cache_bypass_threshold", OPT_UINT32, &data_cache_bypass_threshold,  //new
       "Threshold used for bypassing L2 data cache for TLB-related requests (in percentage) for TLB L2 data cache bypass policy 2", "80");
-  option_parser_register(opp, "-enable_page_coalescing", OPT_UINT32, &enable_page_coalescing,
+  option_parser_register(opp, "-enable_page_coalescing", OPT_UINT32, &enable_page_coalescing,  //new
       "Enable page coalescing (default = 0)", "0");
-  option_parser_register(opp, "-enable_compaction", OPT_UINT32, &enable_compaction,
+  option_parser_register(opp, "-enable_compaction", OPT_UINT32, &enable_compaction,  //new
       "Enable compaction (default = 0)", "0");
-  option_parser_register(opp, "-enable_rctest", OPT_UINT32, &enable_rctest,
+  option_parser_register(opp, "-enable_rctest", OPT_UINT32, &enable_rctest,  //new
       "If set to 1, randomly send rowclone commands for testing (default = 0)", "0");
-  option_parser_register(opp, "-compaction_probe_cycle", OPT_UINT32, &compaction_probe_cycle,
+  option_parser_register(opp, "-compaction_probe_cycle", OPT_UINT32, &compaction_probe_cycle,  //new
       "How frequency compaction probes DRAM (default = 100000)", "100000");
-  option_parser_register(opp, "-compaction_probe_additional_latency", OPT_UINT32, &compaction_probe_additional_latency,
+  option_parser_register(opp, "-compaction_probe_additional_latency", OPT_UINT32, &compaction_probe_additional_latency,  //new
       "Additional latency when probing, for testing purposes (default = 0)", "0");
-  option_parser_register(opp, "-enable_costly_coalesce", OPT_UINT32, &enable_costly_coalesce,
+  option_parser_register(opp, "-enable_costly_coalesce", OPT_UINT32, &enable_costly_coalesce,  //new
       "Enable page coalescing even when there are pages from other app within the coalesce range (default = 0)", "0");
-  option_parser_register(opp, "-page_coalesce_locality_thres", OPT_UINT32, &page_coalesce_locality_thres,
+  option_parser_register(opp, "-page_coalesce_locality_thres", OPT_UINT32, &page_coalesce_locality_thres,  //new
       "Threshold for locality (number of pages touched in the large page range, in percentage) to trigger page coalescing (default = 101 (i.e., impossible to happen)", "101");
-  option_parser_register(opp, "-page_coalesce_hotness_thres", OPT_UINT32, &page_coalesce_hotness_thres,
+  option_parser_register(opp, "-page_coalesce_hotness_thres", OPT_UINT32, &page_coalesce_hotness_thres,  //new
       "Threshold for hotness (how long this page is touched) before trigger coalescing, default = 100", "100");
   option_parser_register(opp, "-page_coalesce_lower_thres_offset", OPT_UINT32, &page_coalesce_lower_thres_offset
-      ,
+      ,  //new
       "The gap in percentage between coalesce/demotion threshold in percentage, default = 10 percent of the threshold", "10");
-  option_parser_register(opp, "-tlb_enabled", OPT_UINT32, &tlb_enable,
+  option_parser_register(opp, "-tlb_enabled", OPT_UINT32, &tlb_enable,  //new
       "TLB and PT_walk enable (true/false)", "1");
   // Set automatically using the page_size_list
-  //    option_parser_register(opp, "-base_page_size", OPT_UINT32, &base_page_size,
+  //    option_parser_register(opp, "-base_page_size", OPT_UINT32, &base_page_size,  //new
   //                 "Size of a base page (default = 4096)", "4096");
-  option_parser_register(opp, "-page_size_list", OPT_CSTR, &page_size_list,
+  option_parser_register(opp, "-page_size_list", OPT_CSTR, &page_size_list,  //new
       "List of differing page sizes (in bytes) (default = 2MB and 4KB page sizes)", "2097152:4096");
-  //    option_parser_register(opp, "-page_size", OPT_UINT32, &page_size,
+  //    option_parser_register(opp, "-page_size", OPT_UINT32, &page_size,  //new
   //                 "Size of a page (factor of 2, 12 means 2^12)", "12");
-  option_parser_register(opp, "-dram_row_size", OPT_UINT32, &dram_row_size,
+  option_parser_register(opp, "-dram_row_size", OPT_UINT32, &dram_row_size,  //new
       "Size of a dram row buffer (factor of 2, 12 means 2^12, default = 4KB)", "12");
-  option_parser_register(opp, "-DRAM_size", OPT_UINT32, &DRAM_size,
+  option_parser_register(opp, "-DRAM_size", OPT_UINT32, &DRAM_size,  //new
       "Size of the DRAM", "3221225472");
-  option_parser_register(opp, "-DRAM_fragmentation", OPT_FLOAT, &DRAM_fragmentation,
+  option_parser_register(opp, "-DRAM_fragmentation", OPT_FLOAT, &DRAM_fragmentation,  //new
       "Initial fragmentation as percent of the DRAM", "0.0");
-  option_parser_register(opp, "-DRAM_fragmentation_pages_per_frame", OPT_UINT32, &DRAM_fragmentation_pages_per_frame,
+  option_parser_register(opp, "-DRAM_fragmentation_pages_per_frame", OPT_UINT32, &DRAM_fragmentation_pages_per_frame,  //new
       "Number of pages to add to a fragmented frame", "1");
-  //    option_parser_register(opp, "-tlb_template_bits", OPT_UINT32, &tlb_template_bits,
+  //    option_parser_register(opp, "-tlb_template_bits", OPT_UINT32, &tlb_template_bits,  //new
   //                 "Template bits for all TLB's memory accesses", "4294967296");
-  //    option_parser_register(opp, "-page_appID_bits", OPT_UINT32, &page_appID_bits,
+  //    option_parser_register(opp, "-page_appID_bits", OPT_UINT32, &page_appID_bits,  //new
   //                 "Location of the appID bits", "28");
-  //    option_parser_register(opp, "-page_tlb_level_bits", OPT_UINT32, &page_tlb_level_bits,
+  //    option_parser_register(opp, "-page_tlb_level_bits", OPT_UINT32, &page_tlb_level_bits,  //new
   //                 "Location of the tlb_access_level bit", "5");
-  option_parser_register(opp, "-page_evict_policy", OPT_UINT32, &page_evict_policy,
+  option_parser_register(opp, "-page_evict_policy", OPT_UINT32, &page_evict_policy,  //new
       "Page eviction policy (0=app-LRU (default), 1=global-LRU, 2=victim)", "0");
-  option_parser_register(opp, "-page_partition_policy", OPT_UINT32, &page_partition_policy,
+  option_parser_register(opp, "-page_partition_policy", OPT_UINT32, &page_partition_policy,  //new
       "DRAM partitioning policy (default = 0)", "0");
-  option_parser_register(opp, "-PCIe_queue_size", OPT_UINT32, &PCIe_queue_size,
+  option_parser_register(opp, "-PCIe_queue_size", OPT_UINT32, &PCIe_queue_size,  //new
       "Size of the PCIe queue", "2048");
   m_address_mapping.addrdec_setoption(opp);
 }
@@ -781,6 +795,7 @@ gpgpu_sim::gpgpu_sim(const gpgpu_sim_config &config)
   printf("Initializing MMU\n");
   m_page_manager = g_mmu;
 
+  //FIXME: Check this
   if (m_page_manager->need_init)
     m_page_manager->init2(m_memory_config);
 
@@ -849,8 +864,12 @@ void gpgpu_sim::reinit_clock_domains(void)
 
 bool gpgpu_sim::active()
 {
+  //    gpu_tot_sim_cycle, gpu_sim_cycle, gpu_deadlock, m_memory_config->m_n_mem, icnt_busy(), get_more_cta_left());
+
   if (m_config.gpu_max_cycle_opt && (gpu_tot_sim_cycle + gpu_sim_cycle) >= m_config.gpu_max_cycle_opt)
     return false;
+  //if (m_config.gpu_max_insn_opt && (gpu_tot_sim_insn + gpu_sim_insn) >= m_config.gpu_max_insn_opt)
+  //return false;
   if (m_config.gpu_max_cta_opt && (gpu_tot_issued_cta >= m_config.gpu_max_cta_opt))
     return false;
   if (m_config.gpu_deadlock_detect && gpu_deadlock)
@@ -874,13 +893,13 @@ void gpgpu_sim::init()
   for (unsigned i = 0; i < ConfigOptions::n_apps; i++) {
     std::stringstream fname;
     fname << "stream" << i << ".txt";
-    if (!App::is_registered(i)){
+    if(!App::is_registered(i)){
         printf("GPGPU-sim INIT routine: Registering app %d", i);
-        App::register_app(i); //This is needed for streams that are > 0. Stream 0 causes gpgpu-sim to initize itself.
+        App::register_app(i); //This is needed for streams that are > 0. Stream 0 causes gpgpu-sim to initize itself. 
     }
-    printf("GPGPU-sim INIT routine: Creating app %d, app name = %s\n", i, fname.str().c_str());
-    appid_t appid = App::get_app_id(i);
-    appid = App::create_app(appid, fopen(fname.str().c_str(), "w"), m_shader_config->warp_size);
+    printf("GPGPU-sim INIT routine: Creating app with ID = %d, app name = %s\n", i, fname.str().c_str());
+    appid_t appid = App::create_app(App::get_app_id(i), fopen(fname.str().c_str(), "w"), m_shader_config->warp_size);
+    //appid_t appid = App::create_app(i, fopen(fname.str().c_str(), "w"), m_shader_config->warp_size);
     // static partitioning of sms
     unsigned sms_per_app = m_config.num_shader() / ConfigOptions::n_apps;
     std::vector<int> sms;
@@ -915,6 +934,7 @@ void gpgpu_sim::init()
     gpu_sim_insn_per_core[i] = 0;
   }
 
+  //m_page_manager = new mmu(m_memory_config);
   printf("Done initializing shader stat. Initializing shared TLB\n");
   // Add a pointer to memory_partition unit so that tlb can insert DRAM copy/zero commands
   m_shared_tlb = new tlb_tag_array(m_memory_config, m_shader_stats, m_page_manager, true, m_memory_stats, m_memory_partition_unit);
@@ -942,6 +962,7 @@ void gpgpu_sim::init()
   icnt_create(m_shader_config->n_simt_clusters, m_memory_config->m_n_mem_sub_partition);
 
 
+  //FIXME: Check this
   if (m_page_manager->need_init)
     m_page_manager->set_ready();
 
@@ -1361,7 +1382,7 @@ void shader_core_ctx::issue_block2core(kernel_info_t &kernel)
 {
   set_max_cta(kernel);
 
-  unsigned kernel_id = kernel.get_uid();
+  unsigned kernel_id = kernel.get_uid(); //new
   unsigned stream_id = kernel.get_stream_id();
 
   // find a free CTA context
@@ -1412,6 +1433,7 @@ void shader_core_ctx::issue_block2core(kernel_info_t &kernel)
   m_n_active_cta++;
 
   shader_CTA_count_log(m_sid, 1);
+  //printf("GPGPU-Sim uArch: core:%3d, cta:%2u initialized @(%lld,%lld)\n", m_sid, free_cta_hw_id, gpu_sim_cycle, gpu_tot_sim_cycle );
   printf("GPGPU-Sim uArch: Shader:%3d, cta:%2u initialized @(%lld,%lld), ACTIVE=%d, KERNEL=%d, STREAM=%d\n", m_sid, free_cta_hw_id, gpu_sim_cycle, gpu_tot_sim_cycle, m_n_active_cta, kernel_id, stream_id);
 }
 
@@ -1451,7 +1473,7 @@ int gpgpu_sim::next_clock_domain(void)
   return mask;
 }
 
-void gpgpu_sim::issue_block2core()
+void gpgpu_sim::issue_block2core() //new
 {
   unsigned last_issued = m_last_cluster_issue;
   unsigned clusters_issued;
@@ -1555,6 +1577,7 @@ void gpgpu_sim::cycle()
     }
     float temp = 0;
 
+
     for (unsigned i = 0; i < m_shader_config->num_shader(); i++) {
       temp += m_shader_stats->m_pipeline_duty_cycle[i];
     }
@@ -1568,6 +1591,8 @@ void gpgpu_sim::cycle()
     }
     gpu_sim_cycle++;
 
+    unsigned cluster_size = gpu_sms / ConfigOptions::n_apps;
+
     my_active_sms = 0;
     for (int i = 0; i < gpu_sms; i++) {
       if (m_cluster[i]->get_n_active_sms()) {
@@ -1576,11 +1601,8 @@ void gpgpu_sim::cycle()
     }
     for (unsigned j = 0; j < ConfigOptions::n_apps; j++) {
       App* app = App::get_app(App::get_app_id(j));
-      // get all SMs assigned to an app
-      const std::vector<int> app_sms = App::get_app_sms(app->appid);
-      for (std::vector<int>::const_iterator sm = app_sms.begin(); sm != app_sms.end(); sm++) {
-        // If any SM in m_cluster was active, increment total cycles.
-        if (m_cluster[*sm]->get_n_active_sms() > 0) {
+      for (unsigned i = j * cluster_size; i < (j + 1) * cluster_size; i++) {
+        if (m_cluster[i]->get_n_active_sms() > 0) {
           app->gpu_total_simulator_cycles_stream++;
           break;
         }
@@ -1696,7 +1718,7 @@ void gpgpu_sim::cycle()
       max_insn_struck = true;
       print_stats();
 
-      fprintf(output, "statistics when all apps completed MAX instructions\n");
+      fprintf(output, "statistics when three apps completed MAX instructions\n");
       fprintf(output, "-------------------------------------------------\n");
       for (unsigned i = 0; i < ConfigOptions::n_apps; i++) {
         App* app = App::get_app(App::get_app_id(i));

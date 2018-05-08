@@ -43,7 +43,7 @@ public:
       m_thread=NULL;
       m_inst=NULL;
    }
-   watchpoint_event(const ptx_thread_info *thd, const ptx_instruction *pI)
+   watchpoint_event(const ptx_thread_info *thd, const ptx_instruction *pI) 
    {
       m_thread=thd;
       m_inst = pI;
@@ -62,7 +62,7 @@ void hit_watchpoint( unsigned watchpoint_num, ptx_thread_info *thd, const ptx_in
    g_watchpoint_hits[watchpoint_num]=watchpoint_event(thd,pI);
 }
 
-/// interactive debugger
+/// interactive debugger 
 
 void gpgpu_sim::gpgpu_debug()
 {
@@ -74,7 +74,7 @@ void gpgpu_sim::gpgpu_debug()
 
    /// if single stepping, go to interactive debugger
 
-   if( single_step )
+   if( single_step ) 
       done=false;
 
    /// check if we've reached a breakpoint
@@ -86,13 +86,13 @@ void gpgpu_sim::gpgpu_debug()
       brk_pt &b=i->second;
       if( b.is_watchpoint() ) {
          unsigned addr = b.get_addr();
-         unsigned new_value;
-         m_global_mem->read(addr,4,&new_value);
+         unsigned new_value; 
+         m_global_mem->read(addr,4,&new_value,0);
          if( new_value != b.get_value() || g_watchpoint_hits.find(num) != g_watchpoint_hits.end() ) {
             printf( "GPGPU-Sim PTX DBG: watch point %u triggered (old value=%x, new value=%x)\n",
                      num,b.get_value(),new_value );
             std::map<unsigned,watchpoint_event>::iterator w=g_watchpoint_hits.find(num);
-            if( w==g_watchpoint_hits.end() )
+            if( w==g_watchpoint_hits.end() ) 
                printf( "GPGPU-Sim PTX DBG: memory transfer modified value\n");
             else {
                watchpoint_event wa = w->second;
@@ -106,17 +106,17 @@ void gpgpu_sim::gpgpu_debug()
                g_watchpoint_hits.erase(w);
             }
             b.set_value(new_value);
-            done = false;
+            done = false; 
          }
       } else {
           /*
-         for( unsigned sid=0; sid < m_n_shader; sid++ ) {
+         for( unsigned sid=0; sid < m_n_shader; sid++ ) { 
             unsigned hw_thread_id = -1;
             abort();
             ptx_thread_info *thread = m_sc[sid]->get_functional_thread(hw_thread_id);
             if( thread_at_brkpt(thread, b) ) {
                done = false;
-               printf("GPGPU-Sim PTX DBG: reached breakpoint %u at %s (sm=%u, hwtid=%u)\n",
+               printf("GPGPU-Sim PTX DBG: reached breakpoint %u at %s (sm=%u, hwtid=%u)\n", 
                       num, b.location().c_str(), sid, hw_thread_id );
                brk_thd = thread;
                brk_inst = brk_thd->get_inst();
@@ -131,7 +131,7 @@ void gpgpu_sim::gpgpu_debug()
       }
    }
 
-   if( done )
+   if( done ) 
       assert( g_watchpoint_hits.empty() );
 
    /// enter interactive debugger loop
@@ -139,7 +139,7 @@ void gpgpu_sim::gpgpu_debug()
    while (!done) {
       printf("(ptx debugger) ");
       fflush(stdout);
-
+      
       char line[1024];
       fgets(line,1024,stdin);
 
@@ -182,9 +182,9 @@ void gpgpu_sim::gpgpu_debug()
          tok = strtok(NULL," \t\n");
          unsigned addr;
          sscanf(tok,"%x",&addr);
-         unsigned value;
-         m_global_mem->read(addr,4,&value);
-         m_global_mem->set_watch(addr,next_brkpt);
+         unsigned value; 
+         m_global_mem->read(addr,4,&value,0);
+         m_global_mem->set_watch(addr,next_brkpt); 
          breakpoints[next_brkpt++] = brk_pt(addr,value);
       } else if( !strcmp(tok,"l") ) {
          if( brk_thd == NULL  ) {

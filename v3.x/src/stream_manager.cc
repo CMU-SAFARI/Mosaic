@@ -106,8 +106,6 @@ void stream_operation::do_operation(gpgpu_sim *gpu) {
 
   assert(!m_done && m_stream);
 
-  assert(false);
-  // this will not get the app
   App* app = App::get_app(App::get_app_id(this->m_stream->get_stream_id()));
 
   if (g_debug_execution >= 3)
@@ -116,41 +114,42 @@ void stream_operation::do_operation(gpgpu_sim *gpu) {
     case stream_memcpy_host_to_device:
       if (g_debug_execution >= 3) {
         printf("memcpy host-to-device\n");
-        printf("got memcpy host-to-device from device addr "
-            "dest = %lx, host addr src = %lx, count = %d\n", m_device_address_dst, m_host_address_src,
+        printf("in stream manager, got memcpy host-to-device from device addr "
+            "dest = %x, host addr src = %x, count = %d\n", m_device_address_dst, m_host_address_src,
             m_cnt);
       }
       app->mem_flag = true;
-      gpu->memcpy_to_gpu(m_device_address_dst, m_host_address_src, m_cnt);
+      gpu->memcpy_to_gpu(m_device_address_dst, m_host_address_src, m_cnt, app->appid);
       m_stream->record_next_done();
       break;
     case stream_memcpy_device_to_host:
       if (g_debug_execution >= 3) {
         printf("memcpy device-to-host\n");
-        printf("got memcpy device-to-host from device addr src = "
-            "%lx, host addr dest = %lx, count = %d\n", m_device_address_src, m_host_address_dst,
+        printf("in stream manager, got memcpy device-to-host from device addr src = "
+            "%x, host addr dest = %x, count = %d\n", m_device_address_src, m_host_address_dst,
             m_cnt);
       }
       app->mem_flag = true;
-      gpu->memcpy_from_gpu(m_host_address_dst, m_device_address_src, m_cnt);
+      gpu->memcpy_from_gpu(m_host_address_dst, m_device_address_src, m_cnt,
+          app->appid);
       m_stream->record_next_done();
       break;
     case stream_memcpy_device_to_device:
       if (g_debug_execution >= 3) {
         printf("memcpy device-to-device\n");
-        printf("got memcpy device-to-host from device addr src = "
-            "%lx, device addr dest = %lx, count = %d\n", m_device_address_src, m_device_address_dst,
+        printf("in stream manager, got memcpy device-to-host from device addr src = "
+            "%x, device addr dest = %x, count = %d\n", m_device_address_src, m_device_address_dst,
             m_cnt);
       }
       app->mem_flag = true;
-      gpu->memcpy_gpu_to_gpu(m_device_address_dst, m_device_address_src, m_cnt);
+      gpu->memcpy_gpu_to_gpu(m_device_address_dst, m_device_address_src, m_cnt, app->appid);
       m_stream->record_next_done();
       break;
     case stream_memcpy_to_symbol:
       if (g_debug_execution >= 3) {
         printf("memcpy to symbol\n");
-        printf("got memcpy host-to-symbol from host addr src = "
-            "%lx, count = %d\n", m_host_address_src, m_cnt);
+        printf("in stream manager, got memcpy host-to-symbol from host addr src = "
+            "%x, count = %d\n", m_host_address_src, m_cnt);
       }
       app->mem_flag = true;
       gpgpu_ptx_sim_memcpy_symbol(m_symbol, m_host_address_src, m_cnt, m_offset, 1, gpu);
@@ -159,8 +158,8 @@ void stream_operation::do_operation(gpgpu_sim *gpu) {
     case stream_memcpy_from_symbol:
       if (g_debug_execution >= 3) {
         printf("memcpy from symbol\n");
-        printf("got memcpy symbol-to-host from host addr dest = "
-            "%lx, count = %d\n", m_host_address_dst, m_cnt);
+        printf("in stream manager, got memcpy symbol-to-host from host addr dest = "
+            "%x, count = %d\n", m_host_address_dst, m_cnt);
       }
       app->mem_flag = true;
       gpgpu_ptx_sim_memcpy_symbol(m_symbol, m_host_address_dst, m_cnt, m_offset, 0, gpu);

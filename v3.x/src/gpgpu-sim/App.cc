@@ -6,17 +6,16 @@
  */
 
 #include "App.h"
-#include <cassert>
 #include <map>
-#include <pthread.h>
-#include <stdio.h>
+#include <cassert>
 #include <vector>
-
-
+#include <stdio.h>
 
 App::App(appid_t appid, FILE* output, unsigned warp_size) : appid(appid), output(output) {
   shader_cycle_distro = (uint64_t*) calloc(warp_size + 3, sizeof(uint64_t));
+  // no reason this has to be here... I just have no idea what's going on.
   tlb_concurrent_total_time_app = (uint64_t*) calloc(200, sizeof(uint64_t));
+  // I do not know what the 200 is. It's TLB-related. TODO define a constant.
 }
 
 App::~App() {
@@ -24,21 +23,10 @@ App::~App() {
 }
 
 // Definition of static members
-uint32_t appid_t::next_identifier = 666; // arbitrary
 std::map<appid_t, App*> App::apps;
 std::map<int, appid_t> App::sm_to_app;
 std::map<int, appid_t> App::creation_index_to_app;
-std::map<void*, appid_t> App::thread_id_to_app_id;
-// special apps
-App App::noapp(appid_t(), NULL, 0);
-App App::pt_space(appid_t(), NULL, 0);
-App App::mixapp(appid_t(), NULL, 0);
-App App::prefrag(appid_t(), NULL, 0);
-
-std::ostream& operator<<(std::ostream& os, const appid_t& appid) {
-  os << appid.my_id;
-  return os;
-}
+appid_t App::next_app_id = 666; // a random, nonzero  application identifier
 
 const std::vector<int> App::get_app_sms(appid_t appid) {
   std::vector<int> sms;
@@ -53,7 +41,9 @@ const std::vector<int> App::get_app_sms(appid_t appid) {
 
 bool App::is_registered(int i)
 {
-  return creation_index_to_app.find(i) != creation_index_to_app.end();
+  bool return_val = (creation_index_to_app.find(i) != creation_index_to_app.end());
+  printf("Check if app is registered, return val = %d\n", return_val);
+  return return_val;
 }
 
 /**
@@ -77,27 +67,20 @@ appid_t App::get_app_id_from_sm(int sm_number) {
   return sm_to_app.at(sm_number);
 }
 
-appid_t App::get_app_id_from_thread(void* tid) {
-  return thread_id_to_app_id[tid];
-}
-
 App* App::get_app(appid_t app) {
   return App::apps.at(app);
 }
 
 appid_t App::register_app(int creation_index) {
-  creation_index_to_app[creation_index] = appid_t();
-  thread_id_to_app_id[(void*) pthread_self()] = creation_index_to_app[creation_index];
-  std::cout << "Registering index " << creation_index << " as appID " <<
-      creation_index_to_app[creation_index] << std::endl;
-  return creation_index_to_app[creation_index];
+  appid_t my_id = next_app_id;
+  printf("Registering index = %d, as appID = %d\n",creation_index, my_id);
+  creation_index_to_app[creation_index] = next_app_id++;
+  return my_id;
 }
 
 appid_t App::create_app(appid_t my_id, FILE* output, unsigned warp_size) {
-  static uint32_t addr_offset = 0;
-  std::cout << "Creating app for appID " << my_id << std::endl;
+  printf("Creating app for appID = %d\n", my_id);
   App::apps[my_id] = new App(my_id, output, warp_size);
-  App::apps[my_id]->addr_offset = addr_offset++;
   return my_id;
 }
 

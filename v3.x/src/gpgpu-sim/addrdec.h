@@ -29,7 +29,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "../option_parser.h"
-#include "App.h"
+
+#ifndef PT_SPACE
+#define PT_SPACE 987654321
+#endif
 
 #ifndef ADDRDEC_H
 #define ADDRDEC_H
@@ -42,7 +45,7 @@ struct memory_config;
 
 struct addrdec_t {
    void print( FILE *fp ) const;
-
+    
    unsigned chip;
    unsigned bk;
    unsigned row;
@@ -51,18 +54,23 @@ struct addrdec_t {
 
    unsigned subarray;
 
-   unsigned sub_partition;
+   unsigned sub_partition; 
 };
 
 class linear_to_raw_address_translation {
 public:
    linear_to_raw_address_translation();
    void addrdec_setoption(option_parser_t opp);
-   void init(unsigned int n_channel, unsigned int n_sub_partition_in_channel, memory_config * config);
+   void init(unsigned int n_channel, unsigned int n_sub_partition_in_channel, memory_config * config); 
 
    // accessors
-   bool addrdec_tlx(new_addr_type in_addr, addrdec_t *tlx, appid_t appID, unsigned level, bool isRead) const;
-   new_addr_type partition_address( new_addr_type in_addr, appid_t appID, unsigned level, bool isRead) const;
+//   void addrdec_tlx(new_addr_type addr, addrdec_t *tlx) const; 
+   bool addrdec_tlx(new_addr_type in_addr, addrdec_t *tlx, unsigned appID, unsigned level, bool isRead) const; 
+//   new_addr_type partition_address( new_addr_type addr ) const;
+   new_addr_type partition_address( new_addr_type in_addr, unsigned appID, unsigned level, bool isRead) const;
+
+   unsigned m_app1_channels, m_app2_channels, m_app3_channels;
+   unsigned m_app1_banks, m_app2_banks, m_app3_banks;
 
    void set_mmu(mmu * page_manager);
 
@@ -82,6 +90,7 @@ private:
 
    const char *addrdec_option;
    int gpgpu_mem_address_mask;
+   bool run_test; 
 
    mmu * m_mmu;
 
@@ -90,13 +99,13 @@ private:
    unsigned char addrdec_mklow[N_ADDRDEC];
    unsigned char addrdec_mkhigh[N_ADDRDEC];
    new_addr_type addrdec_mask[N_ADDRDEC];
-   new_addr_type sub_partition_id_mask;
+   new_addr_type sub_partition_id_mask; 
 
    unsigned int m_subarray_bits;
 
    unsigned int gap;
    int m_n_channel;
-   int m_n_sub_partition_in_channel;
+   int m_n_sub_partition_in_channel; 
    int m_n_bk; //number of banks
    int m_n_bkgrp; //number of bank groups
 };

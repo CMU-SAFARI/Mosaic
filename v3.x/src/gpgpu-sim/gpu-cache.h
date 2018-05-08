@@ -317,7 +317,8 @@ public:
       cache_config() {
   }
   void init(linear_to_raw_address_translation *address_mapping);
-  virtual unsigned set_index(new_addr_type addr, appid_t core_id_l2, unsigned level) const;
+  //virtual unsigned set_index(new_addr_type addr) const;
+  virtual unsigned set_index(new_addr_type addr, unsigned core_id_l2, unsigned level) const;
 
 private:
   linear_to_raw_address_translation *m_address_mapping;
@@ -352,7 +353,7 @@ public:
   void print(FILE *stream, unsigned &total_access, unsigned &total_misses,
       std::vector<uint64_t>& total_access_s, std::vector<uint64_t>& total_misses_s) const;
   void get_missr(unsigned &accesses, unsigned &misses);
-  void get_missr_stream(unsigned &accesses_1, unsigned &misses_1, appid_t stream_idx);
+  void get_missr_stream(unsigned &accesses_1, unsigned &misses_1, unsigned stream_idx);
   void get_missr_core(unsigned &total_access_core, unsigned &total_misses_core, unsigned core_id);
   void get_misses_cum_core(unsigned &total_access_core, unsigned &total_misses_core,
       unsigned core_id);
@@ -383,7 +384,7 @@ protected:
   unsigned m_access;
   unsigned m_miss;
 
-  unsigned m_access_core[60]; // TODO: Use non-constant
+  unsigned m_access_core[60]; 
   unsigned m_miss_core[60];
 
   unsigned m_pending_hit; // number of cache miss that hit a line that is allocated but not filled
@@ -392,7 +393,7 @@ protected:
   unsigned m_access_previous;
   unsigned m_miss_previous;
 
-  unsigned m_access_previous_core[64]; // TODO: use non-constant
+  unsigned m_access_previous_core[64]; 
   unsigned m_miss_previous_core[64];
 
   // performance counters for calculating the amount of misses within a time window
@@ -625,11 +626,11 @@ public:
     m_tag_array->flush();
   }
   void print(FILE *fp, unsigned &accesses, unsigned &misses) const;
-  void print(FILE *fp, unsigned &accesses, unsigned &misses, std::vector<uint64_t>& accesses_s,
-      std::vector<uint64_t>& misses_s) const;
+  void print(FILE *fp, unsigned &accesses, unsigned &misses,
+      std::vector<uint64_t>& accesses_s, std::vector<uint64_t>& misses_s) const;
 
   void get_missr(unsigned &accesses, unsigned &misses);
-  void get_missr_stream(unsigned &accesses_1, unsigned &misses_1, appid_t stream_idx);
+  void get_missr_stream(unsigned &accesses_1, unsigned &misses_1, unsigned stream_idx);
   void get_missr_core(unsigned &total_access_core, unsigned &total_misses_core, unsigned core_id);
   void get_misses_cum_core(unsigned &total_access_core, unsigned &total_misses_core,
       unsigned core_id);
@@ -1021,8 +1022,8 @@ public:
 /*****************************************************************************/
 
 // See the following paper to understand this cache model:
-//
-// Igehy, et al., Prefetching in a Texture Cache Architecture,
+// 
+// Igehy, et al., Prefetching in a Texture Cache Architecture, 
 // Proceedings of the 1998 Eurographics/SIGGRAPH Workshop on Graphics Hardware
 // http://www-graphics.stanford.edu/papers/texture_prefetch/
 class tex_cache: public cache_t {

@@ -48,7 +48,6 @@ CPPFLAGS += -O3
 endif
 CPPFLAGS += -g
 CPPFLAGS += -fPIC
-CPPFLAGS += -std=c++0x
 LFLAGS +=
 
 
@@ -97,8 +96,8 @@ endif
 LEX_OBJS  = ${OBJDIR}/lex.yy.o
 YACC_OBJS = ${OBJDIR}/y.tab.o
 
-# networks
-NETWORKS:= $(wildcard networks/*.cpp)
+# networks 
+NETWORKS:= $(wildcard networks/*.cpp) 
 ALLOCATORS:= $(wildcard allocators/*.cpp)
 ARBITERS:= $(wildcard arbiters/*.cpp)
 ROUTERS:= $(wildcard routers/*.cpp)
@@ -133,23 +132,23 @@ ${LEX_OBJS}: lex.yy.c y.tab.h
 ${YACC_OBJS}: y.tab.c y.tab.h
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-${OBJDIR}/%.o: %.cpp
+${OBJDIR}/%.o: %.cpp 
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 # rules to compile networks
-${OBJDIR}/%.o: networks/%.cpp
+${OBJDIR}/%.o: networks/%.cpp 
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 # rules to compile arbiters
-${OBJDIR}/%.o: arbiters/%.cpp
+${OBJDIR}/%.o: arbiters/%.cpp 
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 # rules to compile allocators
-${OBJDIR}/%.o: allocators/%.cpp
+${OBJDIR}/%.o: allocators/%.cpp 
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 # rules to compile routers
-${OBJDIR}/%.o: routers/%.cpp
+${OBJDIR}/%.o: routers/%.cpp 
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 # rules to compile power classes
@@ -157,7 +156,7 @@ ${OBJDIR}/%.o: power/%.cpp
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) 
 	rm -f $(PROG)
 	rm -f *~
 	rm -f allocators/*~
