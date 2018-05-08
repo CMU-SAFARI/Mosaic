@@ -2,8 +2,6 @@ Requirements:
 
 - NVIDIA CUDA SDK
 - CUDA 4.0
-- MAFIA benchmark Suite
--- Available at https://github.com/adwaitjog/mafia/tree/master/pthread_benchmark
 - gcc 4.4 and g++ 4.8
 -- Note that the Makefile in pthread_benchmark as well as NVIDIA CUDA SDK folder can potentially be updated to enforce gcc and g++ to use the same version. However, it is not supported at the moment. g++4.8 is needed for Mosaic main simulator as we have been using newer funcationalities of g++.
 
