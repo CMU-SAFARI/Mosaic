@@ -1,0 +1,38 @@
+Description:
+  This software contains source code provided by NVIDIA Corporation.
+  http://developer.download.nvidia.com/compute/cuda/sdk/website/samples.html#dct8x8
+
+  A partial implementation of JPEG encoding and decoding.  Encoding performs
+  DCT and quantization.  Decoding performs IDCT.  Both encoding and decoding
+  take a bmp file as input.  Decoding first encodes the file on the CPU then
+  decodes on the GPU.
+
+********************************************************************************
+Install/Compile CUDA 2.3:
+  Extract JPEG.tar.gz into:
+    NVIDIA_GPU_Computing_SDK/C/src/
+
+  In the JPEG directory run:
+    make
+
+
+********************************************************************************
+Install/Compile GPGPU-Sim 2.1.1b:
+  Extract JPEG.tar.gz into:
+    gpgpu-sim_v2.1.1b/benchmarks/
+  
+  In the JPEG directory run:
+    make
+
+
+********************************************************************************
+Run:
+  To execute JPEG run the following command:
+    ./JPEG --[mode] --file=[input_file]
+  
+  Options:
+    [mode] - encode or decode
+    [input_file] - The name of the bmp file to encode or decode
+  
+  Example:
+    ./JPEG --decode --file=data/image.bmp

@@ -1,0 +1,49 @@
+
+
+        *** GPGPU-Sim version 2.1.2b (beta) ***
+
+
+GPGPU-Sim PTX: __cudaRegisterFunction _Z27CUDAkernelQuantizationShortPsi : 0x41cd75
+GPGPU-Sim PTX: __cudaRegisterFunction _Z27CUDAkernelQuantizationFloatPfi : 0x41ce04
+GPGPU-Sim PTX: __cudaRegisterFunction _Z19CUDAkernelShortIDCTPsi : 0x41ce93
+GPGPU-Sim PTX: __cudaRegisterFunction _Z18CUDAkernelShortDCTPsi : 0x41cf22
+GPGPU-Sim PTX: __cudaRegisterFunction _Z15CUDAkernel2IDCTPfi : 0x41cfb1
+GPGPU-Sim PTX: __cudaRegisterFunction _Z14CUDAkernel2DCTPfi : 0x41d040
+GPGPU-Sim PTX: __cudaRegisterFunction _Z15CUDAkernel1IDCTPfiii : 0x41d119
+GPGPU-Sim PTX: __cudaRegisterFunction _Z14CUDAkernel1DCTPfiii : 0x41d1fe
+GPGPU-Sim PTX: in __cudaRegisterTexture:
+GPGPU-Sim PTX:   int dim = 2
+GPGPU-Sim PTX:   int norm = 0
+GPGPU-Sim PTX:   int ext = 0
+GPGPU-Sim PTX:   Execution warning: Not finished implementing "void __cudaRegisterTexture(void**, const textureReference*, const void**, const char*, int, int, int)"
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x651f00; deviceAddress = DCTv8matrix; deviceName = DCTv8matrix
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 256 bytes
+GPGPU-Sim PTX registering constant DCTv8matrix (256 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterSharedVar
+GPGPU-Sim PTX: __cudaRegisterSharedVar
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652000; deviceAddress = C_a; deviceName = C_a
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_a (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652004; deviceAddress = C_b; deviceName = C_b
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_b (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652008; deviceAddress = C_c; deviceName = C_c
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_c (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x65200c; deviceAddress = C_d; deviceName = C_d
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_d (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652010; deviceAddress = C_e; deviceName = C_e
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_e (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652014; deviceAddress = C_f; deviceName = C_f
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_f (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652018; deviceAddress = C_norm; deviceName = C_norm
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_norm (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x652020; deviceAddress = Q; deviceName = Q
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 128 bytes
+GPGPU-Sim PTX registering constant Q (128 bytes) to name mapping
+GPGPU-Sim PTX: simulation mode 0 (can change with PTX_SIM_MODE_FUNC environment variable:
+               1=functional simulation only, 0=detailed performance simulator)

@@ -1,0 +1,407 @@
+
+
+        *** GPGPU-Sim version 2.1.1b (beta) ***
+
+
+GPGPU-Sim PTX: __cudaRegisterFunction _Z27CUDAkernelQuantizationShortPsi : 0x41b585
+GPGPU-Sim PTX: __cudaRegisterFunction _Z27CUDAkernelQuantizationFloatPfi : 0x41b614
+GPGPU-Sim PTX: __cudaRegisterFunction _Z19CUDAkernelShortIDCTPsi : 0x41b6a3
+GPGPU-Sim PTX: __cudaRegisterFunction _Z18CUDAkernelShortDCTPsi : 0x41b732
+GPGPU-Sim PTX: __cudaRegisterFunction _Z15CUDAkernel2IDCTPfi : 0x41b7c1
+GPGPU-Sim PTX: __cudaRegisterFunction _Z14CUDAkernel2DCTPfi : 0x41b850
+GPGPU-Sim PTX: __cudaRegisterFunction _Z15CUDAkernel1IDCTPfiii : 0x41b929
+GPGPU-Sim PTX: __cudaRegisterFunction _Z14CUDAkernel1DCTPfiii : 0x41ba0e
+GPGPU-Sim PTX: in __cudaRegisterTexture:
+GPGPU-Sim PTX:   int dim = 2
+GPGPU-Sim PTX:   int norm = 0
+GPGPU-Sim PTX:   int ext = 0
+GPGPU-Sim PTX:   Execution warning: Not finished implementing "void __cudaRegisterTexture(void**, const textureReference*, const void**, const char*, int, int, int)"
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d0c0; deviceAddress = DCTv8matrix; deviceName = DCTv8matrix
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 256 bytes
+GPGPU-Sim PTX registering constant DCTv8matrix (256 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterSharedVar
+GPGPU-Sim PTX: __cudaRegisterSharedVar
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1c0; deviceAddress = C_a; deviceName = C_a
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_a (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1c4; deviceAddress = C_b; deviceName = C_b
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_b (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1c8; deviceAddress = C_c; deviceName = C_c
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_c (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1cc; deviceAddress = C_d; deviceName = C_d
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_d (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1d0; deviceAddress = C_e; deviceName = C_e
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_e (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1d4; deviceAddress = C_f; deviceName = C_f
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_f (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1d8; deviceAddress = C_norm; deviceName = C_norm
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering constant C_norm (4 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x63d1e0; deviceAddress = Q; deviceName = Q
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 128 bytes
+GPGPU-Sim PTX registering constant Q (128 bytes) to name mapping
+GPGPU-Sim PTX: simulation mode 0 (can change with PTX_SIM_MODE_FUNC environment variable:
+               1=functional simulation only, 0=detailed performance simulator)
+GPGPU-Sim: Configuration options:
+
+-network_mode                           1 # Interconnection network mode
+-inter_config_file                   mesh # Interconnection network config file
+-save_embedded_ptx                      0 # saves ptx files embedded in binary as <n>.ptx
+-gpgpu_simd_model                       1 # 0 = no recombination, 1 = post-dominator, 2 = MIMD, 3 = dynamic warp formation
+-gpgpu_dram_scheduler                    1 # 0 = fifo (default), 1 = fast ideal
+-gpgpu_max_cycle                        0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_insn                         0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_tex_cache:l1            512:64:2:L # per-shader L1 texture cache  (READ-ONLY) config, i.e., {<nsets>:<linesize>:<assoc>:<repl>|none}
+-gpgpu_const_cache:l1            64:64:2:L # per-shader L1 constant memory cache  (READ-ONLY) config, i.e., {<nsets>:<linesize>:<assoc>:<repl>|none}
+-gpgpu_no_dl1                           1 # no dl1 cache (voids -gpgpu_cache:dl1 option)
+-gpgpu_cache:dl1               128:64:4:L # shader L1 data cache config, i.e., {<nsets>:<bsize>:<assoc>:<repl>|none}
+-gpgpu_cache:dl2                     NULL # unified banked L2 data cache config, i.e., {<nsets>:<bsize>:<assoc>:<repl>|none}; disabled by default
+-gpgpu_perfect_mem                      0 # enable perfect memory mode (no cache miss)
+-gpgpu_shader_core_pipeline           1024:32:32 # shader core pipeline config, i.e., {<nthread>:<warpsize>:<pipe_simd_width>}
+-gpgpu_shader_registers                16768 # Number of registers per shader core. Limits number of concurrent CTAs. (default 8192)
+-gpgpu_shader_cta                       8 # Maximum number of concurrent CTAs in shader (default 8)
+-gpgpu_n_shader                        28 # number of shaders in gpu
+-gpgpu_n_mem                            8 # number of memory modules (e.g. memory controllers) in gpu
+-gpgpu_n_mem_per_ctrlr                    2 # number of memory chips per memory controller
+-gpgpu_runtime_stat               10000:0 # display runtime statistics such as dram utilization {<freq>:<flag>}
+-gpgpu_dwf_heuristic                    0 # DWF scheduling heuristic: 0 = majority, 1 = minority, 2 = timestamp, 3 = pdom priority, 4 = pc-based, 5 = max-heap
+-gpgpu_reg_bankconflict                    0 # Check for bank conflict in the pipeline
+-gpgpu_dwf_regbk                        1 # Have dwf scheduler to avoid bank conflict
+-gpgpu_memlatency_stat                    0 # track and display latency statistics 0x2 enables MC, 0x4 enables queue logs
+-gpgpu_mshr_per_thread                    1 # Number of MSHRs per thread
+-gpgpu_interwarp_mshr_merge                    6 # interwarp coalescing
+-gpgpu_dram_sched_queue_size                   32 # 0 = unlimited (default); # entries per chip
+-gpgpu_dram_buswidth                    4 # default = 4 bytes (8 bytes per cycle at DDR)
+-gpgpu_dram_burst_length                    4 # Burst length of each DRAM request (default = 4 DDR cycle)
+-gpgpu_dram_timing_opt 4:2:8:12:21:13:34:9:4:5 # DRAM timing parameters = {nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tWTR}
+-gpgpu_mem_address_mask                    1 # 0 = old addressing mask, 1 = new addressing mask, 2 = new add. mask + flipped bank sel and chip sel bits
+-gpgpu_flush_cache                      0 # Flush cache at the end of each kernel call
+-gpgpu_l2_readoverwrite                    0 # Prioritize read requests over write requests for L2
+-gpgpu_pre_mem_stages                    1 # default = 0 pre-memory pipeline stages
+-gpgpu_no_divg_load                     0 # Don't allow divergence on load
+-gpgpu_dwf_hw                        32:2 # dynamic warp formation hw config, i.e., {<#LUT_entries>:<associativity>|none}
+-gpgpu_thread_swizzling                    0 # Thread Swizzling (1=on, 0=off)
+-gpgpu_strict_simd_wrbk                    0 # Applying Strick SIMD WriteBack Stage (1=on, 0=off)
+-gpgpu_shmem_size                   16384 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_bkconflict                    1 # Turn on bank conflict check for shared memory
+-gpgpu_shmem_pipe_speedup                    1 # Number of groups each warp is divided for shared memory bank conflict check
+-gpgpu_L2_queue         0:0:0:0:0:0:10:10 # L2 data cache queue length and latency config
+-gpgpu_cache_wt_through                    0 # L1 cache become write through (1=on, 0=off)
+-gpgpu_deadlock_detect                    1 # Stop the simulation at deadlock (1=on (default), 0=off)
+-gpgpu_cache_bkconflict                    1 # Turn on bank conflict check for L1 cache access
+-gpgpu_n_cache_bank                     1 # Number of banks in L1 cache, also for memory coalescing stall
+-gpgpu_warpdistro_shader                   -1 # Specify which shader core to collect the warp size distribution from
+-gpgpu_pdom_sched_type                    8 # 0 = first ready warp found, 1 = random, 8 = loose round robin
+-gpgpu_spread_blocks_across_cores                    1 # Spread block-issuing across all cores instead of filling up core by core
+-gpgpu_cuda_sim                         1 # use PTX instruction set
+-gpgpu_ptx_instruction_classification                    0 # if enabled will classify ptx instruction types per kernel (Max 255 kernels now)
+-gpgpu_ptx_sim_mode                     0 # Select between Performance (default) or Functional simulation (1)
+-gpgpu_clock_domains 500.0:2000.0:2000.0:2000.0 # Clock Domain Frequencies in MhZ {<Core Clock>:<ICNT Clock>:<L2 Clock>:<DRAM Clock>}
+-gpgpu_shmem_port_per_bank                    2 # Number of access processed by a shared memory bank per cycle (default = 2)
+-gpgpu_cache_port_per_bank                    2 # Number of access processed by a cache bank per cycle (default = 2)
+-gpgpu_const_port_per_bank                    2 # Number of access processed by a constant cache bank per cycle (default = 2)
+-gpgpu_cflog_interval                    0 # Interval between each snapshot in control flow logger
+-gpgpu_partial_write_mask                    1 # use partial write mask to filter memory requests <1>No extra reads(use this!)<2>extra reads generated for partial chunks
+-gpu_concentration                      1 # Number of shader cores per interconnection port (default = 1)
+-gpgpu_local_mem_map                    1 # Mapping from local memory space address to simulated GPU physical address space (default = 1)
+-gpgpu_mem_addr_mapping                 NULL # mapping memory address to dram model {dramid@<start bit>;<memory address map>}
+-visualizer_enabled                     1 # Turn on visualizer output (1=On, 0=Off)
+-visualizer_outputfile                 NULL # Specifies the output log file for visualizer
+-visualizer_zlevel                      6 # Compression level of the visualizer output log (0=no comp, 9=highest)
+-enable_ptx_file_line_stats                    1 # Turn on PTX source line statistic profiling. (1 = On)
+-ptx_line_stats_filename gpgpu_inst_stats.txt # Output file for PTX source line statistics.
+32 28 1024 917504
+28672
+addr_dec_mask[CHIP]  = 000000000000e000 	high:16 low:13
+addr_dec_mask[BK]    = 0000000000001800 	high:13 low:11
+addr_dec_mask[ROW]   = 000000003fff0000 	high:30 low:16
+addr_dec_mask[COL]   = 00000000000007ff 	high:11 low:0
+addr_dec_mask[BURST] = 000000000000000f 	high:4 low:0
+*** Initializing Memory Statistics ***
+nodemap
+0 
+1 2 4 5 6 8 
+9 11 13 14 15 16 
+17 18 19 20 21 22 
+24 26 27 29 30 31 
+33 34 35 3 7 10 
+12 23 25 28 32 GPU performance model initialization complete.
+GPGPU-Sim PTX: USING EMBEDDED .ptx files...
+GPGPU-Sim PTX: encountered texture directive TexSrc.
+GPGPU-Sim PTX: allocating shared region for "CurBlockLocal1" from 0x100 to 0x200 (shared memory space)
+GPGPU-Sim PTX: allocating shared region for "CurBlockLocal2" from 0x200 to 0x300 (shared memory space)
+GPGPU-Sim PTX: allocating constant region for "DCTv8matrix" from 0x100 to 0x200 (global memory space) 1
+GPGPU-Sim PTX: allocating constant region for "Q" from 0x200 to 0x280 (global memory space) 2
+GPGPU-Sim PTX: allocating constant region for "C_a" from 0x280 to 0x284 (global memory space) 3
+GPGPU-Sim PTX: allocating constant region for "C_b" from 0x284 to 0x288 (global memory space) 4
+GPGPU-Sim PTX: allocating constant region for "C_c" from 0x288 to 0x28c (global memory space) 5
+GPGPU-Sim PTX: allocating constant region for "C_d" from 0x28c to 0x290 (global memory space) 6
+GPGPU-Sim PTX: allocating constant region for "C_e" from 0x290 to 0x294 (global memory space) 7
+GPGPU-Sim PTX: allocating constant region for "C_f" from 0x294 to 0x298 (global memory space) 8
+GPGPU-Sim PTX: allocating constant region for "C_norm" from 0x298 to 0x29c (global memory space) 9
+GPGPU-Sim PTX: parsing function _Z14CUDAkernel1DCTPfiii
+GPGPU-Sim PTX: instruction assembly for function '_Z14CUDAkernel1DCTPfiii'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z14CUDAkernel1DCTPfiii'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z14CUDAkernel1DCTPfiii'...
+GPGPU-Sim PTX: parsing function _Z15CUDAkernel1IDCTPfiii
+GPGPU-Sim PTX: instruction assembly for function '_Z15CUDAkernel1IDCTPfiii'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z15CUDAkernel1IDCTPfiii'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z15CUDAkernel1IDCTPfiii'...
+GPGPU-Sim PTX: parsing function _Z14CUDAkernel2DCTPfi
+GPGPU-Sim PTX: allocating shared region for "__cuda_block572" from 0x300 to 0xb40 (shared memory space)
+GPGPU-Sim PTX: instruction assembly for function '_Z14CUDAkernel2DCTPfi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z14CUDAkernel2DCTPfi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z14CUDAkernel2DCTPfi'...
+GPGPU-Sim PTX: parsing function _Z15CUDAkernel2IDCTPfi
+GPGPU-Sim PTX: allocating shared region for "__cuda_block2700" from 0x300 to 0xb40 (shared memory space)
+GPGPU-Sim PTX: instruction assembly for function '_Z15CUDAkernel2IDCTPfi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z15CUDAkernel2IDCTPfi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z15CUDAkernel2IDCTPfi'...
+GPGPU-Sim PTX: parsing function _Z18CUDAkernelShortDCTPsi
+GPGPU-Sim PTX: allocating shared region for "__cuda_block4828" from 0x300 to 0xb80 (shared memory space)
+GPGPU-Sim PTX: instruction assembly for function '_Z18CUDAkernelShortDCTPsi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z18CUDAkernelShortDCTPsi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z18CUDAkernelShortDCTPsi'...
+GPGPU-Sim PTX: parsing function _Z19CUDAkernelShortIDCTPsi
+GPGPU-Sim PTX: allocating shared region for "__cuda_block7020" from 0x300 to 0xb80 (shared memory space)
+GPGPU-Sim PTX: instruction assembly for function '_Z19CUDAkernelShortIDCTPsi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z19CUDAkernelShortIDCTPsi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z19CUDAkernelShortIDCTPsi'...
+GPGPU-Sim PTX: parsing function _Z27CUDAkernelQuantizationFloatPfi
+GPGPU-Sim PTX: instruction assembly for function '_Z27CUDAkernelQuantizationFloatPfi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z27CUDAkernelQuantizationFloatPfi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z27CUDAkernelQuantizationFloatPfi'...
+GPGPU-Sim PTX: parsing function _Z27CUDAkernelQuantizationShortPsi
+GPGPU-Sim PTX: instruction assembly for function '_Z27CUDAkernelQuantizationShortPsi'...   done.
+GPGPU-Sim PTX: Finding postdominators for '_Z27CUDAkernelQuantizationShortPsi'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z27CUDAkernelQuantizationShortPsi'...
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file _1.ptx
+GPGPU-Sim PTX: extracting embedded .ptx to temporary file "_ptx_siwTHf"
+GPGPU-Sim PTX: generating ptxinfo using "ptxas -v _ptx2_yVCFNS --output-file /dev/null 2> _ptx_siwTHfinfo"
+GPGPU-Sim PTX: Kernel _Z27CUDAkernelQuantizationShortPsi
+GPGPU-Sim PTX: Kernel _Z27CUDAkernelQuantizationFloatPfi
+GPGPU-Sim PTX: Kernel _Z19CUDAkernelShortIDCTPsi
+GPGPU-Sim PTX: Kernel _Z18CUDAkernelShortDCTPsi
+GPGPU-Sim PTX: Kernel _Z15CUDAkernel2IDCTPfi
+GPGPU-Sim PTX: Kernel _Z14CUDAkernel2DCTPfi
+GPGPU-Sim PTX: Kernel _Z15CUDAkernel1IDCTPfiii
+GPGPU-Sim PTX: Kernel _Z14CUDAkernel1DCTPfiii
+GPGPU-Sim PTX: removing ptxinfo using "rm -f _ptx_siwTHf _ptx2_yVCFNS _ptx_siwTHfinfo"
+GPGPU-Sim PTX: loading global with explicit initializers...  done.
+GPGPU-Sim PTX: loading constants with explicit initializers...  done.
+GPGPU-Sim PTX: Program parsing completed (max 286 registers used per thread).
+GPGPU-Sim PTX: cudaMallocPitch (width = 2048)
+GPGPU-Sim PTX: allocating 1048576 bytes on GPU starting at address 0x10000000
+GPGPU-Sim PTX: copying 1048576 bytes from CPU[0x2a96691010] to GPU[0x10000000] ...  done.
+
+
+
+GPGPU-Sim PTX: cudaLaunch for 0x41b7c1 (mode=performance simulation)
+GPGPU-Sim PTX: Launching kernel '_Z15CUDAkernel2IDCTPfi' gridDim= (16,32,1) blockDim = (8,4,2); ntuid=1
+GPGPU-Sim uArch: clock freqs: 500000000.000000:2000000000.000000:2000000000.000000:2000000000.000000
+GPGPU-Sim uArch: clock periods: 0.00000000200000000000:0.00000000050000000000:0.00000000050000000000:0.00000000050000000000
+Reconvergence Pairs for _Z15CUDAkernel2IDCTPfi
+CTA/core = 7, limited by: shmem
+Shader 0 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 1 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 2 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 3 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 4 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 5 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 6 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 7 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 8 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 9 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 10 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 11 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 12 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 13 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 14 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 15 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 16 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 17 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 18 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 19 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 20 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 21 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 22 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 23 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 24 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 25 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 26 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 27 initializing CTA #0 with hw tids from 0 to 64 @(1,0) shdr->not_completed = 0
+Shader 0 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 1 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 2 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 3 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 4 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 5 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 6 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 7 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 8 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 9 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 10 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 11 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 12 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 13 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 14 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 15 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 16 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 17 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 18 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 19 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 20 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 21 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 22 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 23 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 24 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 25 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 26 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 27 initializing CTA #1 with hw tids from 64 to 128 @(2,0) shdr->not_completed = 64
+Shader 0 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 1 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 2 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 3 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 4 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 5 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 6 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 7 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 8 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 9 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 10 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 11 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 12 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 13 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 14 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 15 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 16 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 17 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 18 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 19 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 20 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 21 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 22 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 23 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 24 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 25 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 26 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 27 initializing CTA #2 with hw tids from 128 to 192 @(3,0) shdr->not_completed = 128
+Shader 0 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 1 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 2 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 3 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 4 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 5 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 6 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 7 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 8 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 9 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 10 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 11 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 12 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 13 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 14 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 15 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 16 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 17 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 18 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 19 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 20 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 21 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 22 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 23 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 24 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 25 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 26 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 27 initializing CTA #3 with hw tids from 192 to 256 @(4,0) shdr->not_completed = 192
+Shader 0 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 1 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 2 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 3 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 4 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 5 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 6 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 7 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 8 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 9 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 10 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 11 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 12 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 13 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 14 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 15 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 16 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 17 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 18 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 19 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 20 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 21 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 22 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 23 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 24 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 25 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 26 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 27 initializing CTA #4 with hw tids from 256 to 320 @(5,0) shdr->not_completed = 256
+Shader 0 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 1 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 2 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 3 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 4 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 5 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 6 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 7 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 8 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 9 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 10 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 11 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 12 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 13 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 14 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 15 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 16 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 17 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 18 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 19 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 20 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 21 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 22 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 23 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 24 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 25 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 26 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 27 initializing CTA #5 with hw tids from 320 to 384 @(6,0) shdr->not_completed = 320
+Shader 0 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 1 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 2 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 3 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 4 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 5 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 6 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 7 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 8 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 9 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 10 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 11 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 12 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 13 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 14 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 15 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 16 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 17 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 18 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 19 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 20 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 21 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 22 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 23 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 24 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 25 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 26 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+Shader 27 initializing CTA #6 with hw tids from 384 to 448 @(7,0) shdr->not_completed = 384
+100000 instructions simulated : ctaid=(0,1,0) tid=(7,3,0)
+200000 instructions simulated : ctaid=(5,0,0) tid=(7,3,0)

@@ -1,0 +1,13 @@
+CXX=g++
+CC=g++
+NVCC=/i3c/hpcl/aup234/software/cuda/bin/nvcc
+AR=ar
+LD=g++
+CPPFLAGS=-I../../../../src/common -I../../../../config  -I/i3c/hpcl/aup234/software/cuda/include -I../../include
+CFLAGS=-g -O2
+CXXFLAGS=-g -O2
+NVCXXFLAGS=-g -O2
+LDFLAGS= 
+ARFLAGS=rcv
+LIBS=-lSHOCCommon -L../../../../lib  -lrt
+uname= Linux ganga02.cse.psu.edu 2.6.32-358.11.1.el6.x86_64 #1 SMP Wed May 15 10:48:38 EDT 2013 x86_64 x86_64 x86_64 GNU/Linux
