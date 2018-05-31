@@ -106,7 +106,7 @@ mem_fetch::mem_fetch( mem_fetch * mf )
 
 
 
-   if(mf->get_cache()==NULL){printf(" Whoaaa, cache is not set, cannot probe the cache!!!\n");}
+   if(mf->get_cache()==NULL){printf("Rachata-debug: Whoaaa, cache is not set, cannot probe the cache!!!\n");}
    else m_cache = mf->get_cache();
 
 
@@ -148,6 +148,8 @@ mem_fetch::mem_fetch( const mem_access_t &access,
    m_tpc = tpc;
    m_wid = wid;
    m_tlb = NULL; // By default, this should be null
+   //config->m_address_mapping.addrdec_tlx(access.get_addr(),&m_raw_addr, 0);
+   //m_partition_addr = config->m_address_mapping.partition_address(access.get_addr(), 0);
    m_type = m_access.is_write()?WRITE_REQUEST:READ_REQUEST;
    m_timestamp = gpu_sim_cycle + gpu_tot_sim_cycle;
    m_timestamp2 = 0;
@@ -180,6 +182,7 @@ mem_fetch::mem_fetch( const mem_access_t &access,
 
    accum_dram_access = 0;
 
+   // Rachata: Only set from the L2 TLB, if this is a TLB miss at L2 TLB
    isL2TLBMiss = false;
 
    bypass_L2 = false;
@@ -245,6 +248,7 @@ bool mem_fetch::check_bypass(mem_fetch * mf)
     }
     else if(m_mem_config->tlb_bypass_enabled == 3)
     {
+        //TODO: Add dynamic policy, check level hit rate vs. shared cache hit rate
         if( (float)(mf->get_tlb()->get_shared_tlb()->get_mem_stat()->tlb_level_hits[mf->get_tlb_depth_count()])/  (float)(mf->get_tlb()->get_shared_tlb()->get_mem_stat()->tlb_level_accesses[mf->get_tlb_depth_count()]) /*TLB level hit rate*/ 
          <  (float)(mf->get_tlb()->get_shared_tlb()->get_mem_stat()->l2_cache_hits)/  (float)(mf->get_tlb()->get_shared_tlb()->get_mem_stat()->l2_cache_accesses) /*L2 data cache hit rate*/ ) //Can get from l2cache.cc line 770, or just collect it again
             return true;
@@ -257,7 +261,7 @@ bool mem_fetch::check_bypass(mem_fetch * mf)
     }
 }
 
-// Note: when the request is serviced in DRAM, invoke this routine again on the parent
+//Rachata: Note: when the request is serviced in DRAM, invoke this routine again on the parent
 //               This code is on l2cache.cc in dram_cycle(); 
 // This routine is invoked only with a tlb request got its data from DRAM (at the DRAM return queue pop)
 void mem_fetch::done_tlb_req(mem_fetch * mf)
@@ -268,13 +272,6 @@ void mem_fetch::done_tlb_req(mem_fetch * mf)
     mfr = mf;
     if(mfr->get_parent_tlb_request()!=NULL)
     {
-
-//        if(mfr->pwcache_hit)
-//        {
-//            done_tlb_req(mfr->get_parent_tlb_request());
-//            delete mfr; 
-//            return;
-//        }
 
         // If PW cache hit
         if(mfr->pwcache_hit && !mfr->pwcache_done)
@@ -296,8 +293,6 @@ void mem_fetch::done_tlb_req(mem_fetch * mf)
         mfr->bypass_L2 = mfr->check_bypass(mfr);
 
         m_cache->add_tlb_miss_to_queue(mfr); // Send the actual (original) memory request to DRAM
-//        mfr->get_DRAM()->push(mfr); // Send the actual (original) memory request to DRAM
-//        mfr = mfr->get_parent_tlb_request();
     }
     else
     {
@@ -308,11 +303,11 @@ void mem_fetch::done_tlb_req(mem_fetch * mf)
         mf->get_tlb()->fill(mf->get_addr(), mf);
         mf->get_tlb()->l2_fill(mf->get_addr(), mf->get_appID(), mf);
 
-        // Do not have to send this actual request anymore because pt_walk would return reservation fail --> The mf is deleted.
-//        m_cache->add_tlb_miss_to_queue(mf); // Send the actual (original) memory request to DRAM
 
         mf->get_tlb()->add_mf_to_done(mf);
 
+//        mf->get_cache()->access(mf->get_addr(),mf,mf->get_timestamp(),mf->get_events()); // Push the original request back to DRAM
+//        mf->get_DRAM()->push(mf); // Push the original request back to DRAM
     }
 }
 
@@ -349,7 +344,6 @@ void mem_fetch::pt_walk(mem_fetch * mf)
 
 
         mem_fetch * child;
-        // Assume this constructor will probe the TLB and set the TLB status properly
         child = new mem_fetch(mf); // set a new mem_fetch for the next level subroutine
 
         if(m_mem_config->pw_cache_enable)

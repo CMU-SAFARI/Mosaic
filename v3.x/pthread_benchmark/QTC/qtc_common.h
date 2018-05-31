@@ -4,10 +4,8 @@
 #define GLOBAL_MEMORY 0x0
 #define TEXTUR_MEMORY 0x1
 #define COMPACT_STORAGE_MATRIX 0x00
-#define FULL_STORAGE_MATRIX    0x10
+#define FULL_STORAGE_MATRIX 0x10
 
-
-                                               
 #define INVALID_POINT_MARKER -42
 
 #endif

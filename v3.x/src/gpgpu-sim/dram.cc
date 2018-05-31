@@ -257,11 +257,8 @@ dram_req_t::dram_req_t( class mem_fetch *mf )
 }
 
 
-// --> If there is a mem_fetch that miss in the TLB --> Add two requests, 
-// --> If there is a mem_fetch to a page that doesn't exist --> page fault
-//                                    --> Hand this mf to memory_owner.cc
 void dram_t::push(class mem_fetch *data) {
-  if (mrqq->full()) { //make sure that we have enough room to fill into the queue
+  if (mrqq->full()) { //Rachata: new, make sure that we have enough room to fill into the queue
     wait_list.push_back(data);
   } else {
     if (data->get_page_fault()) // Page not in DRAM
@@ -342,6 +339,7 @@ void dram_t::cycle() {
     m_page_manager->m_compaction_last_probed = gpu_sim_cycle + gpu_tot_sim_cycle;
 
     m_page_manager->send_scan_request(); //Trigger the scan request
+
   }
 
 
@@ -362,7 +360,6 @@ void dram_t::cycle() {
         mem_fetch *data = cmd->data;
         data->set_status(IN_PARTITION_MC_RETURNQ, gpu_sim_cycle + gpu_tot_sim_cycle);
         if (data->get_access_type() != L1_WRBK_ACC && data->get_access_type() != L2_WRBK_ACC) {
-
 
           if (data->get_parent_tlb_request() == NULL) {
             data->set_reply();
@@ -439,8 +436,6 @@ void dram_t::cycle() {
       return;
     }
 
-//     //1) other DRAM command here, decrement the counter for each copy command
-//     // Note that multiple copies are handled in the MMU
     if ((bk[i]->state == BANK_IDLE) && (!bk[i]->cmd_queue->empty())) //Add cmd_queue
         {
       if (RC_DEBUG && bk[i]->blocked > 0)
@@ -501,7 +496,7 @@ void dram_t::cycle() {
           bk[i]->state = BANK_BLOCKED_PENDING; //Can only become other state when target bank change the state of this bank
           bk[command->to_bank]->cmd_queue->push_back(command);
         }
-      } else if (command->command == Channel_copy) 
+      } else if (command->command == Channel_copy) //TODO
       {
       }
       bk[i]->cmd_queue->pop_front(); //Always remove the command

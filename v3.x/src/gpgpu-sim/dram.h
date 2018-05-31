@@ -240,7 +240,7 @@ private:
    //should be filled with dram clock and popped with l2or icnt clock 
    fifo_pipeline<mem_fetch> *returnq;
 
-   std::list<mem_fetch*> wait_list; // A queue for TLB-related requests
+   std::list<mem_fetch*> wait_list; //Rachata: A queue for TLB-related requests
 
    unsigned int dram_util_bins[10];
    unsigned int dram_eff_bins[10];

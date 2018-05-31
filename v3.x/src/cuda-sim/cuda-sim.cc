@@ -53,7 +53,6 @@
 #include "../stream_manager.h"
 #include <pthread.h>
 #include "../common.h"
-//#include "../gpgpu-sim/App.h"
 
 extern mmu * g_mmu;
 
@@ -384,7 +383,6 @@ class VMM;
 
 
 void Hub::modify_mapping(bool adding, bool promotion, uint64_t ID, uint64_t vaddr, uint64_t paddr) {
-      if (ID = max_uint64) return;
       void* vaddr_ptr = (void*)vaddr;
       void* paddr_ptr = (void*)paddr;
       if (adding) {
@@ -408,8 +406,7 @@ void Hub::modify_mapping(bool adding, bool promotion, uint64_t ID, uint64_t vadd
 void Hub::transfer_page(uint64_t ID, uint64_t vaddr, uint64_t old_paddr, uint64_t new_paddr) {
       void* vaddr_ptr = (void*)vaddr;
       void* old_paddr_ptr = (void*)old_paddr;
-      void* new_paddr_ptr = (void*)new_paddr;
-      printf("page at %p being moved from %p to %p\n", vaddr_ptr, old_paddr_ptr, new_paddr_ptr);
+      void* new_vaddr_ptr = (void*)new_paddr;
       // base page at vaddr is being moved from old_paddr to new_paddr
       g_mmu->update_mapping((new_addr_type)vaddr, (new_addr_type) old_paddr, (new_addr_type) vaddr, (new_addr_type) new_paddr, ID);
 }
@@ -610,7 +607,7 @@ class PMM : public Abstract_PMM {
    uint64_t huge_page_size;
    uint64_t max_chunks;
    std::unordered_map<uint64_t,Vspace_Data*> ID_to_data;
-   std::vector<uint64_t> free_chunks, special_chunks;
+   std::vector<uint64_t> free_chunks;
    uint64_t pages_allocated, pages_freed;
 
    // attempts to free up one chunk
@@ -675,54 +672,14 @@ class PMM : public Abstract_PMM {
       delete most_unused_schunk;
       return chunk_num;
    }
-   float fmfi() {
-      /* This doesn't make any sense
-      if (free_chunks.size() == 0) return 0.0;
-      uint64_t total_free = max_chunks * huge_page_size - (pages_allocated - pages_freed);
-      return 1 - (total_free / huge_page_size / free_chunks.size());*/
-      if (free_chunks.size() == 0) return 1.0;
-      uint64_t total_free = max_chunks * huge_page_size - (pages_allocated - pages_freed);
-      return 1.0 - ((float)free_chunks.size() / (float)(total_free / huge_page_size));
-      
-   }
-   void prefragment(float target_fmfi, uint64_t fppf) {
-      assert(target_fmfi >= 0.0 && target_fmfi <= 1.0 && "invalid target fmfi");
-      assert(target_fmfi == 0.0 || fppf > 0 && fppf < huge_page_size && "invalid pages per frame");
-      if (target_fmfi == 0.0f) return;
-      const uint64_t hps = huge_page_size;
-      //uint64_t appID;
-      //if(App::is_registered(max_uint64)) appID = App::get_app_id(max_uint64);
-      //else appID = App::register_app(max_uint64);
-      //if (ID_to_data[appID] == nullptr) ID_to_data[appID] = new Vspace_Data();
-      //Vspace_Data* data = ID_to_data[appID];
-      if (ID_to_data[max_uint64] == nullptr) ID_to_data[max_uint64] = new Vspace_Data();
-      Vspace_Data* data = ID_to_data[max_uint64];
-      uint64_t vcn = 1 + hub->start_vaddr / hub->page_size / hps;
-      while (fmfi() < target_fmfi && !free_chunks.empty()) {
-         Virtual_Chunk* chunk = new Virtual_Chunk(hps, vcn*hps*hub->page_size, free_chunks.back());
-         free_chunks.pop_back();
-         data->virt_to_phys[vcn] = chunk;
-         data->reserved_chunks.insert(chunk);
-         //Log_Info info = Log_Info(appID, hub);
-         Log_Info info = Log_Info(max_uint64, hub);
-         for (uint64_t i = 0; i < fppf; ++i) {
-            chunk->add_page(info, i);
-         }
-         pages_allocated += fppf;
-         ++vcn;
-      }
-      if (fmfi() < target_fmfi && free_chunks.empty()) printf("could not acheive desired fragmentation");
-   }
 
    public:
-   PMM(Hub* h, uint64_t hps, uint64_t total_pages, float tf = 0.0f, uint64_t fppf = 1) : free_chunks(total_pages / hps - 100), special_chunks(100), ID_to_data() {
+   PMM(Hub* h, uint64_t hps, uint64_t total_pages) : free_chunks(total_pages / hps), ID_to_data() {
       hub = h;
       huge_page_size = hps;
-      max_chunks = total_pages / huge_page_size - 100;
+      max_chunks = total_pages / huge_page_size;
       std::iota(free_chunks.rbegin(), free_chunks.rend(), 0);
-      std::iota(special_chunks.rbegin(), special_chunks.rend(), max_chunks);
       pages_allocated = 0; pages_freed = 0;
-      prefragment(tf, fppf);
    }
 
    uint64_t translate(uint64_t ID, uint64_t vpn) {
@@ -894,7 +851,7 @@ class PMM : public Abstract_PMM {
             data->reserved_chunks.erase(chunk);
             if (chunk->fragmented()) {
                // defragment and promote to huge page
-               uint64_t chunk_num = max_uint64;
+               uint64_t chunk_num;
                if (!free_chunks.empty()) {
                   chunk_num = free_chunks.back();
                   free_chunks.pop_back();
@@ -949,21 +906,6 @@ class PMM : public Abstract_PMM {
       }
       pages_freed += num_pages;
    }
-   
-   void special_allocate(uint64_t ID, uint64_t vcn) {
-      const uint64_t hps = huge_page_size;
-      if (ID_to_data[ID] == nullptr) ID_to_data[ID] = new Vspace_Data();
-      Vspace_Data* data = ID_to_data[ID];
-      assert(!special_chunks.empty() && "no more reserved huge frames for system addresses");
-      Virtual_Chunk* chunk = new Virtual_Chunk(hps, vcn*hps*hub->page_size, special_chunks.back());
-      special_chunks.pop_back();
-      data->virt_to_phys[vcn] = chunk;
-      Log_Info info = Log_Info(ID, hub);
-      for (uint64_t virtual_offset = 0; virtual_offset < hps; ++virtual_offset) {
-         chunk->add_page(info, virtual_offset);
-      }
-      pages_allocated += hps;
-   }
 };
 
 class VMM : public Abstract_VMM {
@@ -1014,7 +956,7 @@ class VMM : public Abstract_VMM {
    }
 
    void print() {
-      printf("%llu non-continuous bytes used / %llu continuous bytes used\n", in_use, end_addr - hub->start_vaddr);
+      printf("%llu non-continuous bytes used / %llu continuous bytes used\n", in_use, end_addr);
    }
 
    void* allocate(uint64_t bytes) {
@@ -1110,14 +1052,32 @@ class VMM : public Abstract_VMM {
    }
 };
 
-Hub::Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv = 0, float tf = 0.0, uint64_t fppf = 1) {
+void Hub::pre_populate_DRAM()
+{
+//   uint64_t size = (g_mmu->get_mem_config()->DRAM_size) * ((float)(g_mmu->get_mem_config()->DRAM_fragmentation)/(float)100);
+//   size = (float)size / (float) g_mmu->get_mem_config()->base_page_size;
+//   for(uint64_t count = 0; count < size; count++)
+//   {
+//       //Get ID
+//       
+//       //Call allcate for this page
+//
+//   }
+}
+
+//void Hub::paging(uint64_t vaddr, uint64_t paddr, uint64_t size)
+//{
+//   g_mmu->page_fault(vaddr, paddr, size);
+//}
+
+Hub::Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv = 0) {
    // tp is total size of memory, in base pages
    // PMM currently rounds that down to the nearest size in huge pages
    round_malloc_to = rmt;
    page_size = ps;
    huge_page_size = hps;
    start_vaddr = sv | (uint64_t{1} << 63);
-   pmm = new PMM(this, huge_page_size, tp, tf, fppf);
+   pmm = new PMM(this, huge_page_size, tp);
 }
 
 void* Hub::allocate(uint64_t ID, uint64_t bytes) {
@@ -1157,12 +1117,22 @@ void* Hub::translate(uint64_t ID, void* vaddr) {
       //printf("translating non-malloc virtual address %p\n", vaddr);
       //if (fixed_vaddr >= start_vaddr) printf("non-malloc vaddr %p in m_dev_malloc range at cycle %llu\n", vaddr, gpu_sim_cycle + gpu_tot_sim_cycle);
       phys_page_addr = pmm->translate(ID, vpn);
-      if (phys_page_addr == max_uint64) pmm->special_allocate(ID, vpn / huge_page_size);
+      if (phys_page_addr == max_uint64) pmm->allocate(ID, vpn - vpn % 512, 512);
       phys_page_addr = pmm->translate(ID, vpn);
       assert(phys_page_addr != max_uint64 && "failed to register non-malloc virtual address");
    }
    return (void*)(phys_page_addr + uint64_t(fixed_vaddr) % page_size);
 }
+
+// Old translate
+//void* Hub::translate(uint64_t ID, void* vaddr) {
+//   const uint64_t mask = max_uint64 >> 16;
+//   uint64_t fixed_vaddr = uint64_t(vaddr) & mask;
+//   uint64_t vpn = uint64_t(fixed_vaddr) / page_size;
+//   uint64_t phys_page_addr = pmm->translate(ID, vpn);
+//   if (phys_page_addr == max_uint64) return (void*)max_uint64;
+//   return (void*)(phys_page_addr + uint64_t(fixed_vaddr) % page_size);
+//}
 
 Hub* gpu_alloc;
 
@@ -1177,13 +1147,9 @@ void gpgpu_t::gpu_malloc_init() {
 //       g_mmu->init(g_the_gpu_config.get_mem_config());
    }
    DRAM_size = g_mmu->get_mem_config()->DRAM_size;
-   float DRAM_frag = g_mmu->get_mem_config()->DRAM_fragmentation;
-   uint64_t DRAM_fppf = g_mmu->get_mem_config()->DRAM_fragmentation_pages_per_frame;
    //if (DRAM_size == 0) DRAM_size = (uint64_t)3 * (uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024; // default to 1GB
-   gpu_alloc = new Hub(256, 4096, 512, DRAM_size / 4096, m_dev_malloc, DRAM_frag, DRAM_fppf);
+   gpu_alloc = new Hub(256, 4096, 512, DRAM_size / 4096, m_dev_malloc);
    printf("using DRAM size: %lu\n", DRAM_size);
-   printf("using starting DRAM fragmentation: %g\n", DRAM_frag);
-   printf("using DRAM fragmentation pages per frame: %lu\n", DRAM_fppf);
    printf("gpu_malloc starting pointer: %p\n", (void*)m_dev_malloc);
 }
 

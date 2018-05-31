@@ -6,12 +6,10 @@
  *cr
  ***************************************************************************/
 
-#include <stdio.h>
 #include "file.h"
+#include <stdio.h>
 
-unsigned short
-read16u(FILE *f)
-{
+unsigned short read16u(FILE* f) {
   int n;
 
   n = fgetc(f);
@@ -20,9 +18,7 @@ read16u(FILE *f)
   return n;
 }
 
-short
-read16i(FILE *f)
-{
+short read16i(FILE* f) {
   int n;
 
   n = fgetc(f);
@@ -31,25 +27,19 @@ read16i(FILE *f)
   return n;
 }
 
-void
-write32u(FILE *f, unsigned int i)
-{
+void write32u(FILE* f, unsigned int i) {
   putc(i, f);
   putc(i >> 8, f);
   putc(i >> 16, f);
   putc(i >> 24, f);
 }
 
-void
-write16u(FILE *f, unsigned short h)
-{
+void write16u(FILE* f, unsigned short h) {
   putc(h, f);
   putc(h >> 8, f);
 }
 
-void
-write16i(FILE *f, short h)
-{
+void write16i(FILE* f, short h) {
   putc(h, f);
   putc(h >> 8, f);
 }

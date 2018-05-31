@@ -82,12 +82,10 @@ void linear_to_raw_address_translation::set_mmu(mmu * page_manager)
 new_addr_type linear_to_raw_address_translation::partition_address( new_addr_type in_addr , unsigned appID, unsigned level, bool isRead) const 
 {
    if(ALLOC_DEBUG) printf("Address decoder want to parse memory partition ID for address = %x, appID = %d, level = %d\n", in_addr, appID, level);
-   //new_addr_type addr = in_addr;
    new_addr_type addr;
    if(level == DRAM_CMD || appID == PT_SPACE) addr = in_addr;
    else if(m_config->use_old_Alloc) addr = m_mmu->old_get_pa(in_addr,appID,isRead);
    else addr = m_mmu->get_pa(in_addr,appID,isRead); // Check if this address space has been allocated before (in case of new local memory reference)
-   //else addr = (new_addr_type)gpu_alloc->translate(appID, (void*)((appID << 48) | in_addr)); // Check if this address space has been allocated before (in case of new local memory reference)
    if(MERGE_DEBUG) printf("Decoing VA = %x. Got = %x, Cycle = %lld. Calling translate(%d,%p)\n", in_addr, addr, gpu_sim_cycle + gpu_tot_sim_cycle, appID, (void*)((appID << 48) | in_addr));
 
    if((uint64_t)addr == max_uint64){
@@ -122,10 +120,7 @@ bool linear_to_raw_address_translation::addrdec_tlx(new_addr_type in_addr, addrd
    new_addr_type addr;
    if(level == DRAM_CMD || appID == PT_SPACE) addr = in_addr;
    else if(m_config->use_old_Alloc) addr = m_mmu->old_get_pa(in_addr,appID,isRead);
-   //else addr = in_addr;
-   //else addr = m_mmu->get_pa(in_addr, appID, &fault, isRead);
    else addr = m_mmu->get_pa(in_addr,appID,isRead); // Check if this address space has been allocated before (in case of new local memory reference)
-   //else addr = (new_addr_type)gpu_alloc->translate(appID, (void*)((appID << 48) | in_addr)); // Check if this address space has been allocated before (in case of new local memory reference)
    if(MERGE_DEBUG) printf("Decoing in addrdec_tlx, VA = %x. Got = %x, cycle = %lld. Calling translate(%d,%p)\n", in_addr, addr, gpu_sim_cycle + gpu_tot_sim_cycle, appID, (void*)((appID << 48) | in_addr));
 
    if((uint64_t)addr == max_uint64){
@@ -135,7 +130,6 @@ bool linear_to_raw_address_translation::addrdec_tlx(new_addr_type in_addr, addrd
 
    if(MERGE_DEBUG) printf("Address decoder want to parse physical address ID for address = %x, appID = %d, level = %d. Got physical address = %x\n", in_addr, appID, level, addr);
 
-   //printf("in addrdec.cc, physical addr = %x, VA = %x, app = %d, fault value = %d\n", addr, in_addr, appID, fault);
   
    unsigned long long int addr_for_chip,rest_of_addr;
    unsigned num_app = ConfigOptions::n_apps;

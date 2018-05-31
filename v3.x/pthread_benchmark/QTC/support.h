@@ -17,32 +17,28 @@
 // Creation:    June 8, 2010
 //
 // ****************************************************************************
-inline unsigned long 
-findAvailBytes(void)
-{
-    int device;
-    cudaGetDevice(&device);
-    CHECK_CUDA_ERROR();
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, device);
-    CHECK_CUDA_ERROR();
-    unsigned long total_bytes = deviceProp.totalGlobalMem;
-    unsigned long avail_bytes = total_bytes;
-    void* work;
+inline unsigned long findAvailBytes(void) {
+  int device;
+  cudaGetDevice(&device);
+  CHECK_CUDA_ERROR();
+  cudaDeviceProp deviceProp;
+  cudaGetDeviceProperties(&deviceProp, device);
+  CHECK_CUDA_ERROR();
+  unsigned long total_bytes = deviceProp.totalGlobalMem;
+  unsigned long avail_bytes = total_bytes;
+  void* work;
 
-    while (1) {
-        cudaMalloc(&work, avail_bytes);
-        if (cudaGetLastError() == cudaSuccess) {
-            break;
-        }
-        avail_bytes -= (1024*1024);
+  while (1) {
+    cudaMalloc(&work, avail_bytes);
+    if (cudaGetLastError() == cudaSuccess) {
+      break;
     }
-    cudaFree(work);
-    CHECK_CUDA_ERROR();
+    avail_bytes -= (1024 * 1024);
+  }
+  cudaFree(work);
+  CHECK_CUDA_ERROR();
 
-    return avail_bytes;
+  return avail_bytes;
 }
-
-
 
 #endif

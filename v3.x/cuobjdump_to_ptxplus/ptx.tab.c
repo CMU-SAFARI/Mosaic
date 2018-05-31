@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989-1990, 2000-2011 Free Software Foundation, Inc.
-   
+
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,7 +26,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.5"
+#define YYBISON_VERSION "3.0.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -58,29 +58,28 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-/* Using locations.  */
-#define YYLSP_NEEDED 0
 
 /* Substitute the variable and function names.  */
 #define yyparse         ptx_parse
 #define yylex           ptx_lex
 #define yyerror         ptx_error
-#define yylval          ptx_lval
-#define yychar          ptx_char
 #define yydebug         ptx_debug
 #define yynerrs         ptx_nerrs
 
+#define yylval          ptx_lval
+#define yychar          ptx_char
 
 /* Copy the first part of user declarations.  */
 
+#line 75 "ptx.tab.c" /* yacc.c:339  */
 
-/* Line 268 of yacc.c  */
-#line 79 "ptx.tab.c"
-
-/* Enabling traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 1
-#endif
+# ifndef YY_NULLPTR
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
+#  else
+#   define YY_NULLPTR 0
+#  endif
+# endif
 
 /* Enabling verbose error messages.  */
 #ifdef YYERROR_VERBOSE
@@ -90,181 +89,184 @@
 # define YYERROR_VERBOSE 0
 #endif
 
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
+/* In a future release of Bison, this section will be replaced
+   by #include "ptx.tab.h".  */
+#ifndef YY_PTX_PTX_TAB_H_INCLUDED
+# define YY_PTX_PTX_TAB_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 1
+#endif
+#if YYDEBUG
+extern int ptx_debug;
 #endif
 
-
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     STRING = 258,
-     OPCODE = 259,
-     ALIGN_DIRECTIVE = 260,
-     BRANCHTARGETS_DIRECTIVE = 261,
-     BYTE_DIRECTIVE = 262,
-     CALLPROTOTYPE_DIRECTIVE = 263,
-     CALLTARGETS_DIRECTIVE = 264,
-     CONST_DIRECTIVE = 265,
-     CONSTPTR_DIRECTIVE = 266,
-     PTR_DIRECTIVE = 267,
-     ENTRY_DIRECTIVE = 268,
-     EXTERN_DIRECTIVE = 269,
-     FILE_DIRECTIVE = 270,
-     FUNC_DIRECTIVE = 271,
-     GLOBAL_DIRECTIVE = 272,
-     LOCAL_DIRECTIVE = 273,
-     LOC_DIRECTIVE = 274,
-     MAXNCTAPERSM_DIRECTIVE = 275,
-     MAXNNREG_DIRECTIVE = 276,
-     MAXNTID_DIRECTIVE = 277,
-     MINNCTAPERSM_DIRECTIVE = 278,
-     PARAM_DIRECTIVE = 279,
-     PRAGMA_DIRECTIVE = 280,
-     REG_DIRECTIVE = 281,
-     REQNTID_DIRECTIVE = 282,
-     SECTION_DIRECTIVE = 283,
-     SHARED_DIRECTIVE = 284,
-     SREG_DIRECTIVE = 285,
-     STRUCT_DIRECTIVE = 286,
-     SURF_DIRECTIVE = 287,
-     TARGET_DIRECTIVE = 288,
-     TEX_DIRECTIVE = 289,
-     UNION_DIRECTIVE = 290,
-     VERSION_DIRECTIVE = 291,
-     ADDRESS_SIZE_DIRECTIVE = 292,
-     VISIBLE_DIRECTIVE = 293,
-     IDENTIFIER = 294,
-     INT_OPERAND = 295,
-     FLOAT_OPERAND = 296,
-     DOUBLE_OPERAND = 297,
-     S8_TYPE = 298,
-     S16_TYPE = 299,
-     S32_TYPE = 300,
-     S64_TYPE = 301,
-     U8_TYPE = 302,
-     U16_TYPE = 303,
-     U32_TYPE = 304,
-     U64_TYPE = 305,
-     F16_TYPE = 306,
-     F32_TYPE = 307,
-     F64_TYPE = 308,
-     FF64_TYPE = 309,
-     B8_TYPE = 310,
-     B16_TYPE = 311,
-     B32_TYPE = 312,
-     B64_TYPE = 313,
-     BB64_TYPE = 314,
-     BB128_TYPE = 315,
-     PRED_TYPE = 316,
-     TEXREF_TYPE = 317,
-     SAMPLERREF_TYPE = 318,
-     SURFREF_TYPE = 319,
-     V2_TYPE = 320,
-     V3_TYPE = 321,
-     V4_TYPE = 322,
-     COMMA = 323,
-     PRED = 324,
-     HALF_OPTION = 325,
-     EQ_OPTION = 326,
-     NE_OPTION = 327,
-     LT_OPTION = 328,
-     LE_OPTION = 329,
-     GT_OPTION = 330,
-     GE_OPTION = 331,
-     LO_OPTION = 332,
-     LS_OPTION = 333,
-     HI_OPTION = 334,
-     HS_OPTION = 335,
-     EQU_OPTION = 336,
-     NEU_OPTION = 337,
-     LTU_OPTION = 338,
-     LEU_OPTION = 339,
-     GTU_OPTION = 340,
-     GEU_OPTION = 341,
-     NUM_OPTION = 342,
-     NAN_OPTION = 343,
-     CF_OPTION = 344,
-     SF_OPTION = 345,
-     NSF_OPTION = 346,
-     LEFT_SQUARE_BRACKET = 347,
-     RIGHT_SQUARE_BRACKET = 348,
-     WIDE_OPTION = 349,
-     SPECIAL_REGISTER = 350,
-     MINUS = 351,
-     PLUS = 352,
-     COLON = 353,
-     SEMI_COLON = 354,
-     EXCLAMATION = 355,
-     PIPE = 356,
-     RIGHT_BRACE = 357,
-     LEFT_BRACE = 358,
-     EQUALS = 359,
-     PERIOD = 360,
-     BACKSLASH = 361,
-     DIMENSION_MODIFIER = 362,
-     RN_OPTION = 363,
-     RZ_OPTION = 364,
-     RM_OPTION = 365,
-     RP_OPTION = 366,
-     RNI_OPTION = 367,
-     RZI_OPTION = 368,
-     RMI_OPTION = 369,
-     RPI_OPTION = 370,
-     UNI_OPTION = 371,
-     GEOM_MODIFIER_1D = 372,
-     GEOM_MODIFIER_2D = 373,
-     GEOM_MODIFIER_3D = 374,
-     SAT_OPTION = 375,
-     FTZ_OPTION = 376,
-     NEG_OPTION = 377,
-     ATOMIC_AND = 378,
-     ATOMIC_OR = 379,
-     ATOMIC_XOR = 380,
-     ATOMIC_CAS = 381,
-     ATOMIC_EXCH = 382,
-     ATOMIC_ADD = 383,
-     ATOMIC_INC = 384,
-     ATOMIC_DEC = 385,
-     ATOMIC_MIN = 386,
-     ATOMIC_MAX = 387,
-     LEFT_ANGLE_BRACKET = 388,
-     RIGHT_ANGLE_BRACKET = 389,
-     LEFT_PAREN = 390,
-     RIGHT_PAREN = 391,
-     APPROX_OPTION = 392,
-     FULL_OPTION = 393,
-     ANY_OPTION = 394,
-     ALL_OPTION = 395,
-     BALLOT_OPTION = 396,
-     GLOBAL_OPTION = 397,
-     CTA_OPTION = 398,
-     SYS_OPTION = 399,
-     EXIT_OPTION = 400,
-     ABS_OPTION = 401,
-     TO_OPTION = 402,
-     CA_OPTION = 403,
-     CG_OPTION = 404,
-     CS_OPTION = 405,
-     LU_OPTION = 406,
-     CV_OPTION = 407,
-     WB_OPTION = 408,
-     WT_OPTION = 409
-   };
+  enum yytokentype
+  {
+    STRING = 258,
+    OPCODE = 259,
+    ALIGN_DIRECTIVE = 260,
+    BRANCHTARGETS_DIRECTIVE = 261,
+    BYTE_DIRECTIVE = 262,
+    CALLPROTOTYPE_DIRECTIVE = 263,
+    CALLTARGETS_DIRECTIVE = 264,
+    CONST_DIRECTIVE = 265,
+    CONSTPTR_DIRECTIVE = 266,
+    PTR_DIRECTIVE = 267,
+    ENTRY_DIRECTIVE = 268,
+    EXTERN_DIRECTIVE = 269,
+    FILE_DIRECTIVE = 270,
+    FUNC_DIRECTIVE = 271,
+    GLOBAL_DIRECTIVE = 272,
+    LOCAL_DIRECTIVE = 273,
+    LOC_DIRECTIVE = 274,
+    MAXNCTAPERSM_DIRECTIVE = 275,
+    MAXNNREG_DIRECTIVE = 276,
+    MAXNTID_DIRECTIVE = 277,
+    MINNCTAPERSM_DIRECTIVE = 278,
+    PARAM_DIRECTIVE = 279,
+    PRAGMA_DIRECTIVE = 280,
+    REG_DIRECTIVE = 281,
+    REQNTID_DIRECTIVE = 282,
+    SECTION_DIRECTIVE = 283,
+    SHARED_DIRECTIVE = 284,
+    SREG_DIRECTIVE = 285,
+    STRUCT_DIRECTIVE = 286,
+    SURF_DIRECTIVE = 287,
+    TARGET_DIRECTIVE = 288,
+    TEX_DIRECTIVE = 289,
+    UNION_DIRECTIVE = 290,
+    VERSION_DIRECTIVE = 291,
+    ADDRESS_SIZE_DIRECTIVE = 292,
+    VISIBLE_DIRECTIVE = 293,
+    IDENTIFIER = 294,
+    INT_OPERAND = 295,
+    FLOAT_OPERAND = 296,
+    DOUBLE_OPERAND = 297,
+    S8_TYPE = 298,
+    S16_TYPE = 299,
+    S32_TYPE = 300,
+    S64_TYPE = 301,
+    U8_TYPE = 302,
+    U16_TYPE = 303,
+    U32_TYPE = 304,
+    U64_TYPE = 305,
+    F16_TYPE = 306,
+    F32_TYPE = 307,
+    F64_TYPE = 308,
+    FF64_TYPE = 309,
+    B8_TYPE = 310,
+    B16_TYPE = 311,
+    B32_TYPE = 312,
+    B64_TYPE = 313,
+    BB64_TYPE = 314,
+    BB128_TYPE = 315,
+    PRED_TYPE = 316,
+    TEXREF_TYPE = 317,
+    SAMPLERREF_TYPE = 318,
+    SURFREF_TYPE = 319,
+    V2_TYPE = 320,
+    V3_TYPE = 321,
+    V4_TYPE = 322,
+    COMMA = 323,
+    PRED = 324,
+    HALF_OPTION = 325,
+    EQ_OPTION = 326,
+    NE_OPTION = 327,
+    LT_OPTION = 328,
+    LE_OPTION = 329,
+    GT_OPTION = 330,
+    GE_OPTION = 331,
+    LO_OPTION = 332,
+    LS_OPTION = 333,
+    HI_OPTION = 334,
+    HS_OPTION = 335,
+    EQU_OPTION = 336,
+    NEU_OPTION = 337,
+    LTU_OPTION = 338,
+    LEU_OPTION = 339,
+    GTU_OPTION = 340,
+    GEU_OPTION = 341,
+    NUM_OPTION = 342,
+    NAN_OPTION = 343,
+    CF_OPTION = 344,
+    SF_OPTION = 345,
+    NSF_OPTION = 346,
+    LEFT_SQUARE_BRACKET = 347,
+    RIGHT_SQUARE_BRACKET = 348,
+    WIDE_OPTION = 349,
+    SPECIAL_REGISTER = 350,
+    MINUS = 351,
+    PLUS = 352,
+    COLON = 353,
+    SEMI_COLON = 354,
+    EXCLAMATION = 355,
+    PIPE = 356,
+    RIGHT_BRACE = 357,
+    LEFT_BRACE = 358,
+    EQUALS = 359,
+    PERIOD = 360,
+    BACKSLASH = 361,
+    DIMENSION_MODIFIER = 362,
+    RN_OPTION = 363,
+    RZ_OPTION = 364,
+    RM_OPTION = 365,
+    RP_OPTION = 366,
+    RNI_OPTION = 367,
+    RZI_OPTION = 368,
+    RMI_OPTION = 369,
+    RPI_OPTION = 370,
+    UNI_OPTION = 371,
+    GEOM_MODIFIER_1D = 372,
+    GEOM_MODIFIER_2D = 373,
+    GEOM_MODIFIER_3D = 374,
+    SAT_OPTION = 375,
+    FTZ_OPTION = 376,
+    NEG_OPTION = 377,
+    ATOMIC_AND = 378,
+    ATOMIC_OR = 379,
+    ATOMIC_XOR = 380,
+    ATOMIC_CAS = 381,
+    ATOMIC_EXCH = 382,
+    ATOMIC_ADD = 383,
+    ATOMIC_INC = 384,
+    ATOMIC_DEC = 385,
+    ATOMIC_MIN = 386,
+    ATOMIC_MAX = 387,
+    LEFT_ANGLE_BRACKET = 388,
+    RIGHT_ANGLE_BRACKET = 389,
+    LEFT_PAREN = 390,
+    RIGHT_PAREN = 391,
+    APPROX_OPTION = 392,
+    FULL_OPTION = 393,
+    ANY_OPTION = 394,
+    ALL_OPTION = 395,
+    BALLOT_OPTION = 396,
+    GLOBAL_OPTION = 397,
+    CTA_OPTION = 398,
+    SYS_OPTION = 399,
+    EXIT_OPTION = 400,
+    ABS_OPTION = 401,
+    TO_OPTION = 402,
+    CA_OPTION = 403,
+    CG_OPTION = 404,
+    CS_OPTION = 405,
+    LU_OPTION = 406,
+    CV_OPTION = 407,
+    WB_OPTION = 408,
+    WT_OPTION = 409
+  };
 #endif
 
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
 {
-
-/* Line 293 of yacc.c  */
-#line 30 "../src/cuda-sim/ptx.y"
+#line 30 "../src/cuda-sim/ptx.y" /* yacc.c:355  */
 
   double double_value;
   float  float_value;
@@ -272,21 +274,21 @@ typedef union YYSTYPE
   char * string_value;
   void * ptr_value;
 
-
-
-/* Line 293 of yacc.c  */
-#line 279 "ptx.tab.c"
-} YYSTYPE;
+#line 278 "ptx.tab.c" /* yacc.c:355  */
+};
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
 
-/* Copy the second part of user declarations.  */
+extern YYSTYPE ptx_lval;
 
-/* Line 343 of yacc.c  */
-#line 194 "../src/cuda-sim/ptx.y"
+int ptx_parse (void);
+
+#endif /* !YY_PTX_PTX_TAB_H_INCLUDED  */
+
+/* Copy the second part of user declarations.  */
+#line 194 "../src/cuda-sim/ptx.y" /* yacc.c:358  */
 
   	#include "ptx_parser.h"
 	#include <stdlib.h>
@@ -297,9 +299,7 @@ typedef union YYSTYPE
 	int ptx_lex(void);
 	int ptx_error(const char *);
 
-
-/* Line 343 of yacc.c  */
-#line 303 "ptx.tab.c"
+#line 303 "ptx.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -313,11 +313,8 @@ typedef unsigned char yytype_uint8;
 
 #ifdef YYTYPE_INT8
 typedef YYTYPE_INT8 yytype_int8;
-#elif (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-typedef signed char yytype_int8;
 #else
-typedef short int yytype_int8;
+typedef signed char yytype_int8;
 #endif
 
 #ifdef YYTYPE_UINT16
@@ -337,8 +334,7 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+# elif ! defined YYSIZE_T
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
@@ -352,38 +348,67 @@ typedef short int yytype_int16;
 # if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
-#   define YY_(msgid) dgettext ("bison-runtime", msgid)
+#   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
 # endif
 # ifndef YY_
-#  define YY_(msgid) msgid
+#  define YY_(Msgid) Msgid
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE
+# if (defined __GNUC__                                               \
+      && (2 < __GNUC__ || (__GNUC__ == 2 && 96 <= __GNUC_MINOR__)))  \
+     || defined __SUNPRO_C && 0x5110 <= __SUNPRO_C
+#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)
+# else
+#  define YY_ATTRIBUTE(Spec) /* empty */
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE_PURE
+# define YY_ATTRIBUTE_PURE   YY_ATTRIBUTE ((__pure__))
+#endif
+
+#ifndef YY_ATTRIBUTE_UNUSED
+# define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
+#endif
+
+#if !defined _Noreturn \
+     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
+# if defined _MSC_VER && 1200 <= _MSC_VER
+#  define _Noreturn __declspec (noreturn)
+# else
+#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(e) ((void) (e))
+# define YYUSE(E) ((void) (E))
 #else
-# define YYUSE(e) /* empty */
+# define YYUSE(E) /* empty */
 #endif
 
-/* Identity function, used to suppress warnings about constant conditions.  */
-#ifndef lint
-# define YYID(n) (n)
+#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+    _Pragma ("GCC diagnostic push") \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+    _Pragma ("GCC diagnostic pop")
 #else
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static int
-YYID (int yyi)
-#else
-static int
-YYID (yyi)
-    int yyi;
+# define YY_INITIAL_VALUE(Value) Value
 #endif
-{
-  return yyi;
-}
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
 #endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
+#endif
+
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -402,9 +427,9 @@ YYID (yyi)
 #    define alloca _alloca
 #   else
 #    define YYSTACK_ALLOC alloca
-#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
+      /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
 #     ifndef EXIT_SUCCESS
 #      define EXIT_SUCCESS 0
 #     endif
@@ -414,8 +439,8 @@ YYID (yyi)
 # endif
 
 # ifdef YYSTACK_ALLOC
-   /* Pacify GCC's `empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (YYID (0))
+   /* Pacify GCC's 'empty if-body' warning.  */
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -431,7 +456,7 @@ YYID (yyi)
 #  endif
 #  if (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
-	     && (defined YYFREE || defined free)))
+             && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   ifndef EXIT_SUCCESS
 #    define EXIT_SUCCESS 0
@@ -439,15 +464,13 @@ YYID (yyi)
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -457,7 +480,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -482,35 +505,35 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
-    do									\
-      {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
-	Stack = &yyptr->Stack_alloc;					\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
-      }									\
-    while (YYID (0))
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
+    do                                                                  \
+      {                                                                 \
+        YYSIZE_T yynewbytes;                                            \
+        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
+        Stack = &yyptr->Stack_alloc;                                    \
+        yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        yyptr += yynewbytes / sizeof (*yyptr);                          \
+      }                                                                 \
+    while (0)
 
 #endif
 
 #if defined YYCOPY_NEEDED && YYCOPY_NEEDED
-/* Copy COUNT objects from FROM to TO.  The source and destination do
+/* Copy COUNT objects from SRC to DST.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
 #  if defined __GNUC__ && 1 < __GNUC__
-#   define YYCOPY(To, From, Count) \
-      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
+#   define YYCOPY(Dst, Src, Count) \
+      __builtin_memcpy (Dst, Src, (Count) * sizeof (*(Src)))
 #  else
-#   define YYCOPY(To, From, Count)		\
-      do					\
-	{					\
-	  YYSIZE_T yyi;				\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
-      while (YYID (0))
+#   define YYCOPY(Dst, Src, Count)              \
+      do                                        \
+        {                                       \
+          YYSIZE_T yyi;                         \
+          for (yyi = 0; yyi < (Count); yyi++)   \
+            (Dst)[yyi] = (Src)[yyi];            \
+        }                                       \
+      while (0)
 #  endif
 # endif
 #endif /* !YYCOPY_NEEDED */
@@ -526,17 +549,19 @@ union yyalloc
 #define YYNNTS  64
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  268
-/* YYNRULES -- Number of states.  */
+/* YYNSTATES -- Number of states.  */
 #define YYNSTATES  374
 
-/* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
+   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   409
 
-#define YYTRANSLATE(YYX)						\
+#define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
-/* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, without out-of-bounds checking.  */
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -583,122 +608,7 @@ static const yytype_uint8 yytranslate[] =
 };
 
 #if YYDEBUG
-/* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-   YYRHS.  */
-static const yytype_uint16 yyprhs[] =
-{
-       0,     0,     3,     4,     7,    10,    13,    14,    18,    19,
-      20,    26,    33,    36,    39,    41,    44,    45,    46,    54,
-      55,    59,    61,    62,    63,    70,    72,    74,    76,    79,
-      82,    83,    85,    86,    91,    92,    98,    99,   104,   105,
-     109,   112,   114,   116,   118,   121,   125,   127,   129,   132,
-     135,   138,   140,   143,   146,   150,   153,   158,   165,   168,
-     172,   177,   181,   184,   187,   192,   197,   204,   206,   208,
-     212,   214,   219,   223,   228,   230,   233,   235,   237,   239,
-     241,   244,   246,   248,   250,   252,   254,   256,   258,   260,
-     262,   264,   266,   269,   271,   273,   275,   277,   279,   281,
-     283,   285,   287,   289,   291,   293,   295,   297,   299,   301,
-     303,   305,   307,   309,   311,   313,   315,   317,   319,   323,
-     327,   329,   333,   336,   339,   343,   344,   356,   363,   369,
-     372,   374,   375,   379,   381,   384,   388,   392,   396,   400,
-     404,   408,   412,   416,   420,   424,   428,   432,   434,   437,
-     439,   441,   443,   445,   447,   449,   451,   453,   455,   457,
-     459,   461,   463,   465,   467,   469,   471,   473,   475,   477,
-     479,   481,   483,   485,   487,   489,   491,   493,   495,   497,
-     499,   501,   503,   505,   507,   509,   511,   513,   515,   517,
-     519,   521,   523,   525,   527,   529,   531,   533,   535,   537,
-     539,   541,   543,   545,   547,   549,   551,   553,   555,   557,
-     559,   561,   563,   565,   567,   569,   571,   573,   575,   577,
-     579,   583,   585,   588,   591,   593,   595,   597,   599,   602,
-     604,   608,   611,   615,   618,   622,   626,   631,   636,   640,
-     645,   650,   656,   664,   674,   678,   679,   686,   689,   691,
-     695,   700,   705,   710,   713,   717,   722,   727,   732,   738,
-     744,   749,   751,   753,   755,   757,   760,   763,   767
-};
-
-/* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-static const yytype_int16 yyrhs[] =
-{
-     156,     0,    -1,    -1,   156,   181,    -1,   156,   157,    -1,
-     156,   163,    -1,    -1,   163,   158,   179,    -1,    -1,    -1,
-     163,   159,   162,   160,   179,    -1,    22,    40,    68,    40,
-      68,    40,    -1,    23,    40,    -1,    20,    40,    -1,   161,
-      -1,   162,   161,    -1,    -1,    -1,   170,   135,   164,   173,
-     136,   165,   167,    -1,    -1,   170,   166,   167,    -1,   170,
-      -1,    -1,    -1,    39,   168,   135,   169,   171,   136,    -1,
-      39,    -1,    13,    -1,    16,    -1,    38,    16,    -1,    14,
-      16,    -1,    -1,   173,    -1,    -1,   171,    68,   172,   173,
-      -1,    -1,    24,   174,   183,   176,   185,    -1,    -1,    26,
-     175,   183,   185,    -1,    -1,    12,   177,   178,    -1,    12,
-     178,    -1,    17,    -1,    18,    -1,    29,    -1,     5,    40,
-      -1,   103,   180,   102,    -1,   181,    -1,   196,    -1,   180,
-     181,    -1,   180,   196,    -1,   180,   179,    -1,   179,    -1,
-     182,    99,    -1,    36,    42,    -1,    36,    42,    97,    -1,
-      37,    40,    -1,    33,    39,    68,    39,    -1,    33,    39,
-      68,    39,    68,    39,    -1,    33,    39,    -1,    15,    40,
-       3,    -1,    19,    40,    40,    40,    -1,    25,     3,    99,
-      -1,   163,    99,    -1,   183,   184,    -1,   183,   185,   104,
-     194,    -1,   183,   185,   104,   217,    -1,    11,    39,    68,
-      39,    68,    40,    -1,   186,    -1,   185,    -1,   184,    68,
-     185,    -1,    39,    -1,    39,   133,    40,   134,    -1,    39,
-      92,    93,    -1,    39,    92,    40,    93,    -1,   187,    -1,
-     186,   187,    -1,   189,    -1,   191,    -1,   188,    -1,    14,
-      -1,     5,    40,    -1,    26,    -1,    30,    -1,   190,    -1,
-      10,    -1,    17,    -1,    18,    -1,    24,    -1,    29,    -1,
-      32,    -1,    34,    -1,   193,    -1,   192,   193,    -1,    65,
-      -1,    66,    -1,    67,    -1,    43,    -1,    44,    -1,    45,
-      -1,    46,    -1,    47,    -1,    48,    -1,    49,    -1,    50,
-      -1,    51,    -1,    52,    -1,    53,    -1,    54,    -1,    55,
-      -1,    56,    -1,    57,    -1,    58,    -1,    59,    -1,    60,
-      -1,    61,    -1,    62,    -1,    63,    -1,    64,    -1,   103,
-     195,   102,    -1,   103,   194,   102,    -1,   217,    -1,   195,
-      68,   217,    -1,   197,    99,    -1,    39,    98,    -1,   201,
-     197,    99,    -1,    -1,   199,   135,   210,   136,   198,    68,
-     210,    68,   135,   209,   136,    -1,   199,   210,    68,   135,
-     209,   136,    -1,   199,   210,    68,   135,   136,    -1,   199,
-     209,    -1,   199,    -1,    -1,     4,   200,   202,    -1,     4,
-      -1,    69,    39,    -1,    69,   100,    39,    -1,    69,    39,
-      73,    -1,    69,    39,    71,    -1,    69,    39,    74,    -1,
-      69,    39,    72,    -1,    69,    39,    76,    -1,    69,    39,
-      81,    -1,    69,    39,    85,    -1,    69,    39,    82,    -1,
-      69,    39,    89,    -1,    69,    39,    90,    -1,    69,    39,
-      91,    -1,   203,    -1,   203,   202,    -1,   191,    -1,   208,
-      -1,   190,    -1,   205,    -1,   116,    -1,    94,    -1,   139,
-      -1,   140,    -1,   141,    -1,   142,    -1,   143,    -1,   144,
-      -1,   117,    -1,   118,    -1,   119,    -1,   120,    -1,   121,
-      -1,   122,    -1,   137,    -1,   138,    -1,   145,    -1,   146,
-      -1,   204,    -1,   147,    -1,    70,    -1,   148,    -1,   149,
-      -1,   150,    -1,   151,    -1,   152,    -1,   153,    -1,   154,
-      -1,   123,    -1,   124,    -1,   125,    -1,   126,    -1,   127,
-      -1,   128,    -1,   129,    -1,   130,    -1,   131,    -1,   132,
-      -1,   206,    -1,   207,    -1,   108,    -1,   109,    -1,   110,
-      -1,   111,    -1,   112,    -1,   113,    -1,   114,    -1,   115,
-      -1,    71,    -1,    72,    -1,    73,    -1,    74,    -1,    75,
-      -1,    76,    -1,    77,    -1,    78,    -1,    79,    -1,    80,
-      -1,    81,    -1,    82,    -1,    83,    -1,    84,    -1,    85,
-      -1,    86,    -1,    87,    -1,    88,    -1,   210,    -1,   210,
-      68,   209,    -1,    39,    -1,   100,    39,    -1,    96,    39,
-      -1,   215,    -1,   217,    -1,   214,    -1,   211,    -1,    96,
-     211,    -1,   212,    -1,    39,    97,    40,    -1,    39,    77,
-      -1,    96,    39,    77,    -1,    39,    79,    -1,    96,    39,
-      79,    -1,    39,   101,    39,    -1,    39,   101,    39,    77,
-      -1,    39,   101,    39,    79,    -1,    39,   106,    39,    -1,
-      39,   106,    39,    77,    -1,    39,   106,    39,    79,    -1,
-     103,    39,    68,    39,   102,    -1,   103,    39,    68,    39,
-      68,    39,   102,    -1,   103,    39,    68,    39,    68,    39,
-      68,    39,   102,    -1,   103,    39,   102,    -1,    -1,    92,
-      39,    68,   213,   211,    93,    -1,    95,   107,    -1,    95,
-      -1,    92,   218,    93,    -1,    39,    92,   218,    93,    -1,
-      39,    92,   217,    93,    -1,    39,    92,   216,    93,    -1,
-      96,   215,    -1,    39,    97,    39,    -1,    39,    97,    39,
-      77,    -1,    39,    97,    39,    79,    -1,    39,    97,   104,
-      39,    -1,    39,    97,   104,    39,    77,    -1,    39,    97,
-     104,    39,    79,    -1,    39,    97,   104,    40,    -1,    40,
-      -1,    41,    -1,    42,    -1,    39,    -1,    39,    77,    -1,
-      39,    79,    -1,    39,    97,    40,    -1,    40,    -1
-};
-
-/* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
+  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
        0,   207,   207,   208,   209,   210,   213,   213,   214,   214,
@@ -731,7 +641,7 @@ static const yytype_uint16 yyrline[] =
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
+#if YYDEBUG || YYERROR_VERBOSE || 0
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
@@ -785,13 +695,13 @@ static const char *const yytname[] =
   "rounding_mode", "floating_point_rounding_mode", "integer_rounding_mode",
   "compare_spec", "operand_list", "operand", "vector_operand",
   "tex_operand", "$@14", "builtin_operand", "memory_operand",
-  "twin_operand", "literal_operand", "address_expression", 0
+  "twin_operand", "literal_operand", "address_expression", YY_NULLPTR
 };
 #endif
 
 # ifdef YYPRINT
-/* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
-   token YYLEX-NUM.  */
+/* YYTOKNUM[NUM] -- (External) token number corresponding to the
+   (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
@@ -813,130 +723,18 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-/* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-static const yytype_uint8 yyr1[] =
-{
-       0,   155,   156,   156,   156,   156,   158,   157,   159,   160,
-     157,   161,   161,   161,   162,   162,   164,   165,   163,   166,
-     163,   163,   168,   169,   167,   167,   170,   170,   170,   170,
-     171,   171,   172,   171,   174,   173,   175,   173,   176,   176,
-     176,   177,   177,   177,   178,   179,   180,   180,   180,   180,
-     180,   180,   181,   181,   181,   181,   181,   181,   181,   181,
-     181,   181,   181,   182,   182,   182,   182,   183,   184,   184,
-     185,   185,   185,   185,   186,   186,   187,   187,   187,   187,
-     188,   189,   189,   189,   190,   190,   190,   190,   190,   190,
-     190,   191,   191,   192,   192,   192,   193,   193,   193,   193,
-     193,   193,   193,   193,   193,   193,   193,   193,   193,   193,
-     193,   193,   193,   193,   193,   193,   193,   193,   194,   194,
-     195,   195,   196,   196,   196,   198,   197,   197,   197,   197,
-     197,   200,   199,   199,   201,   201,   201,   201,   201,   201,
-     201,   201,   201,   201,   201,   201,   201,   202,   202,   203,
-     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
-     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
-     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
-     203,   204,   204,   204,   204,   204,   204,   204,   204,   204,
-     204,   205,   205,   206,   206,   206,   206,   207,   207,   207,
-     207,   208,   208,   208,   208,   208,   208,   208,   208,   208,
-     208,   208,   208,   208,   208,   208,   208,   208,   208,   209,
-     209,   210,   210,   210,   210,   210,   210,   210,   210,   210,
-     210,   210,   210,   210,   210,   210,   210,   210,   210,   210,
-     210,   211,   211,   211,   211,   213,   212,   214,   214,   215,
-     215,   215,   215,   215,   216,   216,   216,   216,   216,   216,
-     216,   217,   217,   217,   218,   218,   218,   218,   218
-};
-
-/* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
-{
-       0,     2,     0,     2,     2,     2,     0,     3,     0,     0,
-       5,     6,     2,     2,     1,     2,     0,     0,     7,     0,
-       3,     1,     0,     0,     6,     1,     1,     1,     2,     2,
-       0,     1,     0,     4,     0,     5,     0,     4,     0,     3,
-       2,     1,     1,     1,     2,     3,     1,     1,     2,     2,
-       2,     1,     2,     2,     3,     2,     4,     6,     2,     3,
-       4,     3,     2,     2,     4,     4,     6,     1,     1,     3,
-       1,     4,     3,     4,     1,     2,     1,     1,     1,     1,
-       2,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     2,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     3,     3,
-       1,     3,     2,     2,     3,     0,    11,     6,     5,     2,
-       1,     0,     3,     1,     2,     3,     3,     3,     3,     3,
-       3,     3,     3,     3,     3,     3,     3,     1,     2,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       3,     1,     2,     2,     1,     1,     1,     1,     2,     1,
-       3,     2,     3,     2,     3,     3,     4,     4,     3,     4,
-       4,     5,     7,     9,     3,     0,     6,     2,     1,     3,
-       4,     4,     4,     2,     3,     4,     4,     4,     5,     5,
-       4,     1,     1,     1,     1,     2,     2,     3,     1
-};
-
-/* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
-   Performed when YYTABLE doesn't specify something else to do.  Zero
-   means the default is an error.  */
-static const yytype_uint16 yydefact[] =
-{
-       2,     0,     1,     0,    84,     0,    26,    79,     0,    27,
-      85,    86,     0,    87,     0,    81,    88,    82,    89,     0,
-      90,     0,     0,     0,    96,    97,    98,    99,   100,   101,
-     102,   103,   104,   105,   106,   107,   108,   109,   110,   111,
-     112,   113,   114,   115,   116,   117,    93,    94,    95,     4,
-       5,    21,     3,     0,     0,    67,    74,    78,    76,    83,
-      77,     0,    91,    80,     0,    29,     0,     0,     0,    58,
-      53,    55,    28,    62,     0,     0,    16,     0,    52,    70,
-      63,    68,    79,    75,    92,     0,    59,     0,    61,     0,
-      54,     0,     7,     0,     0,     0,    14,     9,     0,    25,
-      20,     0,     0,     0,     0,     0,    60,    56,   131,     0,
-       0,     0,    51,     0,    46,    47,     0,   130,     0,    13,
-       0,    12,     0,    15,    34,    36,     0,     0,     0,    72,
-       0,    69,   261,   262,   263,     0,    64,    65,     0,     0,
-       0,   123,   134,     0,    45,    50,    48,    49,   122,   221,
-       0,   248,     0,     0,     0,     0,   129,   219,   227,   229,
-     226,   224,   225,     0,     0,    10,     0,     0,    17,    23,
-      73,    71,     0,     0,   120,    66,    57,   173,   201,   202,
-     203,   204,   205,   206,   207,   208,   209,   210,   211,   212,
-     213,   214,   215,   216,   217,   218,   154,   193,   194,   195,
-     196,   197,   198,   199,   200,   153,   161,   162,   163,   164,
-     165,   166,   181,   182,   183,   184,   185,   186,   187,   188,
-     189,   190,   167,   168,   155,   156,   157,   158,   159,   160,
-     169,   170,   172,   174,   175,   176,   177,   178,   179,   180,
-     151,   149,   132,   147,   171,   152,   191,   192,   150,   137,
-     139,   136,   138,   140,   141,   143,   142,   144,   145,   146,
-     135,   231,   233,     0,     0,     0,     0,   264,   268,     0,
-     247,   223,     0,     0,   228,   253,   222,     0,     0,     0,
-     124,     0,    38,     0,     0,    30,   119,     0,   118,   148,
-     264,   261,     0,     0,     0,   230,   235,   238,   245,   265,
-     266,     0,   249,   232,   234,   264,     0,     0,   244,   125,
-       0,   220,   219,     0,     0,     0,    37,    18,     0,    31,
-     121,     0,   252,   251,   250,   236,   237,   239,   240,     0,
-     267,     0,     0,   128,     0,     0,    11,     0,    41,    42,
-      43,     0,    40,    35,    32,    24,   254,     0,     0,     0,
-     241,     0,   127,    44,    39,     0,   255,   256,   257,   260,
-     246,     0,     0,    33,   258,   259,     0,   242,     0,     0,
-       0,   243,     0,   126
-};
-
-/* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int16 yydefgoto[] =
-{
-      -1,     1,    49,    74,    75,   122,    96,    97,   111,    98,
-     284,    77,   100,   127,   285,    51,   318,   355,   126,   166,
-     167,   315,   341,   342,    92,   113,    52,    53,    54,    80,
-      81,    55,    56,    57,    58,    59,    60,    61,    62,   136,
-     173,   115,   116,   332,   117,   140,   118,   242,   243,   244,
-     245,   246,   247,   248,   311,   312,   158,   159,   329,   160,
-     161,   292,   162,   269
-};
-
-/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-   STATE-NUM.  */
 #define YYPACT_NINF -270
+
+#define yypact_value_is_default(Yystate) \
+  (!!((Yystate) == (-270)))
+
+#define YYTABLE_NINF -134
+
+#define yytable_value_is_error(Yytable_value) \
+  0
+
+  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+     STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
     -270,   446,  -270,   -29,  -270,   -33,  -270,     6,   -23,  -270,
@@ -979,7 +777,52 @@ static const yytype_int16 yypact[] =
      345,  -270,   311,  -270
 };
 
-/* YYPGOTO[NTERM-NUM].  */
+  /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
+     Performed when YYTABLE does not specify something else to do.  Zero
+     means the default is an error.  */
+static const yytype_uint16 yydefact[] =
+{
+       2,     0,     1,     0,    84,     0,    26,    79,     0,    27,
+      85,    86,     0,    87,     0,    81,    88,    82,    89,     0,
+      90,     0,     0,     0,    96,    97,    98,    99,   100,   101,
+     102,   103,   104,   105,   106,   107,   108,   109,   110,   111,
+     112,   113,   114,   115,   116,   117,    93,    94,    95,     4,
+       5,    21,     3,     0,     0,    67,    74,    78,    76,    83,
+      77,     0,    91,    80,     0,    29,     0,     0,     0,    58,
+      53,    55,    28,    62,     0,     0,    16,     0,    52,    70,
+      63,    68,    79,    75,    92,     0,    59,     0,    61,     0,
+      54,     0,     7,     0,     0,     0,    14,     9,     0,    25,
+      20,     0,     0,     0,     0,     0,    60,    56,   131,     0,
+       0,     0,    51,     0,    46,    47,     0,   130,     0,    13,
+       0,    12,     0,    15,    34,    36,     0,     0,     0,    72,
+       0,    69,   261,   262,   263,     0,    64,    65,     0,     0,
+       0,   123,   134,     0,    45,    50,    48,    49,   122,   221,
+       0,   248,     0,     0,     0,     0,   129,   219,   227,   229,
+     226,   224,   225,     0,     0,    10,     0,     0,    17,    23,
+      73,    71,     0,     0,   120,    66,    57,   173,   201,   202,
+     203,   204,   205,   206,   207,   208,   209,   210,   211,   212,
+     213,   214,   215,   216,   217,   218,   154,   193,   194,   195,
+     196,   197,   198,   199,   200,   153,   161,   162,   163,   164,
+     165,   166,   181,   182,   183,   184,   185,   186,   187,   188,
+     189,   190,   167,   168,   155,   156,   157,   158,   159,   160,
+     169,   170,   172,   174,   175,   176,   177,   178,   179,   180,
+     151,   149,   132,   147,   171,   152,   191,   192,   150,   137,
+     139,   136,   138,   140,   141,   143,   142,   144,   145,   146,
+     135,   231,   233,     0,     0,     0,     0,   264,   268,     0,
+     247,   223,     0,     0,   228,   253,   222,     0,     0,     0,
+     124,     0,    38,     0,     0,    30,   119,     0,   118,   148,
+     264,   261,     0,     0,     0,   230,   235,   238,   245,   265,
+     266,     0,   249,   232,   234,   264,     0,     0,   244,   125,
+       0,   220,   219,     0,     0,     0,    37,    18,     0,    31,
+     121,     0,   252,   251,   250,   236,   237,   239,   240,     0,
+     267,     0,     0,   128,     0,     0,    11,     0,    41,    42,
+      43,     0,    40,    35,    32,    24,   254,     0,     0,     0,
+     241,     0,   127,    44,    39,     0,   255,   256,   257,   260,
+     246,     0,     0,    33,   258,   259,     0,   242,     0,     0,
+       0,   243,     0,   126
+};
+
+  /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
     -270,  -270,  -270,  -270,  -270,  -270,   356,  -270,   449,  -270,
@@ -991,10 +834,21 @@ static const yytype_int16 yypgoto[] =
     -143,  -270,  -100,   203
 };
 
-/* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-   positive, shift that token.  If negative, reduce the rule which
-   number is the opposite.  If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -134
+  /* YYDEFGOTO[NTERM-NUM].  */
+static const yytype_int16 yydefgoto[] =
+{
+      -1,     1,    49,    74,    75,   122,    96,    97,   111,    98,
+     284,    77,   100,   127,   285,    51,   318,   355,   126,   166,
+     167,   315,   341,   342,    92,   113,    52,    53,    54,    80,
+      81,    55,    56,    57,    58,    59,    60,    61,    62,   136,
+     173,   115,   116,   332,   117,   140,   118,   242,   243,   244,
+     245,   246,   247,   248,   311,   312,   158,   159,   329,   160,
+     161,   292,   162,   269
+};
+
+  /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
+     positive, shift that token.  If negative, reduce the rule whose
+     number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
      156,   157,   131,   274,   137,   142,    64,     4,   -19,   275,
@@ -1058,12 +912,6 @@ static const yytype_int16 yytable[] =
       27,    28,    29,    30,    31,    32,    33,    34,    35,    36,
       37,    38,    39,    40,    41,    42,    43,    44,    45
 };
-
-#define yypact_value_is_default(yystate) \
-  ((yystate) == (-270))
-
-#define yytable_value_is_error(yytable_value) \
-  YYID (0)
 
 static const yytype_int16 yycheck[] =
 {
@@ -1129,8 +977,8 @@ static const yytype_int16 yycheck[] =
       56,    57,    58,    59,    60,    61,    62,    63,    64
 };
 
-/* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
-   symbol of state STATE-NUM.  */
+  /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
+     symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
        0,   156,     0,     5,    10,    11,    13,    14,    15,    16,
@@ -1173,94 +1021,105 @@ static const yytype_uint8 yystos[] =
      135,   102,   209,   136
 };
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		(-2)
-#define YYEOF		0
+  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
+static const yytype_uint8 yyr1[] =
+{
+       0,   155,   156,   156,   156,   156,   158,   157,   159,   160,
+     157,   161,   161,   161,   162,   162,   164,   165,   163,   166,
+     163,   163,   168,   169,   167,   167,   170,   170,   170,   170,
+     171,   171,   172,   171,   174,   173,   175,   173,   176,   176,
+     176,   177,   177,   177,   178,   179,   180,   180,   180,   180,
+     180,   180,   181,   181,   181,   181,   181,   181,   181,   181,
+     181,   181,   181,   182,   182,   182,   182,   183,   184,   184,
+     185,   185,   185,   185,   186,   186,   187,   187,   187,   187,
+     188,   189,   189,   189,   190,   190,   190,   190,   190,   190,
+     190,   191,   191,   192,   192,   192,   193,   193,   193,   193,
+     193,   193,   193,   193,   193,   193,   193,   193,   193,   193,
+     193,   193,   193,   193,   193,   193,   193,   193,   194,   194,
+     195,   195,   196,   196,   196,   198,   197,   197,   197,   197,
+     197,   200,   199,   199,   201,   201,   201,   201,   201,   201,
+     201,   201,   201,   201,   201,   201,   201,   202,   202,   203,
+     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
+     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
+     203,   203,   203,   203,   203,   203,   203,   203,   203,   203,
+     203,   204,   204,   204,   204,   204,   204,   204,   204,   204,
+     204,   205,   205,   206,   206,   206,   206,   207,   207,   207,
+     207,   208,   208,   208,   208,   208,   208,   208,   208,   208,
+     208,   208,   208,   208,   208,   208,   208,   208,   208,   209,
+     209,   210,   210,   210,   210,   210,   210,   210,   210,   210,
+     210,   210,   210,   210,   210,   210,   210,   210,   210,   210,
+     210,   211,   211,   211,   211,   213,   212,   214,   214,   215,
+     215,   215,   215,   215,   216,   216,   216,   216,   216,   216,
+     216,   217,   217,   217,   218,   218,   218,   218,   218
+};
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+  /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
+static const yytype_uint8 yyr2[] =
+{
+       0,     2,     0,     2,     2,     2,     0,     3,     0,     0,
+       5,     6,     2,     2,     1,     2,     0,     0,     7,     0,
+       3,     1,     0,     0,     6,     1,     1,     1,     2,     2,
+       0,     1,     0,     4,     0,     5,     0,     4,     0,     3,
+       2,     1,     1,     1,     2,     3,     1,     1,     2,     2,
+       2,     1,     2,     2,     3,     2,     4,     6,     2,     3,
+       4,     3,     2,     2,     4,     4,     6,     1,     1,     3,
+       1,     4,     3,     4,     1,     2,     1,     1,     1,     1,
+       2,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     2,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     3,     3,
+       1,     3,     2,     2,     3,     0,    11,     6,     5,     2,
+       1,     0,     3,     1,     2,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     3,     1,     2,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       3,     1,     2,     2,     1,     1,     1,     1,     2,     1,
+       3,     2,     3,     2,     3,     3,     4,     4,     3,     4,
+       4,     5,     7,     9,     3,     0,     6,     2,     1,     3,
+       4,     4,     4,     2,     3,     4,     4,     4,     5,     5,
+       4,     1,     1,     1,     1,     2,     2,     3,     1
+};
 
 
-/* Like YYERROR except do call yyerror.  This remains here temporarily
-   to ease the transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  However,
-   YYFAIL appears to be in use.  Nevertheless, it is formally deprecated
-   in Bison 2.4.2's NEWS entry, where a plan to phase it out is
-   discussed.  */
+#define yyerrok         (yyerrstatus = 0)
+#define yyclearin       (yychar = YYEMPTY)
+#define YYEMPTY         (-2)
+#define YYEOF           0
 
-#define YYFAIL		goto yyerrlab
-#if defined YYFAIL
-  /* This is here to suppress warnings from the GCC cpp's
-     -Wunused-macros.  Normally we don't worry about that warning, but
-     some users do, and we want to make it easy for users to remove
-     YYFAIL uses, which will produce warnings from Bison 2.5.  */
-#endif
+#define YYACCEPT        goto yyacceptlab
+#define YYABORT         goto yyabortlab
+#define YYERROR         goto yyerrorlab
+
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)					\
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    {								\
-      yychar = (Token);						\
-      yylval = (Value);						\
-      YYPOPSTACK (1);						\
-      goto yybackup;						\
-    }								\
-  else								\
-    {								\
+#define YYBACKUP(Token, Value)                                  \
+do                                                              \
+  if (yychar == YYEMPTY)                                        \
+    {                                                           \
+      yychar = (Token);                                         \
+      yylval = (Value);                                         \
+      YYPOPSTACK (yylen);                                       \
+      yystate = *yyssp;                                         \
+      goto yybackup;                                            \
+    }                                                           \
+  else                                                          \
+    {                                                           \
       yyerror (YY_("syntax error: cannot back up")); \
-      YYERROR;							\
-    }								\
-while (YYID (0))
+      YYERROR;                                                  \
+    }                                                           \
+while (0)
+
+/* Error token number */
+#define YYTERROR        1
+#define YYERRCODE       256
 
 
-#define YYTERROR	1
-#define YYERRCODE	256
-
-
-/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
-   If N is 0, then set CURRENT to the empty location which ends
-   the previous symbol: RHS[0] (always defined).  */
-
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
-#ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)				\
-    do									\
-      if (YYID (N))                                                    \
-	{								\
-	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
-	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
-	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
-	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
-	}								\
-      else								\
-	{								\
-	  (Current).first_line   = (Current).last_line   =		\
-	    YYRHSLOC (Rhs, 0).last_line;				\
-	  (Current).first_column = (Current).last_column =		\
-	    YYRHSLOC (Rhs, 0).last_column;				\
-	}								\
-    while (YYID (0))
-#endif
-
-
-/* This macro is provided for backward compatibility. */
-
-#ifndef YY_LOCATION_PRINT
-# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
-#endif
-
-
-/* YYLEX -- calling `yylex' with the right arguments.  */
-
-#ifdef YYLEX_PARAM
-# define YYLEX yylex (YYLEX_PARAM)
-#else
-# define YYLEX yylex ()
-#endif
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -1270,54 +1129,46 @@ while (YYID (0))
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)			\
-do {						\
-  if (yydebug)					\
-    YYFPRINTF Args;				\
-} while (YYID (0))
+# define YYDPRINTF(Args)                        \
+do {                                            \
+  if (yydebug)                                  \
+    YYFPRINTF Args;                             \
+} while (0)
 
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
-do {									  \
-  if (yydebug)								  \
-    {									  \
-      YYFPRINTF (stderr, "%s ", Title);					  \
-      yy_symbol_print (stderr,						  \
-		  Type, Value); \
-      YYFPRINTF (stderr, "\n");						  \
-    }									  \
-} while (YYID (0))
+/* This macro is provided for backward compatibility. */
+#ifndef YY_LOCATION_PRINT
+# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+#endif
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)                    \
+do {                                                                      \
+  if (yydebug)                                                            \
+    {                                                                     \
+      YYFPRINTF (stderr, "%s ", Title);                                   \
+      yy_symbol_print (stderr,                                            \
+                  Type, Value); \
+      YYFPRINTF (stderr, "\n");                                           \
+    }                                                                     \
+} while (0)
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+
+/*----------------------------------------.
+| Print this symbol's value on YYOUTPUT.  |
+`----------------------------------------*/
+
 static void
 yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
-#else
-static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-#endif
 {
+  FILE *yyo = yyoutput;
+  YYUSE (yyo);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# else
-  YYUSE (yyoutput);
 # endif
-  switch (yytype)
-    {
-      default:
-	break;
-    }
+  YYUSE (yytype);
 }
 
 
@@ -1325,22 +1176,11 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
-#else
-static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-#endif
 {
-  if (yytype < YYNTOKENS)
-    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-  else
-    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
+  YYFPRINTF (yyoutput, "%s %s (",
+             yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
   yy_symbol_value_print (yyoutput, yytype, yyvaluep);
   YYFPRINTF (yyoutput, ")");
@@ -1351,16 +1191,8 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
-#else
-static void
-yy_stack_print (yybottom, yytop)
-    yytype_int16 *yybottom;
-    yytype_int16 *yytop;
-#endif
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -1371,49 +1203,42 @@ yy_stack_print (yybottom, yytop)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
-do {								\
-  if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
-} while (YYID (0))
+# define YY_STACK_PRINT(Bottom, Top)                            \
+do {                                                            \
+  if (yydebug)                                                  \
+    yy_stack_print ((Bottom), (Top));                           \
+} while (0)
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
-#else
-static void
-yy_reduce_print (yyvsp, yyrule)
-    YYSTYPE *yyvsp;
-    int yyrule;
-#endif
+yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule)
 {
+  unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  unsigned long int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-	     yyrule - 1, yylno);
+             yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+      yy_symbol_print (stderr,
+                       yystos[yyssp[yyi + 1 - yynrhs]],
+                       &(yyvsp[(yyi + 1) - (yynrhs)])
+                                              );
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
-} while (YYID (0))
+# define YY_REDUCE_PRINT(Rule)          \
+do {                                    \
+  if (yydebug)                          \
+    yy_reduce_print (yyssp, yyvsp, Rule); \
+} while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
@@ -1427,7 +1252,7 @@ int yydebug;
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef	YYINITDEPTH
+#ifndef YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -1450,15 +1275,8 @@ int yydebug;
 #   define yystrlen strlen
 #  else
 /* Return the length of YYSTR.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static YYSIZE_T
 yystrlen (const char *yystr)
-#else
-static YYSIZE_T
-yystrlen (yystr)
-    const char *yystr;
-#endif
 {
   YYSIZE_T yylen;
   for (yylen = 0; yystr[yylen]; yylen++)
@@ -1474,16 +1292,8 @@ yystrlen (yystr)
 #  else
 /* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
    YYDEST.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static char *
 yystpcpy (char *yydest, const char *yysrc)
-#else
-static char *
-yystpcpy (yydest, yysrc)
-    char *yydest;
-    const char *yysrc;
-#endif
 {
   char *yyd = yydest;
   const char *yys = yysrc;
@@ -1513,27 +1323,27 @@ yytnamerr (char *yyres, const char *yystr)
       char const *yyp = yystr;
 
       for (;;)
-	switch (*++yyp)
-	  {
-	  case '\'':
-	  case ',':
-	    goto do_not_strip_quotes;
+        switch (*++yyp)
+          {
+          case '\'':
+          case ',':
+            goto do_not_strip_quotes;
 
-	  case '\\':
-	    if (*++yyp != '\\')
-	      goto do_not_strip_quotes;
-	    /* Fall through.  */
-	  default:
-	    if (yyres)
-	      yyres[yyn] = *yyp;
-	    yyn++;
-	    break;
+          case '\\':
+            if (*++yyp != '\\')
+              goto do_not_strip_quotes;
+            /* Fall through.  */
+          default:
+            if (yyres)
+              yyres[yyn] = *yyp;
+            yyn++;
+            break;
 
-	  case '"':
-	    if (yyres)
-	      yyres[yyn] = '\0';
-	    return yyn;
-	  }
+          case '"':
+            if (yyres)
+              yyres[yyn] = '\0';
+            return yyn;
+          }
     do_not_strip_quotes: ;
     }
 
@@ -1556,12 +1366,11 @@ static int
 yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yytype_int16 *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (0, yytname[yytoken]);
+  YYSIZE_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
   YYSIZE_T yysize = yysize0;
-  YYSIZE_T yysize1;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
-  const char *yyformat = 0;
+  const char *yyformat = YY_NULLPTR;
   /* Arguments of yyformat. */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
   /* Number of reported tokens (one for the "unexpected", one per
@@ -1569,10 +1378,6 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
   int yycount = 0;
 
   /* There are many possibilities here to consider:
-     - Assume YYFAIL is not used.  It's too flawed to consider.  See
-       <http://lists.gnu.org/archive/html/bison-patches/2009-12/msg00024.html>
-       for details.  YYERROR is fine as it does not invoke this
-       function.
      - If this state is a consistent state with a default action, then
        the only way this function was invoked is if the default action
        is an error action.  In that case, don't check for expected
@@ -1621,11 +1426,13 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                     break;
                   }
                 yyarg[yycount++] = yytname[yyx];
-                yysize1 = yysize + yytnamerr (0, yytname[yyx]);
-                if (! (yysize <= yysize1
-                       && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
-                  return 2;
-                yysize = yysize1;
+                {
+                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
+                  if (! (yysize <= yysize1
+                         && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+                    return 2;
+                  yysize = yysize1;
+                }
               }
         }
     }
@@ -1645,10 +1452,12 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 # undef YYCASE_
     }
 
-  yysize1 = yysize + yystrlen (yyformat);
-  if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
-    return 2;
-  yysize = yysize1;
+  {
+    YYSIZE_T yysize1 = yysize + yystrlen (yyformat);
+    if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+      return 2;
+    yysize = yysize1;
+  }
 
   if (*yymsg_alloc < yysize)
     {
@@ -1685,48 +1494,20 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
-#else
-static void
-yydestruct (yymsg, yytype, yyvaluep)
-    const char *yymsg;
-    int yytype;
-    YYSTYPE *yyvaluep;
-#endif
 {
   YYUSE (yyvaluep);
-
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-  switch (yytype)
-    {
-
-      default:
-	break;
-    }
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  YYUSE (yytype);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
 
-/* Prevent warnings from -Wmissing-prototypes.  */
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void *YYPARSE_PARAM);
-#else
-int yyparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void);
-#else
-int yyparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
 
 /* The lookahead symbol.  */
@@ -1734,7 +1515,6 @@ int yychar;
 
 /* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;
-
 /* Number of syntax errors so far.  */
 int yynerrs;
 
@@ -1743,37 +1523,18 @@ int yynerrs;
 | yyparse.  |
 `----------*/
 
-#ifdef YYPARSE_PARAM
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-int
-yyparse (void *YYPARSE_PARAM)
-#else
-int
-yyparse (YYPARSE_PARAM)
-    void *YYPARSE_PARAM;
-#endif
-#else /* ! YYPARSE_PARAM */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 int
 yyparse (void)
-#else
-int
-yyparse ()
-
-#endif
-#endif
 {
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus;
 
     /* The stacks and their tools:
-       `yyss': related to states.
-       `yyvs': related to semantic values.
+       'yyss': related to states.
+       'yyvs': related to semantic values.
 
-       Refer to the stacks thru separate pointers, to allow yyoverflow
+       Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
 
     /* The state stack.  */
@@ -1791,7 +1552,7 @@ yyparse ()
   int yyn;
   int yyresult;
   /* Lookahead token as an internal (translated) token number.  */
-  int yytoken;
+  int yytoken = 0;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
@@ -1809,9 +1570,8 @@ yyparse ()
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
 
-  yytoken = 0;
-  yyss = yyssa;
-  yyvs = yyvsa;
+  yyssp = yyss = yyssa;
+  yyvsp = yyvs = yyvsa;
   yystacksize = YYINITDEPTH;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
@@ -1820,14 +1580,6 @@ yyparse ()
   yyerrstatus = 0;
   yynerrs = 0;
   yychar = YYEMPTY; /* Cause a token to be read.  */
-
-  /* Initialize stack pointers.
-     Waste one element of value and location stack
-     so that they stay on the same level as the state stack.
-     The wasted elements are never initialized.  */
-  yyssp = yyss;
-  yyvsp = yyvs;
-
   goto yysetstate;
 
 /*------------------------------------------------------------.
@@ -1848,23 +1600,23 @@ yyparse ()
 
 #ifdef yyoverflow
       {
-	/* Give user a chance to reallocate the stack.  Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	yytype_int16 *yyss1 = yyss;
+        /* Give user a chance to reallocate the stack.  Use copies of
+           these so that the &'s don't force the real ones into
+           memory.  */
+        YYSTYPE *yyvs1 = yyvs;
+        yytype_int16 *yyss1 = yyss;
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow (YY_("memory exhausted"),
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
-		    &yystacksize);
+        /* Each stack pointer address is followed by the size of the
+           data in use in that stack, in bytes.  This used to be a
+           conditional around just the two extra args, but that might
+           be undefined if yyoverflow is a macro.  */
+        yyoverflow (YY_("memory exhausted"),
+                    &yyss1, yysize * sizeof (*yyssp),
+                    &yyvs1, yysize * sizeof (*yyvsp),
+                    &yystacksize);
 
-	yyss = yyss1;
-	yyvs = yyvs1;
+        yyss = yyss1;
+        yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -1872,22 +1624,22 @@ yyparse ()
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyexhaustedlab;
+        goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+        yystacksize = YYMAXDEPTH;
 
       {
-	yytype_int16 *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss_alloc, yyss);
-	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+        yytype_int16 *yyss1 = yyss;
+        union yyalloc *yyptr =
+          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+        if (! yyptr)
+          goto yyexhaustedlab;
+        YYSTACK_RELOCATE (yyss_alloc, yyss);
+        YYSTACK_RELOCATE (yyvs_alloc, yyvs);
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+        if (yyss1 != yyssa)
+          YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -1896,10 +1648,10 @@ yyparse ()
       yyvsp = yyvs + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+                  (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+        YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -1928,7 +1680,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
-      yychar = YYLEX;
+      yychar = yylex ();
     }
 
   if (yychar <= YYEOF)
@@ -1968,7 +1720,9 @@ yybackup:
   yychar = YYEMPTY;
 
   yystate = yyn;
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   goto yynewstate;
 
@@ -1991,7 +1745,7 @@ yyreduce:
   yylen = yyr2[yyn];
 
   /* If YYLEN is nonzero, implement the default value of the action:
-     `$$ = $1'.
+     '$$ = $1'.
 
      Otherwise, the following line sets YYVAL to garbage.
      This behavior is undocumented and Bison
@@ -2005,1520 +1759,1304 @@ yyreduce:
   switch (yyn)
     {
         case 6:
-
-/* Line 1806 of yacc.c  */
-#line 213 "../src/cuda-sim/ptx.y"
-    { set_symtab((yyvsp[(1) - (1)].ptr_value)); func_header(".skip"); }
+#line 213 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { set_symtab((yyvsp[0].ptr_value)); func_header(".skip"); }
+#line 1765 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-
-/* Line 1806 of yacc.c  */
-#line 213 "../src/cuda-sim/ptx.y"
+#line 213 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { end_function(); }
+#line 1771 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-
-/* Line 1806 of yacc.c  */
-#line 214 "../src/cuda-sim/ptx.y"
-    { set_symtab((yyvsp[(1) - (1)].ptr_value)); }
+#line 214 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { set_symtab((yyvsp[0].ptr_value)); }
+#line 1777 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-
-/* Line 1806 of yacc.c  */
-#line 214 "../src/cuda-sim/ptx.y"
+#line 214 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { func_header(".skip"); }
+#line 1783 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-
-/* Line 1806 of yacc.c  */
-#line 214 "../src/cuda-sim/ptx.y"
+#line 214 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { end_function(); }
+#line 1789 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-
-/* Line 1806 of yacc.c  */
-#line 217 "../src/cuda-sim/ptx.y"
-    {func_header_info_int(".maxntid", (yyvsp[(2) - (6)].int_value));
-										func_header_info_int(",", (yyvsp[(4) - (6)].int_value));
-										func_header_info_int(",", (yyvsp[(6) - (6)].int_value)); }
+#line 217 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    {func_header_info_int(".maxntid", (yyvsp[-4].int_value));
+										func_header_info_int(",", (yyvsp[-2].int_value));
+										func_header_info_int(",", (yyvsp[0].int_value)); }
+#line 1797 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-
-/* Line 1806 of yacc.c  */
-#line 220 "../src/cuda-sim/ptx.y"
-    { func_header_info_int(".minnctapersm", (yyvsp[(2) - (2)].int_value)); printf("GPGPU-Sim: Warning: .minnctapersm ignored. \n"); }
+#line 220 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { func_header_info_int(".minnctapersm", (yyvsp[0].int_value)); printf("GPGPU-Sim: Warning: .minnctapersm ignored. \n"); }
+#line 1803 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-
-/* Line 1806 of yacc.c  */
-#line 221 "../src/cuda-sim/ptx.y"
-    { func_header_info_int(".maxnctapersm", (yyvsp[(2) - (2)].int_value)); printf("GPGPU-Sim: Warning: .maxnctapersm ignored. \n"); }
+#line 221 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { func_header_info_int(".maxnctapersm", (yyvsp[0].int_value)); printf("GPGPU-Sim: Warning: .maxnctapersm ignored. \n"); }
+#line 1809 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-
-/* Line 1806 of yacc.c  */
-#line 228 "../src/cuda-sim/ptx.y"
-    { start_function((yyvsp[(1) - (2)].int_value)); func_header_info("(");}
+#line 228 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { start_function((yyvsp[-1].int_value)); func_header_info("(");}
+#line 1815 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-
-/* Line 1806 of yacc.c  */
-#line 228 "../src/cuda-sim/ptx.y"
+#line 228 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {func_header_info(")");}
+#line 1821 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-
-/* Line 1806 of yacc.c  */
-#line 228 "../src/cuda-sim/ptx.y"
+#line 228 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.ptr_value) = reset_symtab(); }
+#line 1827 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-
-/* Line 1806 of yacc.c  */
-#line 229 "../src/cuda-sim/ptx.y"
-    { start_function((yyvsp[(1) - (1)].int_value)); }
+#line 229 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { start_function((yyvsp[0].int_value)); }
+#line 1833 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-
-/* Line 1806 of yacc.c  */
-#line 229 "../src/cuda-sim/ptx.y"
+#line 229 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.ptr_value) = reset_symtab(); }
+#line 1839 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-
-/* Line 1806 of yacc.c  */
-#line 230 "../src/cuda-sim/ptx.y"
-    { start_function((yyvsp[(1) - (1)].int_value)); add_function_name(""); g_func_decl=0; (yyval.ptr_value) = reset_symtab(); }
+#line 230 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { start_function((yyvsp[0].int_value)); add_function_name(""); g_func_decl=0; (yyval.ptr_value) = reset_symtab(); }
+#line 1845 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-
-/* Line 1806 of yacc.c  */
-#line 233 "../src/cuda-sim/ptx.y"
-    { add_function_name((yyvsp[(1) - (1)].string_value)); }
+#line 233 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_function_name((yyvsp[0].string_value)); }
+#line 1851 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-
-/* Line 1806 of yacc.c  */
-#line 233 "../src/cuda-sim/ptx.y"
+#line 233 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {func_header_info("(");}
+#line 1857 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-
-/* Line 1806 of yacc.c  */
-#line 233 "../src/cuda-sim/ptx.y"
+#line 233 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { g_func_decl=0; func_header_info(")"); }
+#line 1863 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-
-/* Line 1806 of yacc.c  */
-#line 234 "../src/cuda-sim/ptx.y"
-    { add_function_name((yyvsp[(1) - (1)].string_value)); g_func_decl=0; }
+#line 234 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_function_name((yyvsp[0].string_value)); g_func_decl=0; }
+#line 1869 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-
-/* Line 1806 of yacc.c  */
-#line 237 "../src/cuda-sim/ptx.y"
+#line 237 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.int_value) = 1; g_func_decl=1; func_header(".entry"); }
+#line 1875 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-
-/* Line 1806 of yacc.c  */
-#line 238 "../src/cuda-sim/ptx.y"
+#line 238 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.int_value) = 0; g_func_decl=1; func_header(".func"); }
+#line 1881 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-
-/* Line 1806 of yacc.c  */
-#line 239 "../src/cuda-sim/ptx.y"
+#line 239 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.int_value) = 0; g_func_decl=1; func_header(".func"); }
+#line 1887 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-
-/* Line 1806 of yacc.c  */
-#line 240 "../src/cuda-sim/ptx.y"
+#line 240 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { (yyval.int_value) = 2; g_func_decl=1; func_header(".func"); }
+#line 1893 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-
-/* Line 1806 of yacc.c  */
-#line 244 "../src/cuda-sim/ptx.y"
+#line 244 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_directive(); }
+#line 1899 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-
-/* Line 1806 of yacc.c  */
-#line 245 "../src/cuda-sim/ptx.y"
+#line 245 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {func_header_info(",");}
+#line 1905 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-
-/* Line 1806 of yacc.c  */
-#line 245 "../src/cuda-sim/ptx.y"
+#line 245 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_directive(); }
+#line 1911 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-
-/* Line 1806 of yacc.c  */
-#line 247 "../src/cuda-sim/ptx.y"
+#line 247 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_space_spec(param_space_unclassified,0); }
+#line 1917 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-
-/* Line 1806 of yacc.c  */
-#line 247 "../src/cuda-sim/ptx.y"
+#line 247 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_function_arg(); }
+#line 1923 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-
-/* Line 1806 of yacc.c  */
-#line 248 "../src/cuda-sim/ptx.y"
+#line 248 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_space_spec(reg_space,0); }
+#line 1929 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-
-/* Line 1806 of yacc.c  */
-#line 248 "../src/cuda-sim/ptx.y"
+#line 248 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_function_arg(); }
+#line 1935 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-
-/* Line 1806 of yacc.c  */
-#line 254 "../src/cuda-sim/ptx.y"
+#line 254 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_ptr_spec(global_space); }
+#line 1941 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-
-/* Line 1806 of yacc.c  */
-#line 255 "../src/cuda-sim/ptx.y"
+#line 255 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_ptr_spec(local_space); }
+#line 1947 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-
-/* Line 1806 of yacc.c  */
-#line 256 "../src/cuda-sim/ptx.y"
+#line 256 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_ptr_spec(shared_space); }
+#line 1953 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-
-/* Line 1806 of yacc.c  */
-#line 262 "../src/cuda-sim/ptx.y"
+#line 262 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_directive(); }
+#line 1959 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-
-/* Line 1806 of yacc.c  */
-#line 263 "../src/cuda-sim/ptx.y"
+#line 263 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_instruction(); }
+#line 1965 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-
-/* Line 1806 of yacc.c  */
-#line 264 "../src/cuda-sim/ptx.y"
+#line 264 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_directive(); }
+#line 1971 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-
-/* Line 1806 of yacc.c  */
-#line 265 "../src/cuda-sim/ptx.y"
+#line 265 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_instruction(); }
+#line 1977 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-
-/* Line 1806 of yacc.c  */
-#line 271 "../src/cuda-sim/ptx.y"
-    { add_version_info((yyvsp[(2) - (2)].double_value), 0); }
+#line 271 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_version_info((yyvsp[0].double_value), 0); }
+#line 1983 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-
-/* Line 1806 of yacc.c  */
-#line 272 "../src/cuda-sim/ptx.y"
-    { add_version_info((yyvsp[(2) - (3)].double_value),1); }
+#line 272 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_version_info((yyvsp[-1].double_value),1); }
+#line 1989 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-
-/* Line 1806 of yacc.c  */
-#line 273 "../src/cuda-sim/ptx.y"
+#line 273 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {/*Do nothing*/}
+#line 1995 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-
-/* Line 1806 of yacc.c  */
-#line 274 "../src/cuda-sim/ptx.y"
-    { target_header2((yyvsp[(2) - (4)].string_value),(yyvsp[(4) - (4)].string_value)); }
+#line 274 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { target_header2((yyvsp[-2].string_value),(yyvsp[0].string_value)); }
+#line 2001 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-
-/* Line 1806 of yacc.c  */
-#line 275 "../src/cuda-sim/ptx.y"
-    { target_header3((yyvsp[(2) - (6)].string_value),(yyvsp[(4) - (6)].string_value),(yyvsp[(6) - (6)].string_value)); }
+#line 275 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { target_header3((yyvsp[-4].string_value),(yyvsp[-2].string_value),(yyvsp[0].string_value)); }
+#line 2007 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-
-/* Line 1806 of yacc.c  */
-#line 276 "../src/cuda-sim/ptx.y"
-    { target_header((yyvsp[(2) - (2)].string_value)); }
+#line 276 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { target_header((yyvsp[0].string_value)); }
+#line 2013 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-
-/* Line 1806 of yacc.c  */
-#line 277 "../src/cuda-sim/ptx.y"
-    { add_file((yyvsp[(2) - (3)].int_value),(yyvsp[(3) - (3)].string_value)); }
+#line 277 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_file((yyvsp[-1].int_value),(yyvsp[0].string_value)); }
+#line 2019 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-
-/* Line 1806 of yacc.c  */
-#line 279 "../src/cuda-sim/ptx.y"
-    { add_pragma((yyvsp[(2) - (3)].string_value)); }
+#line 279 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pragma((yyvsp[-1].string_value)); }
+#line 2025 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-
-/* Line 1806 of yacc.c  */
-#line 280 "../src/cuda-sim/ptx.y"
+#line 280 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {/*Do nothing*/}
+#line 2031 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-
-/* Line 1806 of yacc.c  */
-#line 283 "../src/cuda-sim/ptx.y"
+#line 283 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_variables(); }
+#line 2037 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-
-/* Line 1806 of yacc.c  */
-#line 284 "../src/cuda-sim/ptx.y"
+#line 284 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_variables(); }
+#line 2043 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-
-/* Line 1806 of yacc.c  */
-#line 285 "../src/cuda-sim/ptx.y"
+#line 285 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_variables(); }
+#line 2049 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-
-/* Line 1806 of yacc.c  */
-#line 286 "../src/cuda-sim/ptx.y"
-    { add_constptr((yyvsp[(2) - (6)].string_value), (yyvsp[(4) - (6)].string_value), (yyvsp[(6) - (6)].int_value)); }
+#line 286 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_constptr((yyvsp[-4].string_value), (yyvsp[-2].string_value), (yyvsp[0].int_value)); }
+#line 2055 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-
-/* Line 1806 of yacc.c  */
-#line 289 "../src/cuda-sim/ptx.y"
+#line 289 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { set_variable_type(); }
+#line 2061 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-
-/* Line 1806 of yacc.c  */
-#line 294 "../src/cuda-sim/ptx.y"
-    { add_identifier((yyvsp[(1) - (1)].string_value),0,NON_ARRAY_IDENTIFIER); func_header_info((yyvsp[(1) - (1)].string_value));}
+#line 294 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_identifier((yyvsp[0].string_value),0,NON_ARRAY_IDENTIFIER); func_header_info((yyvsp[0].string_value));}
+#line 2067 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-
-/* Line 1806 of yacc.c  */
-#line 295 "../src/cuda-sim/ptx.y"
-    { func_header_info((yyvsp[(1) - (4)].string_value)); func_header_info_int("<", (yyvsp[(3) - (4)].int_value)); func_header_info(">");
+#line 295 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { func_header_info((yyvsp[-3].string_value)); func_header_info_int("<", (yyvsp[-1].int_value)); func_header_info(">");
 		int i,lbase,l;
 		char *id = NULL;
-		lbase = strlen((yyvsp[(1) - (4)].string_value));
-		for( i=0; i < (yyvsp[(3) - (4)].int_value); i++ ) { 
+		lbase = strlen((yyvsp[-3].string_value));
+		for( i=0; i < (yyvsp[-1].int_value); i++ ) {
 			l = lbase + (int)log10(i+1)+10;
 			id = (char*) malloc(l);
-			snprintf(id,l,"%s%u",(yyvsp[(1) - (4)].string_value),i);
-			add_identifier(id,0,NON_ARRAY_IDENTIFIER); 
+			snprintf(id,l,"%s%u",(yyvsp[-3].string_value),i);
+			add_identifier(id,0,NON_ARRAY_IDENTIFIER);
 		}
-		free((yyvsp[(1) - (4)].string_value));
+		free((yyvsp[-3].string_value));
 	}
+#line 2084 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-
-/* Line 1806 of yacc.c  */
-#line 307 "../src/cuda-sim/ptx.y"
-    { add_identifier((yyvsp[(1) - (3)].string_value),0,ARRAY_IDENTIFIER_NO_DIM); func_header_info((yyvsp[(1) - (3)].string_value)); func_header_info("["); func_header_info("]");}
+#line 307 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_identifier((yyvsp[-2].string_value),0,ARRAY_IDENTIFIER_NO_DIM); func_header_info((yyvsp[-2].string_value)); func_header_info("["); func_header_info("]");}
+#line 2090 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-
-/* Line 1806 of yacc.c  */
-#line 308 "../src/cuda-sim/ptx.y"
-    { add_identifier((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].int_value),ARRAY_IDENTIFIER); func_header_info((yyvsp[(1) - (4)].string_value)); func_header_info_int("[",(yyvsp[(3) - (4)].int_value)); func_header_info("]");}
+#line 308 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_identifier((yyvsp[-3].string_value),(yyvsp[-1].int_value),ARRAY_IDENTIFIER); func_header_info((yyvsp[-3].string_value)); func_header_info_int("[",(yyvsp[-1].int_value)); func_header_info("]");}
+#line 2096 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-
-/* Line 1806 of yacc.c  */
-#line 317 "../src/cuda-sim/ptx.y"
+#line 317 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_extern_spec(); }
+#line 2102 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-
-/* Line 1806 of yacc.c  */
-#line 320 "../src/cuda-sim/ptx.y"
-    { add_alignment_spec((yyvsp[(2) - (2)].int_value)); }
+#line 320 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_alignment_spec((yyvsp[0].int_value)); }
+#line 2108 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-
-/* Line 1806 of yacc.c  */
-#line 322 "../src/cuda-sim/ptx.y"
+#line 322 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(reg_space,0); }
+#line 2114 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-
-/* Line 1806 of yacc.c  */
-#line 323 "../src/cuda-sim/ptx.y"
+#line 323 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(reg_space,0); }
+#line 2120 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-
-/* Line 1806 of yacc.c  */
-#line 327 "../src/cuda-sim/ptx.y"
-    {  add_space_spec(const_space,(yyvsp[(1) - (1)].int_value)); }
+#line 327 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    {  add_space_spec(const_space,(yyvsp[0].int_value)); }
+#line 2126 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-
-/* Line 1806 of yacc.c  */
-#line 328 "../src/cuda-sim/ptx.y"
+#line 328 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(global_space,0); }
+#line 2132 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-
-/* Line 1806 of yacc.c  */
-#line 329 "../src/cuda-sim/ptx.y"
+#line 329 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(local_space,0); }
+#line 2138 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-
-/* Line 1806 of yacc.c  */
-#line 330 "../src/cuda-sim/ptx.y"
+#line 330 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(param_space_unclassified,0); }
+#line 2144 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-
-/* Line 1806 of yacc.c  */
-#line 331 "../src/cuda-sim/ptx.y"
+#line 331 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(shared_space,0); }
+#line 2150 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-
-/* Line 1806 of yacc.c  */
-#line 332 "../src/cuda-sim/ptx.y"
+#line 332 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(surf_space,0); }
+#line 2156 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-
-/* Line 1806 of yacc.c  */
-#line 333 "../src/cuda-sim/ptx.y"
+#line 333 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_space_spec(tex_space,0); }
+#line 2162 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-
-/* Line 1806 of yacc.c  */
-#line 340 "../src/cuda-sim/ptx.y"
+#line 340 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_option(V2_TYPE); func_header_info(".v2");}
+#line 2168 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-
-/* Line 1806 of yacc.c  */
-#line 341 "../src/cuda-sim/ptx.y"
+#line 341 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_option(V3_TYPE); func_header_info(".v3");}
+#line 2174 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 95:
-
-/* Line 1806 of yacc.c  */
-#line 342 "../src/cuda-sim/ptx.y"
+#line 342 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     {  add_option(V4_TYPE); func_header_info(".v4");}
+#line 2180 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
-
-/* Line 1806 of yacc.c  */
-#line 345 "../src/cuda-sim/ptx.y"
+#line 345 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( S8_TYPE ); }
+#line 2186 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 97:
-
-/* Line 1806 of yacc.c  */
-#line 346 "../src/cuda-sim/ptx.y"
+#line 346 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( S16_TYPE ); }
+#line 2192 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 98:
-
-/* Line 1806 of yacc.c  */
-#line 347 "../src/cuda-sim/ptx.y"
+#line 347 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( S32_TYPE ); }
+#line 2198 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
-
-/* Line 1806 of yacc.c  */
-#line 348 "../src/cuda-sim/ptx.y"
+#line 348 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( S64_TYPE ); }
+#line 2204 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 100:
-
-/* Line 1806 of yacc.c  */
-#line 349 "../src/cuda-sim/ptx.y"
+#line 349 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( U8_TYPE ); }
+#line 2210 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 101:
-
-/* Line 1806 of yacc.c  */
-#line 350 "../src/cuda-sim/ptx.y"
+#line 350 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( U16_TYPE ); }
+#line 2216 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
-
-/* Line 1806 of yacc.c  */
-#line 351 "../src/cuda-sim/ptx.y"
+#line 351 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( U32_TYPE ); }
+#line 2222 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-
-/* Line 1806 of yacc.c  */
-#line 352 "../src/cuda-sim/ptx.y"
+#line 352 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( U64_TYPE ); }
+#line 2228 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
-
-/* Line 1806 of yacc.c  */
-#line 353 "../src/cuda-sim/ptx.y"
+#line 353 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( F16_TYPE ); }
+#line 2234 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 105:
-
-/* Line 1806 of yacc.c  */
-#line 354 "../src/cuda-sim/ptx.y"
+#line 354 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( F32_TYPE ); }
+#line 2240 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 106:
-
-/* Line 1806 of yacc.c  */
-#line 355 "../src/cuda-sim/ptx.y"
+#line 355 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( F64_TYPE ); }
+#line 2246 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 107:
-
-/* Line 1806 of yacc.c  */
-#line 356 "../src/cuda-sim/ptx.y"
+#line 356 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( FF64_TYPE ); }
+#line 2252 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
-
-/* Line 1806 of yacc.c  */
-#line 357 "../src/cuda-sim/ptx.y"
+#line 357 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( B8_TYPE );  }
+#line 2258 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 109:
-
-/* Line 1806 of yacc.c  */
-#line 358 "../src/cuda-sim/ptx.y"
+#line 358 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( B16_TYPE ); }
+#line 2264 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 110:
-
-/* Line 1806 of yacc.c  */
-#line 359 "../src/cuda-sim/ptx.y"
+#line 359 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( B32_TYPE ); }
+#line 2270 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 111:
-
-/* Line 1806 of yacc.c  */
-#line 360 "../src/cuda-sim/ptx.y"
+#line 360 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( B64_TYPE ); }
+#line 2276 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
-
-/* Line 1806 of yacc.c  */
-#line 361 "../src/cuda-sim/ptx.y"
+#line 361 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( BB64_TYPE ); }
+#line 2282 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 113:
-
-/* Line 1806 of yacc.c  */
-#line 362 "../src/cuda-sim/ptx.y"
+#line 362 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( BB128_TYPE ); }
+#line 2288 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 114:
-
-/* Line 1806 of yacc.c  */
-#line 363 "../src/cuda-sim/ptx.y"
+#line 363 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( PRED_TYPE ); }
+#line 2294 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
-
-/* Line 1806 of yacc.c  */
-#line 364 "../src/cuda-sim/ptx.y"
+#line 364 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( TEXREF_TYPE ); }
+#line 2300 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 116:
-
-/* Line 1806 of yacc.c  */
-#line 365 "../src/cuda-sim/ptx.y"
+#line 365 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( SAMPLERREF_TYPE ); }
+#line 2306 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 117:
-
-/* Line 1806 of yacc.c  */
-#line 366 "../src/cuda-sim/ptx.y"
+#line 366 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_scalar_type_spec( SURFREF_TYPE ); }
+#line 2312 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 118:
-
-/* Line 1806 of yacc.c  */
-#line 369 "../src/cuda-sim/ptx.y"
+#line 369 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_array_initializer(); }
+#line 2318 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-
-/* Line 1806 of yacc.c  */
-#line 370 "../src/cuda-sim/ptx.y"
+#line 370 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { syntax_not_implemented(); }
+#line 2324 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
-
-/* Line 1806 of yacc.c  */
-#line 376 "../src/cuda-sim/ptx.y"
-    { add_label((yyvsp[(1) - (2)].string_value)); }
+#line 376 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_label((yyvsp[-1].string_value)); }
+#line 2330 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 125:
-
-/* Line 1806 of yacc.c  */
-#line 379 "../src/cuda-sim/ptx.y"
+#line 379 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { set_return(); }
+#line 2336 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 131:
-
-/* Line 1806 of yacc.c  */
-#line 386 "../src/cuda-sim/ptx.y"
-    { add_opcode((yyvsp[(1) - (1)].int_value)); }
+#line 386 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_opcode((yyvsp[0].int_value)); }
+#line 2342 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 133:
-
-/* Line 1806 of yacc.c  */
-#line 387 "../src/cuda-sim/ptx.y"
-    { add_opcode((yyvsp[(1) - (1)].int_value)); }
+#line 387 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_opcode((yyvsp[0].int_value)); }
+#line 2348 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 134:
-
-/* Line 1806 of yacc.c  */
-#line 389 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (2)].string_value),0, -1); }
+#line 389 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[0].string_value),0, -1); }
+#line 2354 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 135:
-
-/* Line 1806 of yacc.c  */
-#line 390 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(3) - (3)].string_value),1, -1); }
+#line 390 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[0].string_value),1, -1); }
+#line 2360 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 136:
-
-/* Line 1806 of yacc.c  */
-#line 391 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,1); }
+#line 391 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,1); }
+#line 2366 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 137:
-
-/* Line 1806 of yacc.c  */
-#line 392 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,2); }
+#line 392 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,2); }
+#line 2372 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 138:
-
-/* Line 1806 of yacc.c  */
-#line 393 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,3); }
+#line 393 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,3); }
+#line 2378 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 139:
-
-/* Line 1806 of yacc.c  */
-#line 394 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,5); }
+#line 394 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,5); }
+#line 2384 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 140:
-
-/* Line 1806 of yacc.c  */
-#line 395 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,6); }
+#line 395 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,6); }
+#line 2390 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 141:
-
-/* Line 1806 of yacc.c  */
-#line 396 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,10); }
+#line 396 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,10); }
+#line 2396 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 142:
-
-/* Line 1806 of yacc.c  */
-#line 397 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,12); }
+#line 397 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,12); }
+#line 2402 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 143:
-
-/* Line 1806 of yacc.c  */
-#line 398 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,13); }
+#line 398 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,13); }
+#line 2408 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 144:
-
-/* Line 1806 of yacc.c  */
-#line 399 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,17); }
+#line 399 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,17); }
+#line 2414 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 145:
-
-/* Line 1806 of yacc.c  */
-#line 400 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,19); }
+#line 400 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,19); }
+#line 2420 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 146:
-
-/* Line 1806 of yacc.c  */
-#line 401 "../src/cuda-sim/ptx.y"
-    { add_pred((yyvsp[(2) - (3)].string_value),0,28); }
+#line 401 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_pred((yyvsp[-1].string_value),0,28); }
+#line 2426 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 153:
-
-/* Line 1806 of yacc.c  */
-#line 411 "../src/cuda-sim/ptx.y"
+#line 411 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(UNI_OPTION); }
+#line 2432 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 154:
-
-/* Line 1806 of yacc.c  */
-#line 412 "../src/cuda-sim/ptx.y"
+#line 412 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(WIDE_OPTION); }
+#line 2438 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 155:
-
-/* Line 1806 of yacc.c  */
-#line 413 "../src/cuda-sim/ptx.y"
+#line 413 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ANY_OPTION); }
+#line 2444 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 156:
-
-/* Line 1806 of yacc.c  */
-#line 414 "../src/cuda-sim/ptx.y"
+#line 414 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ALL_OPTION); }
+#line 2450 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 157:
-
-/* Line 1806 of yacc.c  */
-#line 415 "../src/cuda-sim/ptx.y"
+#line 415 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(BALLOT_OPTION); }
+#line 2456 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 158:
-
-/* Line 1806 of yacc.c  */
-#line 416 "../src/cuda-sim/ptx.y"
+#line 416 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GLOBAL_OPTION); }
+#line 2462 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 159:
-
-/* Line 1806 of yacc.c  */
-#line 417 "../src/cuda-sim/ptx.y"
+#line 417 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(CTA_OPTION); }
+#line 2468 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 160:
-
-/* Line 1806 of yacc.c  */
-#line 418 "../src/cuda-sim/ptx.y"
+#line 418 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(SYS_OPTION); }
+#line 2474 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 161:
-
-/* Line 1806 of yacc.c  */
-#line 419 "../src/cuda-sim/ptx.y"
+#line 419 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GEOM_MODIFIER_1D); }
+#line 2480 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 162:
-
-/* Line 1806 of yacc.c  */
-#line 420 "../src/cuda-sim/ptx.y"
+#line 420 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GEOM_MODIFIER_2D); }
+#line 2486 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 163:
-
-/* Line 1806 of yacc.c  */
-#line 421 "../src/cuda-sim/ptx.y"
+#line 421 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GEOM_MODIFIER_3D); }
+#line 2492 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 164:
-
-/* Line 1806 of yacc.c  */
-#line 422 "../src/cuda-sim/ptx.y"
+#line 422 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(SAT_OPTION); }
+#line 2498 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 165:
-
-/* Line 1806 of yacc.c  */
-#line 423 "../src/cuda-sim/ptx.y"
+#line 423 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(FTZ_OPTION); }
+#line 2504 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 166:
-
-/* Line 1806 of yacc.c  */
-#line 424 "../src/cuda-sim/ptx.y"
+#line 424 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(NEG_OPTION); }
+#line 2510 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 167:
-
-/* Line 1806 of yacc.c  */
-#line 425 "../src/cuda-sim/ptx.y"
+#line 425 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(APPROX_OPTION); }
+#line 2516 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 168:
-
-/* Line 1806 of yacc.c  */
-#line 426 "../src/cuda-sim/ptx.y"
+#line 426 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(FULL_OPTION); }
+#line 2522 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 169:
-
-/* Line 1806 of yacc.c  */
-#line 427 "../src/cuda-sim/ptx.y"
+#line 427 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(EXIT_OPTION); }
+#line 2528 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 170:
-
-/* Line 1806 of yacc.c  */
-#line 428 "../src/cuda-sim/ptx.y"
+#line 428 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ABS_OPTION); }
+#line 2534 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 172:
-
-/* Line 1806 of yacc.c  */
-#line 430 "../src/cuda-sim/ptx.y"
+#line 430 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(TO_OPTION); }
+#line 2540 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 173:
-
-/* Line 1806 of yacc.c  */
-#line 431 "../src/cuda-sim/ptx.y"
+#line 431 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(HALF_OPTION); }
+#line 2546 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 174:
-
-/* Line 1806 of yacc.c  */
-#line 432 "../src/cuda-sim/ptx.y"
+#line 432 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(CA_OPTION); }
+#line 2552 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 175:
-
-/* Line 1806 of yacc.c  */
-#line 433 "../src/cuda-sim/ptx.y"
+#line 433 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(CG_OPTION); }
+#line 2558 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 176:
-
-/* Line 1806 of yacc.c  */
-#line 434 "../src/cuda-sim/ptx.y"
+#line 434 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(CS_OPTION); }
+#line 2564 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 177:
-
-/* Line 1806 of yacc.c  */
-#line 435 "../src/cuda-sim/ptx.y"
+#line 435 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LU_OPTION); }
+#line 2570 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 178:
-
-/* Line 1806 of yacc.c  */
-#line 436 "../src/cuda-sim/ptx.y"
+#line 436 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(CV_OPTION); }
+#line 2576 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 179:
-
-/* Line 1806 of yacc.c  */
-#line 437 "../src/cuda-sim/ptx.y"
+#line 437 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(WB_OPTION); }
+#line 2582 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 180:
-
-/* Line 1806 of yacc.c  */
-#line 438 "../src/cuda-sim/ptx.y"
+#line 438 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(WT_OPTION); }
+#line 2588 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 181:
-
-/* Line 1806 of yacc.c  */
-#line 441 "../src/cuda-sim/ptx.y"
+#line 441 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_AND); }
+#line 2594 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 182:
-
-/* Line 1806 of yacc.c  */
-#line 442 "../src/cuda-sim/ptx.y"
+#line 442 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_OR); }
+#line 2600 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 183:
-
-/* Line 1806 of yacc.c  */
-#line 443 "../src/cuda-sim/ptx.y"
+#line 443 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_XOR); }
+#line 2606 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 184:
-
-/* Line 1806 of yacc.c  */
-#line 444 "../src/cuda-sim/ptx.y"
+#line 444 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_CAS); }
+#line 2612 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 185:
-
-/* Line 1806 of yacc.c  */
-#line 445 "../src/cuda-sim/ptx.y"
+#line 445 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_EXCH); }
+#line 2618 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 186:
-
-/* Line 1806 of yacc.c  */
-#line 446 "../src/cuda-sim/ptx.y"
+#line 446 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_ADD); }
+#line 2624 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 187:
-
-/* Line 1806 of yacc.c  */
-#line 447 "../src/cuda-sim/ptx.y"
+#line 447 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_INC); }
+#line 2630 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 188:
-
-/* Line 1806 of yacc.c  */
-#line 448 "../src/cuda-sim/ptx.y"
+#line 448 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_DEC); }
+#line 2636 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 189:
-
-/* Line 1806 of yacc.c  */
-#line 449 "../src/cuda-sim/ptx.y"
+#line 449 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_MIN); }
+#line 2642 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 190:
-
-/* Line 1806 of yacc.c  */
-#line 450 "../src/cuda-sim/ptx.y"
+#line 450 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(ATOMIC_MAX); }
+#line 2648 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 193:
-
-/* Line 1806 of yacc.c  */
-#line 456 "../src/cuda-sim/ptx.y"
+#line 456 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RN_OPTION); }
+#line 2654 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 194:
-
-/* Line 1806 of yacc.c  */
-#line 457 "../src/cuda-sim/ptx.y"
+#line 457 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RZ_OPTION); }
+#line 2660 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 195:
-
-/* Line 1806 of yacc.c  */
-#line 458 "../src/cuda-sim/ptx.y"
+#line 458 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RM_OPTION); }
+#line 2666 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 196:
-
-/* Line 1806 of yacc.c  */
-#line 459 "../src/cuda-sim/ptx.y"
+#line 459 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RP_OPTION); }
+#line 2672 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 197:
-
-/* Line 1806 of yacc.c  */
-#line 462 "../src/cuda-sim/ptx.y"
+#line 462 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RNI_OPTION); }
+#line 2678 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 198:
-
-/* Line 1806 of yacc.c  */
-#line 463 "../src/cuda-sim/ptx.y"
+#line 463 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RZI_OPTION); }
+#line 2684 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 199:
-
-/* Line 1806 of yacc.c  */
-#line 464 "../src/cuda-sim/ptx.y"
+#line 464 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RMI_OPTION); }
+#line 2690 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 200:
-
-/* Line 1806 of yacc.c  */
-#line 465 "../src/cuda-sim/ptx.y"
+#line 465 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(RPI_OPTION); }
+#line 2696 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 201:
-
-/* Line 1806 of yacc.c  */
-#line 468 "../src/cuda-sim/ptx.y"
+#line 468 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(EQ_OPTION); }
+#line 2702 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 202:
-
-/* Line 1806 of yacc.c  */
-#line 469 "../src/cuda-sim/ptx.y"
+#line 469 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(NE_OPTION); }
+#line 2708 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 203:
-
-/* Line 1806 of yacc.c  */
-#line 470 "../src/cuda-sim/ptx.y"
+#line 470 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LT_OPTION); }
+#line 2714 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 204:
-
-/* Line 1806 of yacc.c  */
-#line 471 "../src/cuda-sim/ptx.y"
+#line 471 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LE_OPTION); }
+#line 2720 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 205:
-
-/* Line 1806 of yacc.c  */
-#line 472 "../src/cuda-sim/ptx.y"
+#line 472 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GT_OPTION); }
+#line 2726 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 206:
-
-/* Line 1806 of yacc.c  */
-#line 473 "../src/cuda-sim/ptx.y"
+#line 473 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GE_OPTION); }
+#line 2732 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 207:
-
-/* Line 1806 of yacc.c  */
-#line 474 "../src/cuda-sim/ptx.y"
+#line 474 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LO_OPTION); }
+#line 2738 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 208:
-
-/* Line 1806 of yacc.c  */
-#line 475 "../src/cuda-sim/ptx.y"
+#line 475 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LS_OPTION); }
+#line 2744 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 209:
-
-/* Line 1806 of yacc.c  */
-#line 476 "../src/cuda-sim/ptx.y"
+#line 476 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(HI_OPTION); }
+#line 2750 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 210:
-
-/* Line 1806 of yacc.c  */
-#line 477 "../src/cuda-sim/ptx.y"
+#line 477 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(HS_OPTION); }
+#line 2756 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 211:
-
-/* Line 1806 of yacc.c  */
-#line 478 "../src/cuda-sim/ptx.y"
+#line 478 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(EQU_OPTION); }
+#line 2762 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 212:
-
-/* Line 1806 of yacc.c  */
-#line 479 "../src/cuda-sim/ptx.y"
+#line 479 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(NEU_OPTION); }
+#line 2768 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 213:
-
-/* Line 1806 of yacc.c  */
-#line 480 "../src/cuda-sim/ptx.y"
+#line 480 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LTU_OPTION); }
+#line 2774 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 214:
-
-/* Line 1806 of yacc.c  */
-#line 481 "../src/cuda-sim/ptx.y"
+#line 481 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(LEU_OPTION); }
+#line 2780 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 215:
-
-/* Line 1806 of yacc.c  */
-#line 482 "../src/cuda-sim/ptx.y"
+#line 482 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GTU_OPTION); }
+#line 2786 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 216:
-
-/* Line 1806 of yacc.c  */
-#line 483 "../src/cuda-sim/ptx.y"
+#line 483 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(GEU_OPTION); }
+#line 2792 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 217:
-
-/* Line 1806 of yacc.c  */
-#line 484 "../src/cuda-sim/ptx.y"
+#line 484 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(NUM_OPTION); }
+#line 2798 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 218:
-
-/* Line 1806 of yacc.c  */
-#line 485 "../src/cuda-sim/ptx.y"
+#line 485 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_option(NAN_OPTION); }
+#line 2804 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 221:
-
-/* Line 1806 of yacc.c  */
-#line 491 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(1) - (1)].string_value) ); }
+#line 491 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[0].string_value) ); }
+#line 2810 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 222:
-
-/* Line 1806 of yacc.c  */
-#line 492 "../src/cuda-sim/ptx.y"
-    { add_neg_pred_operand( (yyvsp[(2) - (2)].string_value) ); }
+#line 492 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_neg_pred_operand( (yyvsp[0].string_value) ); }
+#line 2816 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 223:
-
-/* Line 1806 of yacc.c  */
-#line 493 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(2) - (2)].string_value) ); change_operand_neg(); }
+#line 493 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[0].string_value) ); change_operand_neg(); }
+#line 2822 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 228:
-
-/* Line 1806 of yacc.c  */
-#line 498 "../src/cuda-sim/ptx.y"
+#line 498 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { change_operand_neg(); }
+#line 2828 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 230:
-
-/* Line 1806 of yacc.c  */
-#line 500 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (3)].string_value),(yyvsp[(3) - (3)].int_value)); }
+#line 500 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[-2].string_value),(yyvsp[0].int_value)); }
+#line 2834 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 231:
-
-/* Line 1806 of yacc.c  */
-#line 501 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(1) - (2)].string_value) ); change_operand_lohi(1);}
+#line 501 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[-1].string_value) ); change_operand_lohi(1);}
+#line 2840 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 232:
-
-/* Line 1806 of yacc.c  */
-#line 502 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(2) - (3)].string_value) ); change_operand_lohi(1); change_operand_neg();}
+#line 502 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[-1].string_value) ); change_operand_lohi(1); change_operand_neg();}
+#line 2846 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 233:
-
-/* Line 1806 of yacc.c  */
-#line 503 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(1) - (2)].string_value) ); change_operand_lohi(2);}
+#line 503 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[-1].string_value) ); change_operand_lohi(2);}
+#line 2852 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 234:
-
-/* Line 1806 of yacc.c  */
-#line 504 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand( (yyvsp[(2) - (3)].string_value) ); change_operand_lohi(2); change_operand_neg();}
+#line 504 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand( (yyvsp[-1].string_value) ); change_operand_lohi(2); change_operand_neg();}
+#line 2858 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 235:
-
-/* Line 1806 of yacc.c  */
-#line 505 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (3)].string_value),(yyvsp[(3) - (3)].string_value)); change_double_operand_type(-1);}
+#line 505 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-2].string_value),(yyvsp[0].string_value)); change_double_operand_type(-1);}
+#line 2864 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 236:
-
-/* Line 1806 of yacc.c  */
-#line 506 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(-1); change_operand_lohi(1);}
+#line 506 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(-1); change_operand_lohi(1);}
+#line 2870 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 237:
-
-/* Line 1806 of yacc.c  */
-#line 507 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(-1); change_operand_lohi(2);}
+#line 507 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(-1); change_operand_lohi(2);}
+#line 2876 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 238:
-
-/* Line 1806 of yacc.c  */
-#line 508 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (3)].string_value),(yyvsp[(3) - (3)].string_value)); change_double_operand_type(-3);}
+#line 508 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-2].string_value),(yyvsp[0].string_value)); change_double_operand_type(-3);}
+#line 2882 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 239:
-
-/* Line 1806 of yacc.c  */
-#line 509 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(-3); change_operand_lohi(1);}
+#line 509 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(-3); change_operand_lohi(1);}
+#line 2888 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 240:
-
-/* Line 1806 of yacc.c  */
-#line 510 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(-3); change_operand_lohi(2);}
+#line 510 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(-3); change_operand_lohi(2);}
+#line 2894 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 241:
-
-/* Line 1806 of yacc.c  */
-#line 513 "../src/cuda-sim/ptx.y"
-    { add_2vector_operand((yyvsp[(2) - (5)].string_value),(yyvsp[(4) - (5)].string_value)); }
+#line 513 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_2vector_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); }
+#line 2900 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 242:
-
-/* Line 1806 of yacc.c  */
-#line 514 "../src/cuda-sim/ptx.y"
-    { add_3vector_operand((yyvsp[(2) - (7)].string_value),(yyvsp[(4) - (7)].string_value),(yyvsp[(6) - (7)].string_value)); }
+#line 514 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_3vector_operand((yyvsp[-5].string_value),(yyvsp[-3].string_value),(yyvsp[-1].string_value)); }
+#line 2906 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 243:
-
-/* Line 1806 of yacc.c  */
-#line 515 "../src/cuda-sim/ptx.y"
-    { add_4vector_operand((yyvsp[(2) - (9)].string_value),(yyvsp[(4) - (9)].string_value),(yyvsp[(6) - (9)].string_value),(yyvsp[(8) - (9)].string_value)); }
+#line 515 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_4vector_operand((yyvsp[-7].string_value),(yyvsp[-5].string_value),(yyvsp[-3].string_value),(yyvsp[-1].string_value)); }
+#line 2912 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 244:
-
-/* Line 1806 of yacc.c  */
-#line 516 "../src/cuda-sim/ptx.y"
-    { add_1vector_operand((yyvsp[(2) - (3)].string_value)); }
+#line 516 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_1vector_operand((yyvsp[-1].string_value)); }
+#line 2918 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 245:
-
-/* Line 1806 of yacc.c  */
-#line 519 "../src/cuda-sim/ptx.y"
-    { add_scalar_operand((yyvsp[(2) - (3)].string_value)); }
+#line 519 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_scalar_operand((yyvsp[-1].string_value)); }
+#line 2924 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 247:
-
-/* Line 1806 of yacc.c  */
-#line 524 "../src/cuda-sim/ptx.y"
-    { add_builtin_operand((yyvsp[(1) - (2)].int_value),(yyvsp[(2) - (2)].int_value)); }
+#line 524 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_builtin_operand((yyvsp[-1].int_value),(yyvsp[0].int_value)); }
+#line 2930 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 248:
-
-/* Line 1806 of yacc.c  */
-#line 525 "../src/cuda-sim/ptx.y"
-    { add_builtin_operand((yyvsp[(1) - (1)].int_value),-1); }
+#line 525 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_builtin_operand((yyvsp[0].int_value),-1); }
+#line 2936 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 249:
-
-/* Line 1806 of yacc.c  */
-#line 528 "../src/cuda-sim/ptx.y"
+#line 528 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { add_memory_operand(); }
+#line 2942 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 250:
-
-/* Line 1806 of yacc.c  */
-#line 529 "../src/cuda-sim/ptx.y"
-    { add_memory_operand(); change_memory_addr_space((yyvsp[(1) - (4)].string_value)); }
+#line 529 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_memory_operand(); change_memory_addr_space((yyvsp[-3].string_value)); }
+#line 2948 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 251:
-
-/* Line 1806 of yacc.c  */
-#line 530 "../src/cuda-sim/ptx.y"
-    { change_memory_addr_space((yyvsp[(1) - (4)].string_value)); }
+#line 530 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { change_memory_addr_space((yyvsp[-3].string_value)); }
+#line 2954 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 252:
-
-/* Line 1806 of yacc.c  */
-#line 531 "../src/cuda-sim/ptx.y"
-    { change_memory_addr_space((yyvsp[(1) - (4)].string_value)); add_memory_operand();}
+#line 531 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { change_memory_addr_space((yyvsp[-3].string_value)); add_memory_operand();}
+#line 2960 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 253:
-
-/* Line 1806 of yacc.c  */
-#line 532 "../src/cuda-sim/ptx.y"
+#line 532 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
     { change_operand_neg(); }
+#line 2966 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 254:
-
-/* Line 1806 of yacc.c  */
-#line 535 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (3)].string_value),(yyvsp[(3) - (3)].string_value)); change_double_operand_type(1); }
+#line 535 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-2].string_value),(yyvsp[0].string_value)); change_double_operand_type(1); }
+#line 2972 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 255:
-
-/* Line 1806 of yacc.c  */
-#line 536 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(1); change_operand_lohi(1); }
+#line 536 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(1); change_operand_lohi(1); }
+#line 2978 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 256:
-
-/* Line 1806 of yacc.c  */
-#line 537 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(3) - (4)].string_value)); change_double_operand_type(1); change_operand_lohi(2); }
+#line 537 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-3].string_value),(yyvsp[-1].string_value)); change_double_operand_type(1); change_operand_lohi(2); }
+#line 2984 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 257:
-
-/* Line 1806 of yacc.c  */
-#line 538 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(4) - (4)].string_value)); change_double_operand_type(2); }
+#line 538 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-3].string_value),(yyvsp[0].string_value)); change_double_operand_type(2); }
+#line 2990 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 258:
-
-/* Line 1806 of yacc.c  */
-#line 539 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (5)].string_value),(yyvsp[(4) - (5)].string_value)); change_double_operand_type(2); change_operand_lohi(1); }
+#line 539 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-4].string_value),(yyvsp[-1].string_value)); change_double_operand_type(2); change_operand_lohi(1); }
+#line 2996 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 259:
-
-/* Line 1806 of yacc.c  */
-#line 540 "../src/cuda-sim/ptx.y"
-    { add_double_operand((yyvsp[(1) - (5)].string_value),(yyvsp[(4) - (5)].string_value)); change_double_operand_type(2); change_operand_lohi(2); }
+#line 540 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_double_operand((yyvsp[-4].string_value),(yyvsp[-1].string_value)); change_double_operand_type(2); change_operand_lohi(2); }
+#line 3002 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 260:
-
-/* Line 1806 of yacc.c  */
-#line 541 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (4)].string_value),(yyvsp[(4) - (4)].int_value)); change_double_operand_type(3); }
+#line 541 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[-3].string_value),(yyvsp[0].int_value)); change_double_operand_type(3); }
+#line 3008 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 261:
-
-/* Line 1806 of yacc.c  */
-#line 544 "../src/cuda-sim/ptx.y"
-    { add_literal_int((yyvsp[(1) - (1)].int_value)); }
+#line 544 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_literal_int((yyvsp[0].int_value)); }
+#line 3014 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 262:
-
-/* Line 1806 of yacc.c  */
-#line 545 "../src/cuda-sim/ptx.y"
-    { add_literal_float((yyvsp[(1) - (1)].float_value)); }
+#line 545 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_literal_float((yyvsp[0].float_value)); }
+#line 3020 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 263:
-
-/* Line 1806 of yacc.c  */
-#line 546 "../src/cuda-sim/ptx.y"
-    { add_literal_double((yyvsp[(1) - (1)].double_value)); }
+#line 546 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_literal_double((yyvsp[0].double_value)); }
+#line 3026 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 264:
-
-/* Line 1806 of yacc.c  */
-#line 549 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (1)].string_value),0); }
+#line 549 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[0].string_value),0); }
+#line 3032 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 265:
-
-/* Line 1806 of yacc.c  */
-#line 550 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (2)].string_value),0); change_operand_lohi(1);}
+#line 550 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[-1].string_value),0); change_operand_lohi(1);}
+#line 3038 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 266:
-
-/* Line 1806 of yacc.c  */
-#line 551 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (2)].string_value),0); change_operand_lohi(2); }
+#line 551 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[-1].string_value),0); change_operand_lohi(2); }
+#line 3044 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 267:
-
-/* Line 1806 of yacc.c  */
-#line 552 "../src/cuda-sim/ptx.y"
-    { add_address_operand((yyvsp[(1) - (3)].string_value),(yyvsp[(3) - (3)].int_value)); }
+#line 552 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand((yyvsp[-2].string_value),(yyvsp[0].int_value)); }
+#line 3050 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
   case 268:
-
-/* Line 1806 of yacc.c  */
-#line 553 "../src/cuda-sim/ptx.y"
-    { add_address_operand2((yyvsp[(1) - (1)].int_value)); }
+#line 553 "../src/cuda-sim/ptx.y" /* yacc.c:1646  */
+    { add_address_operand2((yyvsp[0].int_value)); }
+#line 3056 "ptx.tab.c" /* yacc.c:1646  */
     break;
 
 
-
-/* Line 1806 of yacc.c  */
-#line 3522 "ptx.tab.c"
+#line 3060 "ptx.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3540,7 +3078,7 @@ yyreduce:
 
   *++yyvsp = yyval;
 
-  /* Now `shift' the result of the reduction.  Determine what state
+  /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
 
@@ -3555,9 +3093,9 @@ yyreduce:
   goto yynewstate;
 
 
-/*------------------------------------.
-| yyerrlab -- here on detecting error |
-`------------------------------------*/
+/*--------------------------------------.
+| yyerrlab -- here on detecting error.  |
+`--------------------------------------*/
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
@@ -3608,20 +3146,20 @@ yyerrlab:
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+         error, discard it.  */
 
       if (yychar <= YYEOF)
-	{
-	  /* Return failure if at end of input.  */
-	  if (yychar == YYEOF)
-	    YYABORT;
-	}
+        {
+          /* Return failure if at end of input.  */
+          if (yychar == YYEOF)
+            YYABORT;
+        }
       else
-	{
-	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
-	  yychar = YYEMPTY;
-	}
+        {
+          yydestruct ("Error: discarding",
+                      yytoken, &yylval);
+          yychar = YYEMPTY;
+        }
     }
 
   /* Else will try to reuse lookahead token after shifting the error
@@ -3640,7 +3178,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
-  /* Do not reclaim the symbols of the rule which action triggered
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -3653,35 +3191,37 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+  yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
   for (;;)
     {
       yyn = yypact[yystate];
       if (!yypact_value_is_default (yyn))
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+        {
+          yyn += YYTERROR;
+          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+            {
+              yyn = yytable[yyn];
+              if (0 < yyn)
+                break;
+            }
+        }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+        YYABORT;
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+                  yystos[yystate], yyvsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
     }
 
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 
 
   /* Shift the error token.  */
@@ -3705,7 +3245,7 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#if !defined(yyoverflow) || YYERROR_VERBOSE
+#if !defined yyoverflow || YYERROR_VERBOSE
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
@@ -3724,14 +3264,14 @@ yyreturn:
       yydestruct ("Cleanup: discarding lookahead",
                   yytoken, &yylval);
     }
-  /* Do not reclaim the symbols of the rule which action triggered
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+                  yystos[*yyssp], yyvsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -3742,14 +3282,9 @@ yyreturn:
   if (yymsg != yymsgbuf)
     YYSTACK_FREE (yymsg);
 #endif
-  /* Make sure YYID is used.  */
-  return YYID (yyresult);
+  return yyresult;
 }
-
-
-
-/* Line 2067 of yacc.c  */
-#line 556 "../src/cuda-sim/ptx.y"
+#line 556 "../src/cuda-sim/ptx.y" /* yacc.c:1906  */
 
 
 extern int ptx_lineno;
@@ -3761,4 +3296,3 @@ void syntax_not_implemented()
 	ptx_error(NULL);
 	abort();
 }
-

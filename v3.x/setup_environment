@@ -18,7 +18,7 @@ if [ ! -z ${GPGPUSIM_SETUP_ENVIRONMENT_WAS_RUN+x} ]; then
    echo "          do this in a new shell!"
    echo " *** "
    echo " *** "
-#   return;   
+#   return;
 fi
 
 export GPGPUSIM_SETUP_ENVIRONMENT_WAS_RUN=
@@ -37,15 +37,31 @@ fi
 export GPGPUSIM_BUILD_TYPE=$BUILD
 echo "build type set to $GPGPUSIM_BUILD_TYPE"
 
-#Modify these two lines
-export CUDAHOME=/usr/local/cuda
-export NVIDIA_CUDA_SDK_LOCATION=/home/rachata/NVIDIA_GPU_Computing_SDK
-#export NVIDIA_CUDA_SDK_LOCATION=/usr/local/cuda-samples
+# CUDAHOME and PATH had some fairly Rachata-specific artifacts
+# even after I changed just the things I thought I should change.
+# Leave them in tact--if you're Rachata, you probably want this stuff.
+# In truth, maybe /home/rachata/bin is something other users rely on?
+# not sure...
 
-export LD_LIBRARY_PATH=$CUDAHOME/lib/:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$CUDAHOME/lib64/:$LD_LIBRARY_PATH:/usr/local/cuda/lib/:
-export LD_LIBRARY_PATH=$GPGPUSIM_ROOT/lib/4000/$BUILD:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$GPGPUSIM_ROOT/lib/4000/$BUILD:$GPGPUSIM_ROOT/lib/4000/$BUILD:/usr/cuda/lib64/:/usr/cuda/lib/:$GPGPUSIM_ROOT/lib/4000/$BUILD:/usr/cuda/lib64/:/usr/cuda/lib/:/usr/local/cuda/lib:/usr/local/cuda/lib:
+EXT_BIN_PATH=
+if [ "$USER" == "rachata" ]; then
+   # try not to break Rachata's build/env by fixing others'
+   export CUDAHOME=/scratch/cluster/rachata/cuda
+   export NVIDIA_CUDA_SDK_LOCATION=/scratch/cluster/rachata/NVIDIA_GPU_Computing_SDK
+   EXT_BIN_PATH=/home/rachata/bin
+elif [ "$USER" == "vance" ]; then
+   export CUDAHOME=/usr/local/cuda-4.0/cuda
+   export NVIDIA_CUDA_SDK_LOCATION=/home/vance/Documents/NVIDIA_GPU_Computing_SDK-4.0
+elif [ "$USER" == "rossbach" ]; then
+   export CUDAHOME=/usr/local/cuda-4.0/cuda # on alembic only
+   export NVIDIA_CUDA_SDK_LOCATION=/home/vance/Documents/NVIDIA_GPU_Computing_SDK-4.0
+else
+   #Modify these two lines
+   export CUDAHOME=/usr/local/cuda
+   export NVIDIA_CUDA_SDK_LOCATION=/usr/local/cuda-samples
+fi
+
+export LD_LIBRARY_PATH=$CUDAHOME/lib:$CUDAHOME/lib64:$LD_LIBRARY_PATH:/usr/local/cuda/lib
 export CUDA_INSTALL_PATH=$CUDAHOME
 export GPGPUSIM_POWER_MODEL=$GPGPUSIM_ROOT/v3.x/src/gpuwattch
 export PATH=$CUDAHOME/bin/:$EXT_BIN_PATH:$PATH
@@ -99,9 +115,9 @@ fi
 
 if [ $# = '1' ] ;
 then
-    export GPGPUSIM_CONFIG=gcc-$CC_VERSION/cuda-$CUDA_VERSION_NUMBER/$1
+    export GPGPUSIM_CONFIG=$1
 else
-    export GPGPUSIM_CONFIG=gcc-$CC_VERSION/cuda-$CUDA_VERSION_NUMBER/release
+    export GPGPUSIM_CONFIG=release
 fi
 
 export QTINC=/usr/include
@@ -120,23 +136,18 @@ if [ -f /usr/lib64/libOpenCL.so ]; then
 	fi
 fi
 
-# setting LD_LIBRARY_PATH as follows enables GPGPU-Sim to be invoked by 
+# setting LD_LIBRARY_PATH as follows enables GPGPU-Sim to be invoked by
 # native CUDA and OpenCL applications. GPGPU-Sim is dynamically linked
 # against instead of the CUDA toolkit.  This replaces this cumbersome
 # static link setup in prior GPGPU-Sim releases.
-if [ `uname` = "Darwin" ]; then
-	export DYLD_LIBRARY_PATH=`echo $DYLD_LIBRARY_PATH | sed -Ee 's#'$GPGPUSIM_ROOT'\/lib\/[0-9]+\/(debug|release):##'`
-	export DYLD_LIBRARY_PATH=$GPGPUSIM_ROOT/lib/$GPGPUSIM_CONFIG:$DYLD_LIBRARY_PATH
-else
-	export LD_LIBRARY_PATH=`echo $LD_LIBRARY_PATH | sed -re 's#'$GPGPUSIM_ROOT'\/lib\/[0-9]+\/(debug|release):##'`
-	export LD_LIBRARY_PATH=$GPGPUSIM_ROOT/lib/$GPGPUSIM_CONFIG:$LD_LIBRARY_PATH
-fi
+export LD_LIBRARY_PATH=`echo $LD_LIBRARY_PATH | sed -re 's#'$GPGPUSIM_ROOT'\/lib\/[0-9]+\/(debug|release):##'`
+export LD_LIBRARY_PATH=$GPGPUSIM_ROOT/lib/$GPGPUSIM_CONFIG:$LD_LIBRARY_PATH
 
 
 # The following sets OPENCL_REMOTE_GPU_HOST which is used by GPGPU-Sim to
-# SSH to remote node to generate PTX for OpenCL kernels when running on 
+# SSH to remote node to generate PTX for OpenCL kernels when running on
 # a node that does not have an NVIDIA driver installed.
-# The remote node should have GPGPU-Sim installed at the same path 
+# The remote node should have GPGPU-Sim installed at the same path
 if [ `uname` = "Darwin" ]; then
 	HOSTNAME_PREFIX=`hostname -s`;
 	export HOSTNAME_DOMAIN=`hostname | sed s/$HOSTNAME_PREFIX\.//`;

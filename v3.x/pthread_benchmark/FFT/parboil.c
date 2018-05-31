@@ -3,98 +3,92 @@
  */
 
 #include "parboil.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #if _POSIX_VERSION >= 200112L
-# include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 /* Free an array of owned strings. */
-static void
-free_string_array(char **string_array)
-{
-  char **p;
+static void free_string_array(char** string_array) {
+  char** p;
 
-  if (!string_array) return;
-  for (p = string_array; *p; p++) free(*p);
+  if (!string_array)
+    return;
+  for (p = string_array; *p; p++)
+    free(*p);
   free(string_array);
 }
 
 /* Parse a comma-delimited list of strings into an
  * array of strings. */
-static char ** 
-read_string_array(char *in)
-{
-  char **ret;
+static char** read_string_array(char* in) {
+  char** ret;
   int i;
-  int count;			/* Number of items in the input */
-  char *substring;		/* Current substring within 'in' */
+  int count;       /* Number of items in the input */
+  char* substring; /* Current substring within 'in' */
 
   /* Count the number of items in the string */
   count = 1;
-  for (i = 0; in[i]; i++) if (in[i] == ',') count++;
+  for (i = 0; in[i]; i++)
+    if (in[i] == ',')
+      count++;
 
   /* Allocate storage */
-  ret = (char **)malloc((count + 1) * sizeof(char *));
+  ret = (char**)malloc((count + 1) * sizeof(char*));
 
   /* Create copies of the strings from the list */
   substring = in;
   for (i = 0; i < count; i++) {
-    char *substring_end;
+    char* substring_end;
     int substring_length;
 
     /* Find length of substring */
     for (substring_end = substring;
-	 (*substring_end != ',') && (*substring_end != 0);
-	 substring_end++);
+         (*substring_end != ',') && (*substring_end != 0); substring_end++)
+      ;
 
     substring_length = substring_end - substring;
 
     /* Allocate memory and copy the substring */
-    ret[i] = (char *)malloc(substring_length + 1);
+    ret[i] = (char*)malloc(substring_length + 1);
     memcpy(ret[i], substring, substring_length);
     ret[i][substring_length] = 0;
 
     /* go to next substring */
     substring = substring_end + 1;
   }
-  ret[i] = NULL;		/* Write the sentinel value */
+  ret[i] = NULL; /* Write the sentinel value */
 
   return ret;
 }
 
 struct argparse {
-  int argc;			/* Number of arguments.  Mutable. */
-  char **argv;			/* Argument values.  Immutable. */
+  int argc;    /* Number of arguments.  Mutable. */
+  char** argv; /* Argument values.  Immutable. */
 
-  int argn;			/* Current argument number. */
-  char **argv_get;		/* Argument value being read. */
-  char **argv_put;		/* Argument value being written.
-				 * argv_put <= argv_get. */
+  int argn;        /* Current argument number. */
+  char** argv_get; /* Argument value being read. */
+  char** argv_put; /* Argument value being written.
+                    * argv_put <= argv_get. */
 };
 
-static void
-initialize_argparse(struct argparse *ap, int argc, char **argv)
-{
+static void initialize_argparse(struct argparse* ap, int argc, char** argv) {
   ap->argc = argc;
   ap->argn = 0;
   ap->argv_get = ap->argv_put = ap->argv = argv;
 }
 
-static void
-finalize_argparse(struct argparse *ap)
-{
+static void finalize_argparse(struct argparse* ap) {
   /* Move the remaining arguments */
-  for(; ap->argn < ap->argc; ap->argn++)
+  for (; ap->argn < ap->argc; ap->argn++)
     *ap->argv_put++ = *ap->argv_get++;
 }
 
 /* Delete the current argument. */
-static void
-delete_argument(struct argparse *ap)
-{
+static void delete_argument(struct argparse* ap) {
   if (ap->argn >= ap->argc) {
     fprintf(stderr, "delete_argument\n");
   }
@@ -104,9 +98,7 @@ delete_argument(struct argparse *ap)
 
 /* Go to the next argument.  Also, move the current argument to its
  * final location in argv. */
-static void
-next_argument(struct argparse *ap)
-{
+static void next_argument(struct argparse* ap) {
   if (ap->argn >= ap->argc) {
     fprintf(stderr, "next_argument\n");
   }
@@ -115,151 +107,130 @@ next_argument(struct argparse *ap)
   ap->argn++;
 }
 
-static int
-is_end_of_arguments(struct argparse *ap)
-{
+static int is_end_of_arguments(struct argparse* ap) {
   return ap->argn == ap->argc;
 }
 
-static char *
-get_argument(struct argparse *ap)
-{
+static char* get_argument(struct argparse* ap) {
   return *ap->argv_get;
 }
 
-static char *
-consume_argument(struct argparse *ap)
-{
-  char *ret = get_argument(ap);
+static char* consume_argument(struct argparse* ap) {
+  char* ret = get_argument(ap);
   delete_argument(ap);
   return ret;
 }
 
-struct pb_Parameters *
-pb_ReadParameters(int *_argc, char **argv)
-{
-  char *err_message;
+struct pb_Parameters* pb_ReadParameters(int* _argc, char** argv) {
+  char* err_message;
   struct argparse ap;
-  struct pb_Parameters *ret =
-    (struct pb_Parameters *)malloc(sizeof(struct pb_Parameters));
+  struct pb_Parameters* ret =
+      (struct pb_Parameters*)malloc(sizeof(struct pb_Parameters));
 
   /* Initialize the parameters structure */
   ret->outFile = NULL;
-  ret->inpFiles = (char **)malloc(sizeof(char *));
+  ret->inpFiles = (char**)malloc(sizeof(char*));
   ret->inpFiles[0] = NULL;
 
   /* Each argument */
   initialize_argparse(&ap, *_argc, argv);
-  while(!is_end_of_arguments(&ap)) {
-    char *arg = get_argument(&ap);
+  while (!is_end_of_arguments(&ap)) {
+    char* arg = get_argument(&ap);
 
     /* Single-character flag */
     if ((arg[0] == '-') && (arg[1] != 0) && (arg[2] == 0)) {
-      delete_argument(&ap);	/* This argument is consumed here */
+      delete_argument(&ap); /* This argument is consumed here */
 
-      switch(arg[1]) {
-      case 'o':			/* Output file name */
-	if (is_end_of_arguments(&ap))
-	  {
-	    err_message = "Expecting file name after '-o'\n";
-	    goto error;
-	  }
-	free(ret->outFile);
-	ret->outFile = strdup(consume_argument(&ap));
-	break;
-      case 'i':			/* Input file name */
-	if (is_end_of_arguments(&ap))
-	  {
-	    err_message = "Expecting file name after '-i'\n";
-	    goto error;
-	  }
-	ret->inpFiles = read_string_array(consume_argument(&ap));
-	break;
-      case '-':			/* End of options */
-	goto end_of_options;
-      default:
-	err_message = "Unexpected command-line parameter\n";
-	goto error;
+      switch (arg[1]) {
+        case 'o': /* Output file name */
+          if (is_end_of_arguments(&ap)) {
+            err_message = "Expecting file name after '-o'\n";
+            goto error;
+          }
+          free(ret->outFile);
+          ret->outFile = strdup(consume_argument(&ap));
+          break;
+        case 'i': /* Input file name */
+          if (is_end_of_arguments(&ap)) {
+            err_message = "Expecting file name after '-i'\n";
+            goto error;
+          }
+          ret->inpFiles = read_string_array(consume_argument(&ap));
+          break;
+        case '-': /* End of options */
+          goto end_of_options;
+        default:
+          err_message = "Unexpected command-line parameter\n";
+          goto error;
       }
-    }
-    else {
+    } else {
       /* Other parameters are ignored */
       next_argument(&ap);
     }
   } /* end for each argument */
 
- end_of_options:
-  *_argc = ap.argc;		/* Save the modified argc value */
+end_of_options:
+  *_argc = ap.argc; /* Save the modified argc value */
   finalize_argparse(&ap);
 
   return ret;
 
- error:
+error:
   fputs(err_message, stderr);
   pb_FreeParameters(ret);
   return NULL;
 }
 
-void
-pb_FreeParameters(struct pb_Parameters *p)
-{
-  char **cpp;
+void pb_FreeParameters(struct pb_Parameters* p) {
+  char** cpp;
 
   free(p->outFile);
   free_string_array(p->inpFiles);
   free(p);
 }
 
-int
-pb_Parameters_CountInputs(struct pb_Parameters *p)
-{
+int pb_Parameters_CountInputs(struct pb_Parameters* p) {
   int n;
 
-  for (n = 0; p->inpFiles[n]; n++);
+  for (n = 0; p->inpFiles[n]; n++)
+    ;
   return n;
 }
 
 /*****************************************************************************/
 /* Timer routines */
 
-static void
-accumulate_time(pb_Timestamp *accum,
-		pb_Timestamp start,
-		pb_Timestamp end)
-{
+static void accumulate_time(pb_Timestamp* accum,
+                            pb_Timestamp start,
+                            pb_Timestamp end) {
 #if _POSIX_VERSION >= 200112L
   *accum += end - start;
 #else
-# error "Timestamps not implemented for this system"
+#error "Timestamps not implemented for this system"
 #endif
 }
 
 #if _POSIX_VERSION >= 200112L
-static pb_Timestamp get_time()
-{
+static pb_Timestamp get_time() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  return (pb_Timestamp) (tv.tv_sec * 1000000LL + tv.tv_usec);
+  return (pb_Timestamp)(tv.tv_sec * 1000000LL + tv.tv_usec);
 }
 #else
-# error "no supported time libraries are available on this platform
+#error "no supported time libraries are available on this platform
 #endif
 
-void
-pb_ResetTimer(struct pb_Timer *timer)
-{
+void pb_ResetTimer(struct pb_Timer* timer) {
   timer->state = pb_Timer_STOPPED;
 
 #if _POSIX_VERSION >= 200112L
   timer->elapsed = 0;
 #else
-# error "pb_ResetTimer: not implemented for this system"
+#error "pb_ResetTimer: not implemented for this system"
 #endif
 }
 
-void
-pb_StartTimer(struct pb_Timer *timer)
-{
+void pb_StartTimer(struct pb_Timer* timer) {
   if (timer->state != pb_Timer_STOPPED) {
     fputs("Ignoring attempt to start a running timer\n", stderr);
     return;
@@ -274,13 +245,11 @@ pb_StartTimer(struct pb_Timer *timer)
     timer->init = tv.tv_sec * 1000000LL + tv.tv_usec;
   }
 #else
-# error "pb_StartTimer: not implemented for this system"
+#error "pb_StartTimer: not implemented for this system"
 #endif
 }
 
-void
-pb_StopTimer(struct pb_Timer *timer)
-{
+void pb_StopTimer(struct pb_Timer* timer) {
   pb_Timestamp fini;
 
   if (timer->state != pb_Timer_RUNNING) {
@@ -297,7 +266,7 @@ pb_StopTimer(struct pb_Timer *timer)
     fini = tv.tv_sec * 1000000LL + tv.tv_usec;
   }
 #else
-# error "pb_StopTimer: not implemented for this system"
+#error "pb_StopTimer: not implemented for this system"
 #endif
 
   accumulate_time(&timer->elapsed, timer->init, fini);
@@ -305,9 +274,7 @@ pb_StopTimer(struct pb_Timer *timer)
 }
 
 /* Get the elapsed time in seconds. */
-double
-pb_GetElapsedTime(struct pb_Timer *timer)
-{
+double pb_GetElapsedTime(struct pb_Timer* timer) {
   double ret;
 
   if (timer->state != pb_Timer_STOPPED) {
@@ -317,14 +284,12 @@ pb_GetElapsedTime(struct pb_Timer *timer)
 #if _POSIX_VERSION >= 200112L
   ret = timer->elapsed / 1e6;
 #else
-# error "pb_GetElapsedTime: not implemented for this system"
+#error "pb_GetElapsedTime: not implemented for this system"
 #endif
   return ret;
 }
 
-void
-pb_InitializeTimerSet(struct pb_TimerSet *timers)
-{
+void pb_InitializeTimerSet(struct pb_TimerSet* timers) {
   int n;
 
   timers->current = pb_TimerID_NONE;
@@ -335,9 +300,7 @@ pb_InitializeTimerSet(struct pb_TimerSet *timers)
     pb_ResetTimer(&timers->timers[n]);
 }
 
-void
-pb_SwitchToTimer(struct pb_TimerSet *timers, enum pb_TimerID timer)
-{
+void pb_SwitchToTimer(struct pb_TimerSet* timers, enum pb_TimerID timer) {
   /* Stop the currently running timer */
   if (timers->current != pb_TimerID_NONE) {
     pb_StopTimer(&timers->timers[timers->current]);
@@ -350,34 +313,29 @@ pb_SwitchToTimer(struct pb_TimerSet *timers, enum pb_TimerID timer)
   }
 }
 
-void
-pb_PrintTimerSet(struct pb_TimerSet *timers)
-{
-  struct pb_Timer *t = timers->timers;
+void pb_PrintTimerSet(struct pb_TimerSet* timers) {
+  struct pb_Timer* t = timers->timers;
   /* Presumably every application will have an I/O component */
   printf("IO:      %f\n", pb_GetElapsedTime(&t[pb_TimerID_IO]));
-  if(pb_GetElapsedTime(&t[pb_TimerID_GPU]) != 0)
+  if (pb_GetElapsedTime(&t[pb_TimerID_GPU]) != 0)
     printf("GPU:     %f\n", pb_GetElapsedTime(&t[pb_TimerID_GPU]));
-  if(pb_GetElapsedTime(&t[pb_TimerID_COPY]) != 0)
+  if (pb_GetElapsedTime(&t[pb_TimerID_COPY]) != 0)
     printf("Copy:    %f\n", pb_GetElapsedTime(&t[pb_TimerID_COPY]));
-  if(pb_GetElapsedTime(&t[pb_TimerID_DRIVER]) != 0)
+  if (pb_GetElapsedTime(&t[pb_TimerID_DRIVER]) != 0)
     printf("Driver:  %f\n", pb_GetElapsedTime(&t[pb_TimerID_DRIVER]));
   /* Presumably every application will have a CPU compute component */
   printf("Compute: %f\n", pb_GetElapsedTime(&t[pb_TimerID_COMPUTE]));
-  if(pb_GetElapsedTime(&t[pb_TimerID_OVERLAP]) != 0)
+  if (pb_GetElapsedTime(&t[pb_TimerID_OVERLAP]) != 0)
     printf("CPU/GPU Overlap: %f\n", pb_GetElapsedTime(&t[pb_TimerID_OVERLAP]));
 }
 
-void pb_DestroyTimerSet(struct pb_TimerSet * timers)
-{
+void pb_DestroyTimerSet(struct pb_TimerSet* timers) {
   /* clean up all of the async event markers */
-  struct pb_async_time_marker_list ** event = &(timers->async_markers);
-  while( *event != NULL) {
-    struct pb_async_time_marker_list ** next = &((*event)->next);
+  struct pb_async_time_marker_list** event = &(timers->async_markers);
+  while (*event != NULL) {
+    struct pb_async_time_marker_list** next = &((*event)->next);
     free(*event);
     (*event) = NULL;
     event = next;
   }
 }
-
-

@@ -1187,7 +1187,7 @@ protected:
 
    shader_core_stats *m_stats; 
 
-   FILE * m_va_trace_file; // For VA to PA tracing
+   FILE * m_va_trace_file; // Rachata: For VA to PA tracing
 
    // for debugging
    unsigned long long m_last_inst_gpu_sim_cycle;
@@ -1498,9 +1498,10 @@ public:
         small_tlb2_miss = 0; 
         tlb2_access = 0; 
         tlb2_fault = 0;
+        //TODO: Get this stat
         for(int j = 0; j < 200; j++) //Per core stat
         {
-            tlb_current_concurrent_serviced_core[j] = 0; 
+            tlb_current_concurrent_serviced_core[j] = 0; //TODO
             avail_warp_tlb_min[j] = 99999999;
             avail_warp_tlb_max[j] = 0;
             avail_warp_tlb_avg[j] = 0.0;

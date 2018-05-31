@@ -6,17 +6,23 @@
  *cr
  ***************************************************************************/
 
+#ifndef file_H
+#define file_H
+
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-unsigned short read16u(FILE *f);
-short read16i(FILE *f);
+unsigned short read16u(FILE* f);
+short read16i(FILE* f);
 
-void write32u(FILE *f, unsigned int i);
-void write16u(FILE *f, unsigned short h);
-void write16i(FILE *f, short h);
+void write32u(FILE* f, unsigned int i);
+void write16u(FILE* f, unsigned short h);
+void write16i(FILE* f, short h);
 
 #ifdef __cplusplus
 }
+#endif
 #endif

@@ -1010,7 +1010,7 @@ ptx_instruction::ptx_instruction( int opcode,
                                   const char *source,
                                   const core_config *config ) : warp_inst_t(config)
 {
-   m_fault = false; 
+   m_fault = false; //Rachata: By default, no fault
    m_uid = ++g_num_ptx_inst_uid;
    m_PC = 0;
    m_opcode = opcode;

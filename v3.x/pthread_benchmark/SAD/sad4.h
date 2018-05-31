@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /* Integer ceiling division.  This computes ceil(x / y) */
-#define CEIL(x,y) (((x) + ((y) - 1)) / (y))
+#define CEIL(x, y) (((x) + ((y)-1)) / (y))
 
 /* Fast multiplication by 33 */
 #define TIMES_DIM_POS(x) (((x) << 5) + (x))
@@ -31,7 +31,7 @@
 #define THREADS_H 1
 
 // #define TIMES_THREADS_W(x) (((x) << 1) + (x))
-#define TIMES_THREADS_W(x) ((x) * THREADS_W)
+#define TIMES_THREADS_W(x) ((x)*THREADS_W)
 
 /* This structure is used for vector load/store operations. */
 struct vec8b {
@@ -42,11 +42,8 @@ struct vec8b {
 typedef struct vec8b vec8b;
 
 /* 4-by-4 SAD computation on the device. */
-__global__ void mb_sad_calc(unsigned short*,
-			    unsigned short*,
-			    int, int);
+__global__ void mb_sad_calc(unsigned short*, unsigned short*, int, int);
 
 /* A function to get a reference to the "ref" texture, because sharing
  * of textures between files isn't really supported. */
-texture<unsigned short, 2, cudaReadModeElementType> &get_ref(void);
-
+texture<unsigned short, 2, cudaReadModeElementType>& get_ref(void);

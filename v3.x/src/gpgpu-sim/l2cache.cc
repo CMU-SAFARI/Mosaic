@@ -215,22 +215,13 @@ int memory_partition_unit::global_sub_partition_id_to_local_id(int global_sub_pa
 void memory_partition_unit::dram_cycle() 
 { 
 
-//    printf("In l2cahce.cc, Cycleing DRAM in dram_cycle() from memory_partition_unit\n");
 
     // pop completed memory request from dram and push it to dram-to-L2 queue 
     // of the original sub partition 
     mem_fetch* mf_return = m_dram->return_queue_top();
 
 
-//    printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), got the return mem_fetch\n");
 
-//    if(mf_return && (mf_return->get_parent_tlb_request()!=NULL))
-//    {
-//        printf("In l2cache.cc, Cycleing DRAM in dram_cycle(), return mem_fetch is a TLB-related request for addr %x, level %d\n", mf_return->get_addr(), mf_return->get_tlb_depth_count());
-//        mf_return->done_tlb_req(mf_return->get_parent_tlb_request());
-//    }
-//    // If not
-//    else if (mf_return) {
     if (mf_return) {
         unsigned dest_global_spid = mf_return->get_sub_partition_id(); 
         int dest_spid = global_sub_partition_id_to_local_id(dest_global_spid); 
@@ -282,17 +273,12 @@ void memory_partition_unit::dram_cycle()
         }
     }
 
-//    printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), Done adding any requests to DRAM, before stat collection\n");
     // DRAM latency queue
     if( !m_dram_latency_queue.empty() && ( (gpu_sim_cycle+gpu_tot_sim_cycle) >= m_dram_latency_queue.front().ready_cycle ) && !m_dram->full() ) {
-//        printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), Adding a requests to DRAM, doing a dram.push\n");
         mem_fetch* mf = m_dram_latency_queue.front().req;
         m_dram_latency_queue.pop_front();
-//        printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), Adding a requests to DRAM, grabbing a request to send the latency queue dram.push\n");
         m_dram->push(mf);
-//        printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), Adding a requests to DRAM, after dram.push\n");
     }
-//    printf("In l2cahce.cc, Cycleing DRAM in dram_cycle(), Done adding any requests to DRAM, done with stat collection\n");
 }
 
 void memory_partition_unit::set_done( mem_fetch *mf )
@@ -398,18 +384,11 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
        if ( m_L2cache->access_ready() && !m_L2_icnt_queue->full() ) {
            mem_fetch *mf = m_L2cache->next_access();
 
-           //if(mf->get_tlb_depth_count() > 1){ //Done with this request in L2
            if(mf->get_parent_tlb_request()!=NULL){ //Done with this request in L2
-                      //added TLB-related latency stats
                       m_stats->memlatstat_read_done(mf);
                       mf->done_tlb_req(mf->get_parent_tlb_request());
                       delete mf;
            }
-//           else if(mf->get_tlb_depth_count() == 1){
-//                      mf->get_tlb()->fill(mf->get_original_addr());
-//                      mf->get_tlb()->l2_fill(mf->get_original_addr(),mf->get_appID());
-//                      delete mf;
-//           }
            else if(mf->get_access_type() != L2_WR_ALLOC_R){ // Don't pass write allocate read request back to upper level cache
 
 		mf->set_reply();
@@ -428,21 +407,9 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
     // DRAM to L2 (texture) and icnt (not texture)
     if ( !m_dram_L2_queue->empty() ) {
         mem_fetch *mf = m_dram_L2_queue->top();
-
-//        if(!mf->bypass_L2)
-//        {
-//           m_stats->memlatstat_read_done(mf);
-//           mf->done_tlb_req(mf->get_parent_tlb_request());
-//           m_dram_L2_queue->pop();
-//           delete mf;
-//        }
-
- 
-
         if ( !m_config->m_L2_config.disabled() && m_L2cache->waiting_for_fill(mf) ) {
             if (m_L2cache->fill_port_free()) {
                 mf->set_status(IN_PARTITION_L2_FILL_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
-//                if(!mf->bypass_L2)
                     m_L2cache->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                 m_dram_L2_queue->pop();
             }
@@ -454,7 +421,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
         }
     }
 
-
     // prior L2 misses inserted into m_L2_dram_queue here
     if( !m_config->m_L2_config.disabled() )
        m_L2cache->cycle();
@@ -465,11 +431,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
     {
         mem_fetch * mf = m_tlb_bypassed_dram->front();
         m_icnt_L2_queue->push(mf); //OLD bypassing
-        //if ( m_L2_dram_queue->full() ){
-        //    break;
-        //}
-        //m_L2_dram_queue->push(mf);
-        //mf->set_status(IN_PARTITION_L2_TO_DRAM_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
         mf->set_status(IN_PARTITION_ICNT_TO_L2_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
         m_tlb_bypassed_dram->pop_front();
     }
@@ -481,7 +442,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
     // new L2 texture accesses and/or non-texture accesses
     if ( !m_L2_dram_queue->full() && !m_icnt_L2_queue->empty() ) {
         mem_fetch *mf = m_icnt_L2_queue->top();
-
         if ( !m_config->m_L2_config.disabled() &&
               ( (m_config->m_L2_texure_only && mf->istexture()) || (!m_config->m_L2_texure_only) )
            ) {
@@ -516,22 +476,14 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
                 bool read_sent = was_read_sent(events);
 
                 if ( status == HIT ) {
-//                 if(mf->get_tlb_depth_count() > 1){ //Hit in L2 cache for tlb-related request
                  if(mf->get_parent_tlb_request()!=NULL){ //Hit in L2 cache for tlb-related request
                       m_stats->memlatstat_read_done(mf);
                       mf->done_tlb_req(mf->get_parent_tlb_request());
                       m_icnt_L2_queue->pop(); // Get rid of the content of this queue
                       delete mf;
                  }
-//                 else if(mf->get_tlb_depth_count() == 1){
-//                      mf->get_tlb()->fill(mf->get_original_addr());
-//                      mf->get_tlb()->l2_fill(mf->get_original_addr(),mf->get_appID());
-//                      m_icnt_L2_queue->pop(); // Get rid of the content of this queue
-//                      delete mf;
-//                 }
                  else {
                    App* app = App::get_app(mf->get_appID());
-                   //App* app = App::get_app(App::get_app_id(mf->get_appID()));
                    m_stats->l2_cache_hits++;
                    app->l2_cache_hits_app++;
 
@@ -541,7 +493,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
                         mf->get_tlb()->fill(mf->get_addr(),mf);
                         mf->get_tlb()->l2_fill(mf->get_addr(), mf->get_appID(),mf);
                         mf->get_tlb()->remove_miss_queue(mf->get_addr(), (int)mf->get_appID());
-                        //mf->get_tlb()->remove_miss_queue(mf->get_addr());
                     }
 
                     if( !write_sent ) {
@@ -565,7 +516,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
 
                     if(mf->get_tlb_depth_count() == 0){
                       App* app = App::get_app(mf->get_appID());
-                      //App* app = App::get_app(App::get_app_id(mf->get_appID()));
                       m_stats->l2_cache_misses++;
                       app->l2_cache_misses_app++;
                     }
@@ -885,8 +835,6 @@ bool memory_sub_partition::busy() const
 void memory_sub_partition::push( mem_fetch* req, unsigned long long cycle ) 
 {
     if (req) {
-
-
         m_request_tracker.insert(req);
         m_stats->memlatstat_icnt2mem_pop(req);
         if( req->istexture() ) {
@@ -897,7 +845,7 @@ void memory_sub_partition::push( mem_fetch* req, unsigned long long cycle )
         {
             m_request_tracker.erase(req); // This should not really matter
             m_stats->tlb_bypassed++;
-            App* app = App::get_app(App::get_app_id(req->get_appID()));
+            App* app = App::get_app(req->get_appID());
             app->tlb_bypassed_app++;
             m_stats->tlb_bypassed_core[req->get_sid()]++;
             m_stats->tlb_bypassed_level[req->get_tlb_depth_count()]++;
@@ -959,6 +907,5 @@ void memory_sub_partition::get_L2cache_sub_stats(struct cache_sub_stats &css) co
 
 void memory_sub_partition::visualizer_print( gzFile visualizer_file )
 {
-    // TODO: Add visualizer stats for L2 cache 
 }
 

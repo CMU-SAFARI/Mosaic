@@ -542,7 +542,7 @@ void shader_core_stats::print(FILE* fout) const {
     fprintf(fout, "}\n");
   }
 
-  //  TLB-related stats
+  // Rachata: TLB-related stats
   fprintf(fout, "max_concurrent_tlb_accesses  = %d\n", tlb_concurrent_max);
   for (unsigned i = 0; i < ConfigOptions::n_apps; i++) {
     App* app = App::get_app(App::get_app_id(i));
@@ -1491,7 +1491,7 @@ mem_stage_stall_type ldst_unit::process_cache_access(cache_t* cache, new_addr_ty
     warp_inst_t &inst, std::list<cache_event>& events, mem_fetch *mf,
     enum cache_request_status status) {
 
-  if (m_memory_config->capture_VA && (mf->get_tlb_depth_count() == 0)) // Collect VA trace
+  if (m_memory_config->capture_VA && (mf->get_tlb_depth_count() == 0)) //Rachata: Collect VA trace
       {
     fprintf(m_va_trace_file, "%x %d %d %d %d\n", mf->get_addr(), mf->get_appID(), mf->get_wid(),
         mf->get_sid(), mf->get_tpc());
@@ -1952,7 +1952,7 @@ unsigned ldst_unit::clock_multiplier() const {
  */
 void ldst_unit::cycle() {
 
-  //  Reset epoch based stats periodically
+  // Rachata: Reset epoch based stats periodically
   if ((gpu_sim_cycle + gpu_tot_sim_cycle) % m_memory_config->epoch_length == 0) {
     printf("Resetting epoch statistics at cycle %x\n", gpu_sim_cycle + gpu_tot_sim_cycle);
     if (m_memory_config->epoch_enabled)
@@ -1960,7 +1960,7 @@ void ldst_unit::cycle() {
     m_stats->reset_epoch_stat();
   }
 
-  //  PW-cache, enqueue all pw_cache hit reqs that are done to icnt
+  // Rachata: PW-cache, enqueue all pw_cache hit reqs that are done to icnt
   if (m_memory_config->pw_cache_enable && m_shared_tlb != NULL) {
     m_shared_tlb->remove_pw_cache_lat_queue();
   }
@@ -2009,7 +2009,6 @@ void ldst_unit::cycle() {
           }
         } else {
           if (m_L1D->fill_port_free()) {
-//                       if(mf->get_tlb_depth_count()==0)
             m_L1D->fill(mf, gpu_sim_cycle + gpu_tot_sim_cycle);
             m_response_fifo.pop_front();
 //                       if(mf->get_tlb_depth_count()>0) delete mf;
@@ -3307,7 +3306,6 @@ unsigned simt_core_cluster::issue_block2core() {
     if (m_core[core]->get_not_completed() == 0) {
       if (m_core[core]->get_kernel() == NULL) {
         kernel_info_t *k = m_gpu->select_kernel();
-        // Adwait: FIXME: this is an inefficient way. Fix select_kernel function to pass m_cluster_id and check
         // there first with the stream id.
         if (k) {
           unsigned id = k->get_stream_id();

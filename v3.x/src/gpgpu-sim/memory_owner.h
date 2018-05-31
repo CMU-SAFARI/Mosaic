@@ -233,6 +233,7 @@ public:
    dram_cmd * compact_routine(page * target_huge, page * source_small);
    // Perform compaction (merge page 2 to page 1
    bool compaction(page * page1, page* page2);
+   // TODO: Mass compaction (with multiple pages, can use compaction to with page2 as the small page
 
    // Find a page using PA
    page * find_page_from_pa(new_addr_type pa);
@@ -248,6 +249,7 @@ public:
 
    //Used in coalesce page, copy original page into the free page "free_page"
    void allocate_free_page(page * original_page, page * free_page);
+   // FIXME: Check these three new functions
    // Used as helper functions to coalesce page, when it has to swap pages of other apps out
    page * find_swapped_page(int appID, page * searched_parent_page, page * source_page);
    page * find_free_page_for_coalesce(page * searched_parent_page, page * source_page);
@@ -294,6 +296,7 @@ public:
    unsigned long long get_current_size(int appID); //Return the current allocated DRAM space for appID
 
 
+//FIXME: For some reason, when this is declared inside the mmu, something definitely try to acces the memory region used by mmu
    unsigned long long page_fault_last_service_time;
    std::set<new_addr_type> page_fault_set;
    std::list<page_fault_info*> page_fault_list;
@@ -309,6 +312,7 @@ public:
    bool update_mapping(new_addr_type old_va, new_addr_type old_pa, new_addr_type new_va, new_addr_type new_pa, int appID);
 
 private:
+   //FIXME: Check this
    dram_t ** dram_channel_interface;
 
 };
@@ -342,6 +346,7 @@ public:
    //bool assign_va_to_pa(new_addr_type addr, int appID, bool isRead); //Done
    //bool assign_va_to_pa(mem_fetch * mf); //Done
    
+   // Rachata: These two functions are called in the beginning. Provide a full mapping between virtual and physical address, return the pointer to the root page tables
 
    page_table * get_page_table_root(){return m_pt_root;} //Done
   

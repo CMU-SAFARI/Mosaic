@@ -1,27 +1,219 @@
-pthread_benchmark/MUM/suffix-tree.cpp://FIXME: needs to be reinitialized to zero at the beginning of each round of printing.
-pthread_benchmark/MUM/suffix-tree.cpp://FIXME: hardcoded path buffer, needs to be as long as the longest query in the query set.
-src/gpgpu-sim/icnt_wrapper.cc:         //FIXME: delete the object: may add icnt_done wrapper
-src/gpgpu-sim/l2cache.h:        mf->set_status(IN_PARTITION_L2_TO_DRAM_QUEUE,0/*FIXME*/);
-src/gpgpu-sim/memory_owner.cc:    page * released_page = occupied_pages[appID_target]->front(); //FIXME: fix get_evicted_target when we have page replacement policy. Always assume this app has an occupied page
-src/gpgpu-sim/memory_owner.cc:  //FIXME: Always evict page from app 0, for now -- This is not supported atm
-src/gpgpu-sim/shader.cc:        // Adwait: FIXME: this is an inefficient way. Fix select_kernel function to pass m_cluster_id and check
-src/gpuwattch/logic.cc:			//FIXME: The first area_t = is from updated McAPAT, the second is from our changes (conflict from base)
-src/gpuwattch/logic.cc:			//FIXME: The first area_t = is from updated McPAT. The second is from our McPAT changes. Fix after merge
-src/gpuwattch/cacti/wire.cc:  sense_amp.power.readOp.leakage = 0; //FIXME
-src/gpuwattch/cacti/uca.cc:        (MAX((g_ip->burst_len / g_ip->int_prefetch_w), 1) - 1); //FIXME
-src/gpuwattch/cacti/nuca.cc:      if (minval->min_leakage == 0) minval->min_leakage = 0.1; //FIXME remove this after leakage modeling
-src/gpuwattch/cacti/highradix.cc:  //FIXME change cb power to per input
-src/gpuwattch/cacti/highradix.cc:  dyn_p.V_b_sense = deviceType->Vdd; // FIXME check power calc.
-src/gpuwattch/cacti/router.cc:  dyn_p.V_b_sense = Vdd; // FIXME check power calc.
-src/gpuwattch/cacti/router.cc:  buffer.power.writeOp = buffer.power.readOp; //FIXME
-src/gpuwattch/cacti/Ucache.cc:      //if (minval->min_leakage == 0) minval->min_leakage = 0.1; //FIXME remove this after leakage modeling
-src/gpuwattch/cacti/arbiter.cc:  power.readOp.leakage = (nor1_leak + nor2_leak + not_leak)*Vdd; //FIXME include priority table leakage
-src/intersim2/.svn/pristine/f8/f88e58811f1c40d35b795e6d317579cc2c3668d0.svn-base:	      // FIXME: This check should probably be performed in Evaluate(), 
-src/intersim2/.svn/pristine/42/42777bd5ccda83625dfbf29e7aec13f2e773373a.svn-base:  FIXME: This is broken (note that f->dr is never actually modified).
-src/intersim2/.svn/pristine/42/42777bd5ccda83625dfbf29e7aec13f2e773373a.svn-base:  // FIXME: This is broken.
-src/intersim2/routers/iq_router.cpp:	      // FIXME: This check should probably be performed in Evaluate(), 
-src/intersim2/interconnect_interface.cpp:        //FIXME: if this cannot make sure _partial_packets is empty
-src/intersim2/interconnect_interface.cpp:  //FIXME: should compatible with non-squre number
-src/intersim2/routefunc.cpp:  FIXME: This is broken (note that f->dr is never actually modified).
-src/intersim2/routefunc.cpp:  // FIXME: This is broken.
-src/abstract_hardware_model.cc:                //FIXME: deferred allocation of shared memory should not accumulate across kernel launches
+cuobjdump_to_ptxplus/cuobjdumpInstList.cc://TODO: Some register processing work is supposed to be done here.
+cuobjdump_to_ptxplus/cuobjdumpInstList.cc:	//TODO: support for 64bit vectors and 128bit vectors
+cuobjdump_to_ptxplus/cuobjdumpInstList.cc:	//TODO: does the vector flag ever need to be set?
+cuobjdump_to_ptxplus/cuobjdumpInstList.cc:		// TODO: is this still needed?
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:	/*TODO: print label here*/
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:	/*TODO: print predicate here*/
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:				output(".false"); //TODO: Need to find out what this is.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".bb64"); //TODO: might have to change to .ss64 in the future.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".bb128"); //TODO: might have to change to .ss64 in the future.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".bb64"); //TODO: might have to change to .ss64 in the future.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			//".sfu" is an unknown base modifier, TODO: find out what it is
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			//".x" is an unknown base modifier, TODO: find out what it is
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			//".e" is an unknown base modifier, TODO: find out what it is
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			//".ir" is an unknown base modifier, TODO: find out what it is
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".ff64"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f64"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f64"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".ff64"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".ff64"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".s32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32.u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".u32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".b32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".b32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".b32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".b32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".b32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".s32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(".s32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:				output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:				output(".f32"); //TODO: setting default type modifier but I'm not sure if this is right.
+cuobjdump_to_ptxplus/cuobjdumpInst.cc:			output(int_default_mod()); //TODO: setting default type modifier but I'm not sure if this is right.
+doc/doxygen/gpgpu-sim.doxygen:# The GENERATE_TODOLIST tag can be used to enable (YES) or
+doc/doxygen/gpgpu-sim.doxygen:GENERATE_TODOLIST      = YES
+libcuda/cuobjdump_lexer.c:	/* TODO. We should be able to replace this entire function body
+libcuda/cuda_runtime_api.cc:	// TODO...  manage g_global_mem space?
+libcuda/cuda_runtime_api.cc:	// TODO...  manage g_global_mem space?
+libcuda/cuda_runtime_api.cc://TODO: convert this to C++ streams, will be way cleaner
+libcuda/cuda_runtime_api.cc:	//TODO: Remove temporarily files as per configurations
+libcuda/cuda_runtime_api.cc:	//TODO This function should syncronize if we support Asyn kernel calls
+libopencl/opencl_runtime_api.cc:   // TODO: do something here
+pthread_benchmark/main.cu:    sleep(1); // TODO keep this?
+pthread_benchmark/QTC/QTC.cu:  // TODO - only deal with this size-switch once
+src/gpgpusim_entrypoint.cc:      //TODO: Set the mem_config for mmu object
+src/gpgpu-sim/icnt_wrapper.cc:// TODO: use delegate/boost/c++11<funtion> instead
+src/gpgpu-sim/tlb_request.h://       //TODO
+src/gpgpu-sim/shader.h:        //TODO: Get this stat
+src/gpgpu-sim/shader.h:            tlb_current_concurrent_serviced_core[j] = 0; //TODO
+src/gpgpu-sim/Schedules.cc:  // TODO
+src/gpgpu-sim/App.cc:  // I do not know what the 200 is. It's TLB-related. TODO define a constant.
+src/gpgpu-sim/mem_fetch.cc:        //TODO: Add dynamic policy, check level hit rate vs. shared cache hit rate
+src/gpgpu-sim/mem_latency_stat.cc:  } // TODO remove zeroth entry
+src/gpgpu-sim/tlb_request.cc:////    // TODO: Rachata: rewrite this part
+src/gpgpu-sim/memory_owner.h:   // TODO: Mass compaction (with multiple pages, can use compaction to with page2 as the small page
+src/gpgpu-sim/dram.cc:      } else if (command->command == Channel_copy) //TODO
+src/gpgpu-sim/stat-tool.cc:      assert(0); // TODO: implement fall back so that visualizer can work with snap shots
+src/gpgpu-sim/stat-tool.cc:      assert(0); // TODO: implement fall back so that visualizer can work with snap shots
+src/gpuwattch/logic.cc:  //TODO: the 0.8um process data is used.
+src/gpuwattch/logic.cc:   		    compare_bits += 16 + 8 + 8;//TODO: opcode bits + log(shared resources) + REG TAG BITS-->opcode comparator
+src/gpuwattch/logic.cc://TODO: add inverter and transmission gate base DFF.
+src/gpuwattch/logic.cc:			//TODO: add a check for clockgating enable
+src/gpuwattch/logic.cc:			C_driver_load = 1024*gate_C(load_nmos_width + load_pmos_width, 0, is_dram); //TODO: this number 1024 needs to be revisited
+src/gpuwattch/cacti/mat.cc:  double R_wire_bit_mux_dec_out = num_subarrays_per_row * subarray.num_cols * g_tp.wire_inside_mat.R_per_um * cell.w;//TODO:revisit for FA
+src/gpuwattch/cacti/mat.cc:    	h_addr_datain_wires = (dp.number_addr_bits_mat + dp.number_way_select_signals_mat +     //TODO: revisit
+src/gpuwattch/cacti/mat.cc:			//TODO: this is just for compute plain read/write energy for fa and cam, plain read/write access timing need to be revisited.
+src/gpuwattch/cacti/mat.cc:			// TODO: this 4*cell.h number must be revisited
+src/gpuwattch/cacti/mat.cc:  // TODO: this should be uncommented...
+src/gpuwattch/cacti/mat.cc:	  //TODO: this number should updated using new layout; from the NAND to output NOR should be computed using logical effort
+src/gpuwattch/cacti/mat.cc:  c_intrinsic = Htagbits*(2*drain_C_(Wdummyn, NCH, 2, 1, g_tp.cell_h_def, is_dram)//TODO: the cell_h_def should be revisit
+src/gpuwattch/cacti/mat.cc:                           + log(g_tp.cam.Vbitpre)* (R_ml_precharge * C_ml + R_ml * C_ml / 2);//TODO: latest CAM has sense amps on matchlines too
+src/gpuwattch/cacti/mat.cc:  dynSearchEng += ((c_intrinsic + Cwire + c_gate_load)*(subarray.num_rows +1)) //+ 2*drain_C_(Wdummyn, NCH, 2, 1, g_tp.cell_h_def, is_dram))//TODO: need to be precise
+src/gpuwattch/cacti/mat.cc:  /* TODO: peripheral-- Priority Encoder, usually this is not necessary in processor components*/
+src/gpuwattch/cacti/mat.cc:  double Iport     = cmos_Isub_leakage(g_tp.cam.cell_a_w, 0,  1, nmos, false, true);//TODO: how much is the idle time? just by *2?
+src/gpuwattch/cacti/mat.cc:  power_matchline.searchOp.leakage *= (subarray.num_rows+1) * subarray.num_cols_fa_cam;//TODO:dumy line precise
+src/gpuwattch/cacti/mat.cc:  power_matchline.searchOp.gate_leakage *= (subarray.num_rows+1) * subarray.num_cols_fa_cam;//TODO:dumy line precise
+src/gpuwattch/cacti/mat.cc:  // TODO: no leakage for DRAMs?
+src/gpuwattch/cacti/mat.cc:    double Iport     = cmos_Isub_leakage(g_tp.sram.cell_a_w, 0,  1, nmos,false, true);//TODO: how much is the idle time? just by *2?
+src/gpuwattch/cacti/wire.cc:	//TODO: this should be consistent with the wire_res in technology file
+src/gpuwattch/cacti/wire.cc:	  //TODO: this should be consistent with the wire_res in technology file
+src/gpuwattch/cacti/uca.cc:    temp = delay_inside_mat + bank.mat.delay_wl_reset + bank.mat.delay_bl_restore;//TODO: Sheng: revisit
+src/gpuwattch/cacti/uca.cc:	  temp = MAX(temp, bank.mat.b_mux_predec->delay);//TODO: Sheng revisit whether distinguish cam and ram bitline etc.
+src/gpuwattch/cacti/uca.cc:  // TODO: below should be  avoided.
+src/gpuwattch/cacti/decoder.cc:  // TODO: following delay calculation part can be greatly simplified.
+src/gpuwattch/cacti/decoder.cc:  // TODO: Jung Ho thinks that predecoder block driver locates between decoder and predecoder block.
+src/gpuwattch/cacti/technology.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:        //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/technology.cc:        //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/cacti/const.h:#define VTHMUXNAND     0.548  // TODO : this constant must be revisited
+src/gpuwattch/cacti/cacti_interface.cc:  // waiting for the way-select signal --TODO add the corresponding
+src/gpuwattch/cacti/nuca.cc:#define LATCH_DELAY 28e-12 /* latch delay in s (later should use FO4 TODO) */
+src/gpuwattch/cacti/nuca.cc:  //TODO: convert latch delay to FO4 */
+src/gpuwattch/cacti/basic_circuit.cc:    // TODO : w_folded_tr must come from Component::compute_gate_area()
+src/gpuwattch/cacti/basic_circuit.cc:	    				Ig_on += nmos_leak*combination(fanin, num_on_tx)*num_on_tx/2;//TODO: this is a approximation now, a precise computation will be very complicated.
+src/gpuwattch/cacti/basic_circuit.cc:    				  Ig_on += pmos_leak*combination(fanin, num_on_tx)*num_on_tx/2;//TODO: this is a approximation now, a precise computation will be very complicated.
+src/gpuwattch/cacti/basic_circuit.cc:	    		Ig_on += nmos_leak*combination(fanin, num_on_tx)*num_on_tx/2;//TODO: this is a approximation now, a precise computation will be very complicated.
+src/gpuwattch/cacti/htree2.cc:  max_unpipelined_link_delay = 0; //TODO
+src/gpuwattch/cacti/router.cc:  FREQUENCY=5; // move this to config file --TODO
+src/gpuwattch/cacti/Ucache.cc:  { //For the final solution, populate the ptr_results data structure  -- TODO: copy only necessary variables
+src/gpuwattch/cacti/parameter.cc:		  tag_num_r_subarray = (int)ceil(capacity_per_die / (g_ip->nbanks*tagbits/8.0 * Ndbl));//TODO: error check input of tagbits and blocksize //TODO: for pure CAM, g_ip->block should be number of entries.
+src/gpuwattch/cacti/parameter.cc:			  tagbits = ADDRESS_BITS + EXTRA_TAG_BITS - _log2(g_ip->block_sz);//TODO: should be the page_offset=log2(page size), but this info is not avail with CACTI, for McPAT this is no problem.
+src/gpuwattch/cacti/parameter.cc:	  double Cbitrow_drain_cap = drain_C_(g_tp.cam.cell_a_w, NCH, 1, 0, cam_cell.w, false, true) / 2.0;//TODO: comment out these two lines
+src/gpuwattch/cacti/parameter.cc:  //TODO:the i/o for subbank is not necessary and should be removed.
+src/gpuwattch/cacti/parameter.cc:		  num_so_b_subbank = 8 * g_ip->block_sz;//TODO:internal perfetch should be considered also for fa
+src/gpuwattch/cacti/parameter.cc:	  num_act_mats_hor_dir_sl = num_mats_h_dir;//TODO: this is unnecessary, since search op, num_mats is used
+src/gpuwattch/cacti/parameter.cc://  if (is_tag == false && g_ip->is_cache == true && !fully_assoc && !pure_cam && //TODO: TODO burst transfer should also apply to RAM arrays
+src/gpuwattch/cacti/parameter.cc:  number_subbanks_decode = _log2(number_subbanks);//TODO: add log2(num_subarray_per_bank) to FA/CAM
+src/gpuwattch/cacti/parameter.cc:		  num_di_b_bank_per_port = g_ip->out_w + tagbits;//TODO: out_w or block_sz?
+src/gpuwattch/cacti/mat.h:    // TODO: clean up pointers and powerDefs below
+src/gpuwattch/cacti/mat.h:    powerDef power_fa_cam;  // TODO: leakage power is not computed yet
+src/gpuwattch/cacti/io.cc:    int REPEATERS_IN_HTREE_SEGMENTS_in,//TODO for now only wires with repeaters are supported
+src/gpuwattch/cacti/io.cc:    nuca_cache_sz=0; // TODO
+src/gpuwattch/cacti/io.cc://TODO: revisit this. This is an important feature. Sheng thought this should be used
+src/gpuwattch/cacti/io.cc://TODO: revisit this
+src/gpuwattch/cacti/io.cc:  //TODO: the csv output should remain
+src/gpuwattch/cacti/router.h:	double FREQUENCY; // move this to config file --TODO
+src/gpuwattch/cacti/cacti_interface.h:    unsigned int nuca_cache_sz; // TODO
+src/gpuwattch/cacti/cacti_interface.h:    int REPEATERS_IN_HTREE_SEGMENTS_in,//TODO for now only wires with repeaters are supported
+src/gpuwattch/core.cc:      //TODO: X86 decoder should decode the inst in cyclic mode under the control of squencer.
+src/gpuwattch/core.cc:	 * TODO:Data Width need to be computed more precisely	 *
+src/gpuwattch/core.cc:    		tag	 = 2*coredynp.phy_freg_width;// TODO: each time only half of the tag is compared
+src/gpuwattch/core.cc:     //TODO: Check if this line should be changed to
+src/gpuwattch/core.cc:		interface_ip.num_rw_ports    = 1;//TODO
+src/gpuwattch/core.cc:		idcl  = new dep_resource_conflict_check(&interface_ip,coredynp,coredynp.phy_ireg_width);//TODO:Separate 2 sections See TR
+src/gpuwattch/core.cc:			interface_ip.num_search_ports= coredynp.commitW;//TODO
+src/gpuwattch/core.cc:			interface_ip.num_rd_ports    = XML->sys.core[ithCore].decode_width;//0;TODO
+src/gpuwattch/core.cc:			interface_ip.num_rd_ports    = XML->sys.core[ithCore].decode_width;//0;TODO;
+src/gpuwattch/core.cc:		interface_ip.num_rw_ports    = 1;//TODO
+src/gpuwattch/core.cc:		idcl  = new dep_resource_conflict_check(&interface_ip,coredynp,coredynp.phy_ireg_width);//TODO:Separate 2 sections See TR
+src/gpuwattch/core.cc:	idcl  = new dep_resource_conflict_check(&interface_ip,coredynp,coredynp.phy_ireg_width);//TODO:Separate 2 sections See TR
+src/gpuwattch/core.cc:				 * TODO: ROB duty_cycle need to be revisited
+src/gpuwattch/core.cc:    	IRF->stats_t.readAc.access  = (XML->sys.core[ithCore].int_regfile_reads/32)*(2*4);///1.5;//TODO: no diff on archi and phy
+src/gpuwattch/core.cc:    	OPC->stats_t.readAc.access  = (XML->sys.core[ithCore].int_regfile_reads)/*/1.5*/+XML->sys.core[ithCore].non_rf_operands;///1.5;//TODO: no diff on archi and phy
+src/gpuwattch/logic.h:	void leakage_feedback(double temperature); // TODO	
+src/gpuwattch/interconnect.cc:  max_unpipelined_link_delay = 0; //TODO
+src/gpuwattch/interconnect.cc:   * TODO: Add wiring option from semi-global to global automatically
+src/gpuwattch/interconnect.cc:	   * TODO: Add pipe regs power, area, and timing;
+src/gpuwattch/processor.cc::XML(XML_interface),//TODO: using one global copy may have problems.
+src/gpuwattch/processor.cc:           exClockRate=cores[0]->clockRate*2;//TODO; get from XML file
+src/gpuwattch/processor.cc:           exClockRate=cores[0]->clockRate;//TODO; get from XML file
+src/gpuwattch/gpgpu_sim_wrapper.cc:	// TODO: coalescing logic is counted as part of the caches power (this is not valid for no-caches architectures)
+src/gpuwattch/gpgpu_sim_wrapper.cc:	// TODO: coalescing logic is counted as part of the caches power (this is not valid for no-caches architectures)
+src/gpuwattch/gpgpu_sim_wrapper.cc:	// TODO: coalescing logic is counted as part of the caches power (this is not valid for no-caches architectures)
+src/gpuwattch/sharedcache.cc:  //directory Now assuming one directory per bank, TODO:should change it later
+src/gpuwattch/sharedcache.cc:  tag							   = debug?51:XML->sys.physical_address_width + EXTRA_TAG_BITS;//TODO: a little bit over estimate
+src/gpuwattch/sharedcache.cc:  tag							   = debug?51:XML->sys.physical_address_width + EXTRA_TAG_BITS;//TODO: a little bit over estimate
+src/gpuwattch/sharedcache.cc://  //llCache.maxPower *=  scktRatio; //TODO: this calculation should be self-contained
+src/gpuwattch/memoryctrl.cc:		  //TODO merge this into undifferentiated core.PHY only achieves square root of the ideal scaling.
+src/gpuwattch/memoryctrl.cc:		  area.set_area((6.4323*log(mcp.peakDataTransferRate*2)-48.134)*mcp.dataBusWidth/128.0*(l_ip.F_sz_um/0.09)*mcp.num_channels*1e6/2);//TODO:/2
+src/gpuwattch/memoryctrl.cc:   * TODO: add docodeing/mux stage to steer memory requests to different channels.
+src/gpuwattch/memoryctrl.cc:			//TODO: Change 0 to ithCore and move to LSU (Syed)
+src/gpuwattch/memoryctrl.cc:			//TODO: Do these accesses represent coalesced accesses?
+src/gpuwattch/memoryctrl.cc:  //+++++++++Transaction engine +++++++++++++++++ ////TODO needs better numbers, Run the RTL code from OpenSparc.
+src/gpuwattch/memoryctrl.cc://  //++++++++++++++PHY ++++++++++++++++++++++++++ //TODO needs better numbers
+src/gpuwattch/memoryctrl.cc:	  //+++++++++Transaction engine +++++++++++++++++ ////TODO needs better numbers, Run the RTL code from OpenSparc.
+src/gpuwattch/memoryctrl.cc:	  //++++++++++++++PHY ++++++++++++++++++++++++++ //TODO needs better numbers
+src/gpuwattch/memoryctrl.cc://		//+++++++++Transaction engine +++++++++++++++++ ////TODO needs better numbers, Run the RTL code from OpenSparc.
+src/gpuwattch/memoryctrl.cc://		//++++++++++++++PHY ++++++++++++++++++++++++++ //TODO needs better numbers
+src/gpuwattch/technology_xeon_core.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/technology_xeon_core.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/technology_xeon_core.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/technology_xeon_core.cc:      //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/technology_xeon_core.cc:        //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/technology_xeon_core.cc:        //CAM cell properties //TODO: data need to be revisited
+src/gpuwattch/processor.h://TODO: Jingwen this should only compute for one time?
+src/gpuwattch/processor.h:		//if mcp.type ==1 TODO: add this check here
+src/gpuwattch/processor.h://TODO: Jingwen nocs stats should not be here
+src/gpuwattch/processor.h:		//if mcp.type ==1 TODO: add this check here
+src/gpuwattch/processor.h://TODO: Jingwen nocs stats should not be here
+src/gpuwattch/array.cc:				//TODO: whether checking the partial satisfied results too, or just change the mark???
+src/gpuwattch/array.cc:					//TODO: since results are reordered results and l_ip may miss match. Therefore, the final output spread sheets may show the miss match.
+src/intersim2/interconnect_interface.hpp://TODO: fixed_lat_icnt, add class support? support for signle network
+src/intersim2/lex.yy.c:	/* TODO. We should be able to replace this entire function body
+src/intersim2/interconnect_interface.cpp:  // TODO: Should we init _round_robin_turn?
+src/intersim2/interconnect_interface.cpp:  //TODO: move to _IssuePacket
+src/intersim2/interconnect_interface.cpp:  //TODO: create a Inject and wrap _IssuePacket and _GeneratePacket
+src/intersim2/interconnect_interface.cpp:  //TODO: Remove mem_fetch to reduce dependency
+src/intersim2/interconnect_interface.cpp:  //TODO: _include_queuing ?
+src/intersim2/gputrafficmanager.hpp:  // TODO: if it is not good...
+src/intersim2/gputrafficmanager.cpp://TODO: Remove stype?
+src/cuda-sim/ptx_ir.cc:      // TODO - remove the symbol_table* from type_info
+src/cuda-sim/ptx_ir.cc:           m_space_spec = op.get_addr_space(); // TODO: can have more than one memory space for ptxplus (g8x) inst
+src/cuda-sim/ptx_parser.cc:  //TODO: Not sure if I'm going to use this for storing to two destinations or not.
+src/cuda-sim/ptx_parser.cc:/*TODO: add other memory locations*/
+src/cuda-sim/instructions.cc:   // TODO: add implementation

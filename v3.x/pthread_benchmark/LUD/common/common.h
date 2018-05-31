@@ -8,52 +8,38 @@
 extern "C" {
 #endif
 
+#define GET_RAND_FP ((float)rand() / ((float)(RAND_MAX) + (float)(1)))
 
+#define MIN_C(i, j) ((i) < (j) ? (i) : (j))
 
-#define GET_RAND_FP ( (float)rand() /   \
-                     ((float)(RAND_MAX)+(float)(1)) )
+typedef enum _FUNC_RETURN_CODE { RET_SUCCESS, RET_FAILURE } func_ret_t;
 
-#define MIN_C(i,j) ((i)<(j) ? (i) : (j))
+typedef struct __stopwatch_t {
+  struct timeval begin;
+  struct timeval end;
+} stopwatch;
 
-typedef enum _FUNC_RETURN_CODE {
-    RET_SUCCESS,
-    RET_FAILURE
-}func_ret_t;
+void stopwatch_start(stopwatch* sw);
 
-typedef struct __stopwatch_t{
-    struct timeval begin;
-    struct timeval end;
-}stopwatch;
+void stopwatch_stop(stopwatch* sw);
 
-void 
-stopwatch_start(stopwatch *sw);
+double get_interval_by_sec(stopwatch* sw);
 
-void 
-stopwatch_stop (stopwatch *sw);
+int get_interval_by_usec(stopwatch* sw);
 
-double 
-get_interval_by_sec(stopwatch *sw);
+func_ret_t create_matrix_from_file(float** mp,
+                                   const char* filename,
+                                   int* size_p);
 
-int 
-get_interval_by_usec(stopwatch *sw);
+func_ret_t create_matrix_from_random(float** mp, int size);
 
-func_ret_t
-create_matrix_from_file(float **mp, const char *filename, int *size_p);
+func_ret_t lud_verify(float* m, float* lu, int size);
 
-func_ret_t
-create_matrix_from_random(float **mp, int size);
+void matrix_multiply(float* inputa, float* inputb, float* output, int size);
 
-func_ret_t
-lud_verify(float *m, float *lu, int size);
+void matrix_duplicate(float* src, float** dst, int matrix_dim);
 
-void
-matrix_multiply(float *inputa, float *inputb, float *output, int size);
-
-void
-matrix_duplicate(float *src, float **dst, int matrix_dim);
-
-void
-print_matrix(float *mm, int matrix_dim);
+void print_matrix(float* mm, int matrix_dim);
 
 #ifdef __cplusplus
 }

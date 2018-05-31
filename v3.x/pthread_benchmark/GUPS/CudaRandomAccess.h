@@ -21,14 +21,13 @@
 
 #define TOTAL_MEM (1 << 22);
 
-
-//typedef uint64_t u64Int;
-//typedef int64_t s64Int;
+// typedef uint64_t u64Int;
+// typedef int64_t s64Int;
 typedef unsigned long long u64Int;
 typedef long long s64Int;
 
 typedef struct {
-  char *outFname;
+  char* outFname;
   u64Int HPLMaxProcMem;
 } Params_t;
 
@@ -40,7 +39,12 @@ typedef struct {
 
 extern u64Int HPCC_starts(s64Int);
 
-extern u64Int *HPCC_Table;
+extern u64Int* HPCC_Table;
 
-extern int HPCC_RandomAccess(Params_t *params, int doIO, double *GUPs, int *failure, cudaStream_t stream_app, pthread_mutex_t *mutexapp, bool flag);
-
+extern int HPCC_RandomAccess(Params_t* params,
+                             int doIO,
+                             double* GUPs,
+                             int* failure,
+                             cudaStream_t stream_app,
+                             pthread_mutex_t* mutexapp,
+                             bool flag);

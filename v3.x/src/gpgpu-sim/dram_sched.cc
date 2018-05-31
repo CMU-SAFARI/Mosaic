@@ -281,10 +281,6 @@ void frfcfs_scheduler::add_req(dram_req_t *req) {
     if (set_req_prio_criteria(req->data) == 2) //Special priority (higher than high)
         {
       m_stats->DRAM_special_prio++;
-//         if(m_queue_special[req->bk].empty())
-//         {
-//             m_high_pq_wait_timestamp = gpu_sim_cycle;
-//         }
       m_queue_special[req->bk].push_front(req);
       std::list<dram_req_t*>::iterator ptr = m_queue_special[req->bk].begin();
       m_bins[req->bk][req->row].push_front(ptr); //newest reqs to the front
@@ -329,6 +325,7 @@ void frfcfs_scheduler::data_collection(unsigned int bank) {
   app->num_activates_[m_dram->id][bank]++;
 }
 
+
 // Mechanism to batch requests in the high prio queue, set m_high_prio_drain to false to batch, true to drain batched requests
 void frfcfs_scheduler::check_high_queue_drain() {
   if (m_high_pq_wait_timestamp + m_config->max_DRAM_high_prio_wait < gpu_sim_cycle) {
@@ -338,7 +335,7 @@ void frfcfs_scheduler::check_high_queue_drain() {
   }
 }
 
-// Pick a request from the request buffers. Can overwrite FR-FCFS policy
+// Rachata: Pick a request from the request buffers. Can overwrite FR-FCFS policy
 dram_req_t *frfcfs_scheduler::pick(std::list<dram_req_t*> * buffers, unsigned curr_row,
     unsigned bank) {
   //FR-FCFS

@@ -184,10 +184,10 @@ gpgpu_sim *gpgpu_ptx_sim_init_perf()
 
    g_the_gpu_config.init();
 
-   // MMU, interface to both cuda-sim and gpgpu-sim
    printf("Initialing GPGPU MMU. Called by gpgpu-sim entrypoint\n");
    if(g_mmu == NULL){
       g_mmu = new mmu();
+      //TODO: Set the mem_config for mmu object
       g_mmu->init(g_the_gpu_config.get_mem_config());
    }
    //g_mmu = new mmu(g_the_gpu_config.get_mem_config());

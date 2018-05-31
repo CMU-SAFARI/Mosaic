@@ -23,35 +23,32 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "../../benchmark_common.h"
-#include "LUD/cuda/lud_kernel.cu"
-#include "LUD/common/common.h"
+#include "lud_kernel.cu"
+#include "../common/common.h"
 
 static int do_verify = 0;
 
 /*static struct option long_options[] = {
-       name, has_arg, flag, val 
+       name, has_arg, flag, val
       {"input", 1, NULL, 'i'},
       {"size", 1, NULL, 's'},
       {"verify", 0, NULL, 'v'},
       {0,0,0,0}
 };*/
 
-extern void
-lud_cuda(float *d_m, int matrix_dim,cudaStream_t stream_app);
+extern void lud_cuda(float* d_m, int matrix_dim, cudaStream_t stream_app);
 
-
-//int
-//main ( int argc, char *argv[] )
-int main_LUD(cudaStream_t stream_app, pthread_mutex_t *mutexapp, bool flag)
-{
+// int
+// main ( int argc, char *argv[] )
+int main_LUD(cudaStream_t stream_app, pthread_mutex_t* mutexapp, bool flag) {
   int matrix_dim = 32; /* default matrix_dim */
-  //int opt, option_index=0;
+  // int opt, option_index=0;
   func_ret_t ret;
-  const char *input_file = NULL;
+  const char* input_file = NULL;
   float *m, *d_m, *mm;
   stopwatch sw;
 
-  /*while ((opt = getopt_long(argc, argv, "::vs:i:", 
+  /*while ((opt = getopt_long(argc, argv, "::vs:i:",
                             long_options, &option_index)) != -1 ) {
       switch(opt){
         case 'i':
@@ -63,7 +60,8 @@ int main_LUD(cudaStream_t stream_app, pthread_mutex_t *mutexapp, bool flag)
         case 's':
           matrix_dim = atoi(optarg);
           fprintf(stderr, "Currently not supported, use -i instead\n");
-          fprintf(stderr, "Usage: %s [-v] [-s matrix_size|-i input_file]\n", argv[0]);
+          fprintf(stderr, "Usage: %s [-v] [-s matrix_size|-i input_file]\n",
+  argv[0]);
           exit(EXIT_FAILURE);
         case '?':
           fprintf(stderr, "invalid option\n");
@@ -77,68 +75,67 @@ int main_LUD(cudaStream_t stream_app, pthread_mutex_t *mutexapp, bool flag)
           exit(EXIT_FAILURE);
       }
   }
-  
+
   if ( (optind < argc) || (optind == 1)) {
-      fprintf(stderr, "Usage: %s [-v] [-s matrix_size|-i input_file]\n", argv[0]);
+      fprintf(stderr, "Usage: %s [-v] [-s matrix_size|-i input_file]\n",
+  argv[0]);
       exit(EXIT_FAILURE);
   }*/
-  
+
   input_file = (char*)"LUD/256.dat";
 
   if (input_file) {
-      printf("Reading matrix from file %s\n", input_file);
-      ret = create_matrix_from_file(&m, input_file, &matrix_dim);
-      if (ret != RET_SUCCESS) {
-          m = NULL;
-          fprintf(stderr, "error create matrix from file %s\n", input_file);
-          exit(EXIT_FAILURE);
-      }
+    printf("Reading matrix from file %s\n", input_file);
+    ret = create_matrix_from_file(&m, input_file, &matrix_dim);
+    if (ret != RET_SUCCESS) {
+      m = NULL;
+      fprintf(stderr, "error create matrix from file %s\n", input_file);
+      exit(EXIT_FAILURE);
+    }
   } else {
     printf("No input file specified!\n");
     exit(EXIT_FAILURE);
   }
 
-  if (do_verify){
+  if (do_verify) {
     printf("Before LUD\n");
     print_matrix(m, matrix_dim);
     matrix_duplicate(m, &mm, matrix_dim);
   }
 
-  cudaMalloc((void**)&d_m, 
-             matrix_dim*matrix_dim*sizeof(float));
+  cudaMalloc((void**)&d_m, matrix_dim * matrix_dim * sizeof(float));
 
   /* beginning of timing point */
   stopwatch_start(&sw);
-  cudaMemcpyAsync(d_m, m, matrix_dim*matrix_dim*sizeof(float), 
-      cudaMemcpyHostToDevice, stream_app);
+  cudaMemcpyAsync(d_m, m, matrix_dim * matrix_dim * sizeof(float),
+                  cudaMemcpyHostToDevice, stream_app);
 
   lud_cuda(d_m, matrix_dim, stream_app);
-  
-  pthread_mutex_unlock (mutexapp);
-  if(flag)
-	cutilSafeCall( cudaStreamSynchronize(stream_app) );
 
-  cudaMemcpyAsync(m, d_m, matrix_dim*matrix_dim*sizeof(float), 
-      cudaMemcpyDeviceToHost, stream_app);
-	  
-	  if(flag)
-		cutilSafeCall( cudaStreamSynchronize(stream_app) );
+  pthread_mutex_unlock(mutexapp);
+  if (flag)
+    cutilSafeCall(cudaStreamSynchronize(stream_app));
+
+  cudaMemcpyAsync(m, d_m, matrix_dim * matrix_dim * sizeof(float),
+                  cudaMemcpyDeviceToHost, stream_app);
+
+  if (flag)
+    cutilSafeCall(cudaStreamSynchronize(stream_app));
   /* end of timing point */
   stopwatch_stop(&sw);
-  printf("Time consumed(ms): %lf\n", 1000*get_interval_by_sec(&sw));
+  printf("Time consumed(ms): %lf\n", 1000 * get_interval_by_sec(&sw));
 
   cudaFree(d_m);
 
-
-  if (do_verify){
+  if (do_verify) {
     printf("After LUD\n");
     print_matrix(m, matrix_dim);
     printf(">>>Verify<<<<\n");
-    lud_verify(mm, m, matrix_dim); 
+    lud_verify(mm, m, matrix_dim);
     free(mm);
   }
 
   free(m);
 
   return 0;
-}				/* ----------  end of function main  ---------- */
+} /* ----------  end of function main  ---------- */

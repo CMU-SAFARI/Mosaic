@@ -262,7 +262,7 @@ public:
     virtual void push(mem_fetch *mf) 
     {
         //This is called by m_memport->push in baseline cache cycle for L2
-        mf->set_status(IN_PARTITION_L2_TO_DRAM_QUEUE,0);
+        mf->set_status(IN_PARTITION_L2_TO_DRAM_QUEUE,0/*FIXME*/);
         m_unit->m_L2_dram_queue->push(mf);
     }
 private:

@@ -14,28 +14,22 @@ const unsigned char DNA_T = 'D';
 const unsigned char DNA_S = 'E';
 
 // 4 bytes
-struct TextureAddress
-{
-  union
-  {
+struct TextureAddress {
+  union {
     unsigned int data;
 
-    struct
-    {
-	  unsigned short x;
+    struct {
+      unsigned short x;
       unsigned short y;
     };
   };
 };
 
 // Store the start, end coordinate of node, and $link in 1 pixel
-struct PixelOfNode
-{
-  union
-  {
+struct PixelOfNode {
+  union {
     ulong4 data;
-    struct
-    {
+    struct {
       int start;
       int end;
       TextureAddress childD;
@@ -45,19 +39,16 @@ struct PixelOfNode
 };
 
 // Store the ACGT links in 1 pixel
-struct PixelOfChildren
-{
-  union
-  {
+struct PixelOfChildren {
+  union {
     ulong4 data;
-	TextureAddress children[4];
+    TextureAddress children[4];
   };
 };
 
-#define FORWARD   0x0000
-#define REVERSE   0x8000
-#define FRMASK    0x8000
-#define FRUMASK   0x7FFF
-
+#define FORWARD 0x0000
+#define REVERSE 0x8000
+#define FRMASK 0x8000
+#define FRUMASK 0x7FFF
 
 #endif

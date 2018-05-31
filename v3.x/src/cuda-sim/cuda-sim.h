@@ -91,8 +91,9 @@ class Hub {
    uint64_t start_vaddr; // starting virtual address for allocations for each application, default is 0
    std::map<uint64_t, VMM*> vmms;
    PMM* pmm;
-   // tp is size of memory in base pages, tf is the target fragmentation %
-   Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv, float tf, uint64_t fppf); 
+   Hub(uint64_t rmt, uint64_t ps, uint64_t hps, uint64_t tp, uint64_t sv); // tp is size of memory in base pages
+   void pre_populate_DRAM();
+   //void paging(uint64_t vaddr, uint64_t paddr, uint64_t size);
    void* allocate(uint64_t ID, uint64_t bytes);
    void free(uint64_t ID, void* addr);
    void print();

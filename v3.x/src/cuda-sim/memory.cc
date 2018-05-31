@@ -59,13 +59,8 @@ template<unsigned BSIZE> memory_space_impl<BSIZE>::memory_space_impl( std::strin
 
 template<unsigned BSIZE> void memory_space_impl<BSIZE>::write( mem_addr_t addr, size_t length, const void *data, class ptx_thread_info *thd, const ptx_instruction *pI, int appID)
 {
-   //bool nofault = true;
-   //nofault = m_page_manager->check_fault_write(addr,length,appID,memory_space_ID);
 
    mem_addr_t index = addr >> m_log2_block_size;
-   //m_mmu->get_pa((new_addr_type)(index<<m_log2_block_size),appID,false);
-   //m_mmu->assign_va_to_pa((new_addr_type)(index<<m_log2_block_size),appID,false);
-
    if ( (addr+length) <= (index+1)*BSIZE ) {
       // fast route for intra-block access 
       unsigned offset = addr & (BSIZE-1);

@@ -59,6 +59,7 @@ tlb_tag_array::tlb_tag_array(const memory_config * config, shader_core_stats * s
   tag_array = new std::list<new_addr_type>;
   large_tag_array = new std::list<new_addr_type>;
   tlb_level = 0;
+//    m_next_tlb = new tlb_tag_array(this,tlb_level);
   m_shared_tlb = shared_tlb;
   m_mem_stats = shared_tlb->get_mem_stat();
   if (shared_tlb != NULL)
@@ -122,6 +123,8 @@ tlb_tag_array::tlb_tag_array(const memory_config * config, shader_core_stats * s
     memory_partition_unit ** memory_partition) {
 
   ready_cycle = 0;
+
+  m_shared_tlb = NULL;
 
   m_memory_partition = memory_partition;
 
@@ -464,19 +467,9 @@ bool tlb_tag_array::pw_cache_access(mem_fetch *mf)
     }
 }
 
-//tlb_tag_array::tlb_tag_array( const memory_config  *config,
-//                      int core_id,
-//                      int type_id, memory_stats_t * stat)
-//    : m_config( config )
-//{
-//    //assert( m_config->m_write_policy == READ_ONLY ); Old assert
-//    m_lines = new tlb_entry_t[ config.get_num_TLB_lines()];
-//    m_stat = stat;
-//    init( core_id, type_id );
-//}
 
 
-// Given an access, get the addess of the localtion of the tlb
+// Rachata: Given an access, get the addess of the localtion of the tlb
 new_addr_type tlb_tag_array::get_tlbreq_addr(mem_fetch * mf)
 {
     //return root->parse_pa(mf);
@@ -485,6 +478,7 @@ new_addr_type tlb_tag_array::get_tlbreq_addr(mem_fetch * mf)
     if(COALESCE_DEBUG) printf("Generating TLBreq for mf = %x, level = %d, return addr = %x\n", mf->get_addr(), mf->get_tlb_depth_count(), return_addr);
     return return_addr;
 }
+
 
 
 // Check the size of new_addr_type and do we want warpID here as well? More policies
@@ -699,7 +693,7 @@ void tlb_tag_array::shift_page_stats()
 }
 
 
-// demotion routine, called by the mmu
+// Rachata:: New, demotion routine, called by the mmu
 bool tlb_tag_array::demote_page(new_addr_type va, int appID)
 {
     unsigned large_page_size;
@@ -726,7 +720,7 @@ bool tlb_tag_array::demote_page(new_addr_type va, int appID)
 }
 
 
-//This is no longer needed with the new allocator. Page stats are now collected through mmu
+//Rachata: This is no longer needed with Josh's allocator. Page stats are now collected through mmu
 void tlb_tag_array::update_page_stats(mem_fetch * mf)
 {
     unsigned large_page_size;
@@ -737,20 +731,7 @@ void tlb_tag_array::update_page_stats(mem_fetch * mf)
 
     new_addr_type key;
 
-//    //shift all page stats if it has not been updated for a while
-//    if( (last_shifted_page_stat + m_config->page_stat_update_cycle) < (gpu_sim_cycle + gpu_tot_sim_cycle))
-//    {
-//        shift_page_stats(); //All saturation counter perform the shifting
-//        last_shifted_page_stat = ((gpu_sim_cycle + gpu_tot_sim_cycle) / m_config->page_stat_update_cycle) * m_config->page_stat_update_cycle; //Set the new timer
-//    }
-
-
-//    if(COALESCE_DEBUG) printf("Updating page stats for mf VA = %x, PA = %x, at cycle = %lld\n", mf->get_addr(), m_page_manager->get_pa(mf->get_addr(),mf->get_appID())/large_page_size,gpu_sim_cycle + gpu_tot_sim_cycle);
-
-    //If use VA
     key = mf->get_addr()/large_page_size;
-    //If use PA. Assume that this page exist
-    //key = m_page_manager->get_pa(mf->get_addr(), mf->get_appID())/large_page_size;
 
     if(COALESCE_DEBUG) printf("Update page statistics for page %x (va = %x), page size = %d\n", key, mf->get_addr()/large_page_size,large_page_size);
 
@@ -943,7 +924,6 @@ int tlb_tag_array::promotion(new_addr_type va, int appID) {
   promoted_pages[appID]->insert(
         (base_addr * (*(m_config->page_sizes))[m_config->page_sizes->size() - 2]));
 
-//    invalidate_entries(appID, base_addr); //Not needed
 
   if (MERGE_DEBUG || COALESCE_DEBUG || COALESCE_DEBUG_SHORT) {
     printf("Current content of the promoted pages for app %d are: {", appID);
@@ -1012,6 +992,7 @@ void tlb_tag_array::resize_page(int appID, new_addr_type base_addr, new_addr_typ
 //Use by both L1 TLBs and L2 TLB
 void tlb_tag_array::invalidate_entries(int appID, new_addr_type base_entry)
 {
+    if((gpu_sim_cycle + gpu_tot_sim_cycle) == 0 ) return;
     if(INVALIDATION_DEBUG) printf("During invalidation for %x\n",base_entry);
     if(m_shared_tlb == NULL) //If L2 TLB
     {
@@ -1053,10 +1034,11 @@ void tlb_tag_array::invalidate_entries(int appID, new_addr_type base_entry)
         for(int i = 0 ; i < (gpu_sms); i++)
         {
             // Only invalidate SMs that belong to appID
-            unsigned this_appID;
+            unsigned this_appID = App::get_app_id_from_sm(i);
+
             // Get AppID for each core i
-            int group_size = gpu_sms / m_config->gpgpu_num_groups;
-            this_appID = i / group_size;
+            //int group_size = gpu_sms / m_config->gpgpu_num_groups;
+            //this_appID = i / group_size;
 
             if(INVALIDATION_DEBUG) printf("Figure out if this core need invalidation. Core ID = %d, app = %d, invalidating app = %d\n",i, this_appID, appID);
 
@@ -1352,10 +1334,10 @@ void tlb_tag_array::update_L1_ready_cycle(int appID, unsigned long long time)
 {
     for(int i=0;i<gpu_sms;i++)
     {
-        unsigned this_appID;
+        unsigned this_appID = App::get_app_id_from_sm(i);
         // Get AppID for each core
-        int group_size = gpu_sms / m_config->gpgpu_num_groups;
-        this_appID = m_core_id / group_size;
+        //int group_size = gpu_sms / m_config->gpgpu_num_groups;
+        //this_appID = App::sm_to_app(i);
         if(this_appID == appID ) //Check if this L1 slice belong to this app
         {
             L1_ready_cycle[i] = gpu_sim_cycle+gpu_tot_sim_cycle+m_config->tlb_L1_flush_cycles;
@@ -1373,7 +1355,8 @@ unsigned tlb_tag_array::flush()
 
 unsigned tlb_tag_array::flush(int appID)
 {
-  App* app = App::get_app(App::get_app_id(appID));
+  App* app = App::get_app(appID);
+  //App* app = App::get_app(App::get_app_id(appID));
   unsigned num_flushed = 0;
   if (m_shared_tlb != NULL) { //L1 TLB Flush, either no flush or all flush
     m_shared_tlb->update_L1_ready_cycle(appID,
@@ -1418,7 +1401,8 @@ void tlb_tag_array::print_statistics()
 }
 
 void tlb_tag_array::reset_bypass_stats(unsigned appID) {
-  App* app = App::get_app(App::get_app_id(appID));
+  App* app = App::get_app(appID);
+  //App* app = App::get_app(App::get_app_id(appID));
 
   //Reset stats
   app->epoch_accesses = 0;
@@ -1594,9 +1578,11 @@ void tlb_tag_array::reset_bypass_stats(unsigned appID) {
 
 //Should only be called from the L2 (shared) TLB
 bool tlb_tag_array::bypass_TLB(mem_fetch * mf, unsigned appID) {
-  App* app = App::get_app(App::get_app_id(appID));
+  App* app = App::get_app(mf->get_appID());
+  //App* app = App::get_app(App::get_app_id(appID));
   if (app->epoch_accesses > m_config->tlb_stat_resets) {
-    reset_bypass_stats(appID);
+    reset_bypass_stats(mf->get_appID());
+    //reset_bypass_stats(appID);
   }
   if (app->epoch_previous_miss_rate > (float) m_config->max_tlb_miss / 100) {
     return (previous_bypass_enabled && !app->wid_tokens[(mf->get_sid() * 100) + mf->get_wid()]);
@@ -1605,7 +1591,8 @@ bool tlb_tag_array::bypass_TLB(mem_fetch * mf, unsigned appID) {
 }
 
 unsigned tlb_tag_array::get_concurrent_tlb_app(int appID) {
-  App* app = App::get_app(App::get_app_id(appID));
+  App* app = App::get_app(appID);
+  //App* app = App::get_app(App::get_app_id(appID));
   return app->concurrent_tracker;
 }
 
@@ -1725,8 +1712,8 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
     //L1_TLB
     if(m_shared_tlb!= NULL)
     {
-//        if(COALESCE_DEBUG) printf("Probe into L1 TLBs for VA = %x, appID = %d\n", mf->get_addr(), accessor);
-        app->addr_mapping.insert(searched_key);
+        if(COALESCE_DEBUG) printf("Probe into L1 TLBs for VA = %x, appID = %d\n", mf->get_addr(), accessor);
+        app->addr_mapping.insert(searched_key); 
 
         //While flushing
         if(m_config->TLB_flush_enable && (gpu_sim_cycle+gpu_tot_sim_cycle < m_shared_tlb->L1_ready_cycle[m_core_id]))
@@ -1796,6 +1783,7 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
             {
                 if(HUGEPAGE_DEBUG) printf("Found TLB entry in the lastpage victim TLB (should not be here if MASK is not enabled. key = %x\n", searched_key);
 
+                //Rachata: For replacement policy 1
                 (*tlb_entry_sharer)[searched_key].insert(mf->get_wid()); //Put this wid as one of the sharer of this TLB entry
 
                 m_stat->tlb_bypassed++;
@@ -1815,6 +1803,7 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
             if(bypass_find_itr != m_shared_tlb->bypass_done_queue->end())
             {
 
+                //Rachata: For replacement policy 1
                 (*tlb_entry_sharer)[searched_key].insert(mf->get_wid()); //Put this wid as one of the sharer of this TLB entry
 
                 m_stat->tlb_bypassed++;
@@ -1841,21 +1830,10 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
         {
 
             if(HUGEPAGE_DEBUG) printf("Searched key = %x is in the MSHR\n", key);
+            //Rachata: For replacement policy 1
             int old_size = (*tlb_entry_sharer)[searched_key].size();
             (*tlb_entry_sharer)[searched_key].insert(mf->get_wid()); //Put this wid as one of the sharer of this TLB entry
             int new_size = (*tlb_entry_sharer)[searched_key].size();
-
-
-
-//            unsigned new_count = miss_tracker_count[mf->get_appID()]->find(key)->second + 1;
-//            miss_tracker_count[mf->get_appID()]->erase(key);
-//            miss_tracker_count[mf->get_appID()]->insert(std::pair<new_addr_type,unsigned>(key,new_count));
-
-//            for(std::set<new_addr_type>::for(iterator itr = m_shared_tlb->miss_queue->begin(); itr!=m_shared_tlb->miss_queue->end();itr++)
-//            {
-//                printf("%x, ",*itr);
-//            }
-//            printf("}\n");
             return TLB_HIT_RESERVED;
         }
 
@@ -1916,12 +1894,6 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
                 if(tlb_status == TLB_MISS)
                 {
 
-                    //New miss, add to the tracker
-    //                miss_tracker[mf->get_appID()]->push_front(key);
-    //                miss_tracker_count[mf->get_appID()]->insert(std::pair<new_addr_type,unsigned>(key,(unsigned)1));
-    //                miss_tracker_timestamp[mf->get_appID()]->push_front(gpu_sim_cycle + gpu_tot_sim_cycle);
-
-
                     m_shared_tlb->miss_queue->insert(key);
                     app->concurrent_tracker++;
 
@@ -1966,12 +1938,6 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
         } //End of large page L1 TLB search
         else{
             std::list<new_addr_type>::iterator findIter = std::find(tag_array->begin(), tag_array->end(), key);
-        //    if(m_page_manager->check_wrong_ownership(addr, accessor)){
-        //        m_stat->tlb_fault++;
-        //        m_stat->tlb_fault_app[accessor]++;
-        //        return TLB_FAULT;
-        //    }
-        //    else if(findIter != tag_array->end())
             if(findIter != tag_array->end())
             {
                 tag_array->remove(key);
@@ -2006,12 +1972,6 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
                 tlb_request_status tlb_status = m_shared_tlb->probe(addr,accessor, mf);
                 if(tlb_status == TLB_MISS)
                 {
-
-                    //New miss, add to the tracker
-    //                miss_tracker[mf->get_appID()]->push_front(key);
-    //                miss_tracker_count[mf->get_appID()]->insert(std::pair<new_addr_type,unsigned>(key,(unsigned)1));
-    //                miss_tracker_timestamp[mf->get_appID()]->push_front(gpu_sim_cycle + gpu_tot_sim_cycle);
-
 
                     m_shared_tlb->miss_queue->insert(key);
                     app->concurrent_tracker++;
@@ -2062,6 +2022,7 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
 
 //        if(COALESCE_DEBUG) printf("Probe into L2 TLBs for VA = %x, appID = %d\n", mf->get_addr(), accessor);
         app->addr_mapping.insert(searched_key); 
+
         //While flushing
         if(m_config->TLB_flush_enable && (gpu_sim_cycle+gpu_tot_sim_cycle < L2_ready_cycle))
         {
@@ -2119,8 +2080,8 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
         else findIter = std::find(l2_tag_array[index]->begin(), l2_tag_array[index]->end(), key);
         if(to_large_page && findIter != large_l2_tag_array[index]->end()) //Found in the large page TLB
         {
+            //Rachata: For replacement policy 1
             (*tlb_entry_sharer)[key].insert(mf->get_wid()); //Put this wid as one of the sharer of this TLB entry
-
             large_l2_tag_array[index]->remove(key);
             large_l2_tag_array[index]->push_front(key); // insert at MRU
             m_stat->tlb2_hit++;
@@ -2144,6 +2105,7 @@ enum tlb_request_status tlb_tag_array::probe( new_addr_type addr, unsigned acces
         }
         else if(!to_large_page && findIter != l2_tag_array[index]->end()) //Found in the small page TLB
         {
+            //Rachata: For replacement policy 1
             (*tlb_entry_sharer)[key].insert(mf->get_wid()); //Put this wid as one of the sharer of this TLB entry
 
 

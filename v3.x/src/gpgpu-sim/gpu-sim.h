@@ -475,8 +475,9 @@ struct memory_config {
    std::vector<unsigned> * page_sizes;
    unsigned dram_row_size;
    unsigned DRAM_size;
-   float DRAM_fragmentation;
-   unsigned DRAM_fragmentation_pages_per_frame;
+   unsigned DRAM_fragmentation;
+   unsigned DRAM_pre_populate;
+   unsigned DRAM_pre_populate_MOSAIC;
    unsigned tlb_dram_aware;
    unsigned dram_switch_factor;
    unsigned dram_switch_max;

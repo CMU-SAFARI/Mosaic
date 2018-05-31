@@ -42,7 +42,7 @@
 #define ALLOC_DEBUG 0
 #define MERGE_DEBUG 0
 #define MERGE_DEBUG_SHORT 0
-#define PROMOTE_DEBUG 1
+#define PROMOTE_DEBUG 0
 #define ALLOC_DEBUG_LONG 0
 //Enable this will print fault queue entries
 #define GET_FAULT_STATUS 1
@@ -767,7 +767,6 @@ void DRAM_layout::set_stat(memory_stats_t * stat)
     m_stats = stat;
 }
 
-// Make sure all parent pages are removed from the free page list when this_page is allocated, and mark this parent page to belong to the app
 void DRAM_layout::propagate_parent_page_as_used(page * this_page)
 {
     if(this_page->parent_page == NULL) return;
@@ -803,7 +802,6 @@ page * DRAM_layout::get_free_base_page(page * parent)
             free = *itr;
             break;
         }
-        //TODO: Check if this page is in the free page list, make sure the list is consistent
     }
     return free;
 }
@@ -985,6 +983,18 @@ void DRAM_layout::swap_page(page * swap_in, page * swap_out)
     swap_out->utilization = temp4;
     //Note that we do not have to swap parent pages, SA, bank, channel IDs. The physical page structures are the same, only appID and VA page are different
 
+    // Then, propagate the swap to all the sub_pages
+//    if(swap_in->sub_pages!=NULL)
+//    {
+//        std::list<page*>::iterator itr_in = swap_in->sub_pages->begin();
+//        std::list<page*>::iterator itr_out = swap_out->sub_pages->begin();
+//        for(;itr_in!=swap_in->sub_pages->end();)
+//        {
+//            swap_page(*itr_in,*itr_out); //Do the swapping for all the sub_pages
+//            itr_in++;
+//            itr_out++;
+//        }
+//    }
 
 }
 
@@ -1255,6 +1265,7 @@ bool DRAM_layout::RC_test()
     return true;
 }
 
+// Rachata: This is obsolete. 
 //Perform compaction by merging pages from page 2 to pages from page 1, free up page 2
 bool DRAM_layout::compaction(page * page1, page* page2)
 {
@@ -1409,10 +1420,6 @@ int DRAM_layout::coalesce_page(page * this_page)
     if(COALESCE_DEBUG) printf("in MMU, coalescing page with base addr = %x (VA = %x), parent page is %x\n", this_page->starting_addr, this_page->va_page_addr, parent->starting_addr);
 
 
-    //this out by searching for the parent page in the occupied_pages[APP]. Can
-    //coalesce right away when it exists. If multiple pages are there, then
-    //this parent page should be in occupied_pages[MIXAPP]
-
     for(std::list<page*>::iterator itr = parent->sub_pages->begin();itr != parent->sub_pages->end();itr++)
     {
         count++;
@@ -1464,6 +1471,7 @@ int DRAM_layout::coalesce_page(page * this_page)
         {
             (*itr)->used = false; //Mark the page as not used (because superpage is the active node)
         }
+
 
         // Remove all free page under this super page range
         while(!remove_free_list.empty())
@@ -1545,13 +1553,11 @@ int DRAM_layout::coalesce_page(page * this_page)
             occupied_pages[this_appID]->push_back(target_free_page);
         
 
-            return 2; 
 
         } //End of step 2
         else //Begin step 3: No free large page available, copy pages from other apps out
         {
             if(COALESCE_DEBUG || COALESCE_DEBUG_SMALL) printf("No more huge free page for coalesceing page %x, base VA = %x, size = %u, free page size = %d\n",this_page->starting_addr,this_page->va_page_addr,this_page->size, free_pages[parent->size] > 0);
-        return 0; 
             // Do we want to copy from other location to fill in this superpage?
             // If this is the case, setup DRAM commands to send
     
@@ -1864,20 +1870,12 @@ new_addr_type mmu::get_pa(new_addr_type addr, int appID, bool isRead){
     bool fault;
     return get_pa(addr, appID, &fault, isRead);
     
-//
-////new_addr_type mmu::get_pa(mem_fetch * mf){
-//    assign_va_to_pa(addr, appID,isRead);
-//    //mf->set_page_fault(!(assign_va_to_pa(mf))); //assign_va_to_pa return false if there is a page fault
-//    return (((*va_to_pa_mapping)[addr >> m_config->page_size]) << m_config->page_size) | (addr & (m_config->base_page_size-1));
-//    //return (*va_to_pa_mapping)[addr];
 }
 
 
 ////Return physical address given a mem fetch. This is called from addrdec when it only want to check which memory partition a request go to
 new_addr_type mmu::old_get_pa(new_addr_type addr, int appID, bool isRead){
 
-
-//    if(COALESCE_DEBUG) printf("Getting PA for VA = %x, app = %d, actual PA is %x\n", addr, appID, (((*va_to_pa_mapping)[addr >> m_config->page_size]) << m_config->page_size) | (addr & (m_config->base_page_size-1)));
 
     bool fault;
     return old_get_pa(addr, appID, &fault, isRead);
@@ -1928,11 +1926,12 @@ bool mmu::allocate_PA(new_addr_type va_base, new_addr_type pa_base, int appID)
 // This set flags in physical page pa_base as used by appID. Initilize all the page metdata
 // Also create the page table entries as needed. Return false if for some reason this pa_base
 // conflict with PT_SPACE
+// Rachata: This should behave similarly to calling allocate_page while get_pa is called but VA is never seen before in the old version.
 page * DRAM_layout::allocate_PA(new_addr_type va_base, new_addr_type pa_base, int appID)
 {
     //Grab this physical page, check if it is occupied by PT
     if((MERGE_DEBUG && ((gpu_sim_cycle+gpu_tot_sim_cycle) > 0)) || ALLOC_DEBUG || ALLOC_DEBUG_SHORT) printf("Trying to get physical page for VA = %x using PA %x as the key. App creation ID = %d,\n",va_base, pa_base, appID);
-    page * target_page = find_page_from_pa(pa_base);
+    page * target_page = find_page_from_pa(pa_base); 
 
     if(target_page == NULL)
     {
@@ -1959,6 +1958,7 @@ page * DRAM_layout::allocate_PA(new_addr_type va_base, new_addr_type pa_base, in
 //    //Set this page's parent page as used by the appID. This can also detect the case when multiple apps are in the same huge page range, and will mark appID as MIXAPP
 //    propagate_parent_page_as_used(target_page);    
     
+    //Create PTE entry for this page 
     target_page->leaf_pte = m_pt_root->add_entry(va_base, appID, true);
 
     //Return the page to MMU so it can get the mapping between VA and page
@@ -2005,6 +2005,7 @@ void DRAM_layout::update_parent_metadata(page * triggered_page)
     check_utilization(parent); //update parent's utilization
 }
 
+// Rachata: New get_pa would just update the metadata then call translate(va, appID)
 // This is called by the address decoder in main gpgpu-sim
 new_addr_type mmu::get_pa(new_addr_type addr, int appID, bool * fault, bool isRead){
 
@@ -2051,6 +2052,8 @@ new_addr_type mmu::get_pa(new_addr_type addr, int appID, bool * fault, bool isRe
 
 }
 
+////Rachata: After Josh's allocator, Hub->translate(VA, appID) supersede all these.
+////Return physical address given a mem fetch
 new_addr_type mmu::old_get_pa(new_addr_type addr, int appID, bool * fault, bool isRead){
 
     //page * this_page = m_DRAM->get_page_from_va(addr,appID); This is slow, use the map to prevent this search
@@ -2111,7 +2114,6 @@ new_addr_type mmu::old_get_pa(new_addr_type addr, int appID, bool * fault, bool 
 
     if(this_page == NULL) //If we run out of space
     {
-        //TODO-low priority: Eviction and then use the new acquired free page
     }
     else
     {
@@ -2120,25 +2122,6 @@ new_addr_type mmu::old_get_pa(new_addr_type addr, int appID, bool * fault, bool 
 
     if(ALLOC_DEBUG) printf("Requesting the page with va = 0x%x, appID = %d, fault = %d, returning physical address 0x%x, starting page = 0x%x\n",addr, appID, *fault, this_page->starting_addr | (addr & this_page->size-1), this_page->starting_addr);
     return (this_page->starting_addr | (addr & (this_page->size-1))); 
-
-    
-
-//Old
-//    *fault = !(assign_va_to_pa(addr, appID,isRead)); //assign_va_to_pa return false if there is a new page fault
-//
-//    new_addr_type key = addr >> m_config->page_size;
-//    if(ALLOC_DEBUG)
-//        printf("Translating the virtual address = %x, app = %d, fault = %d. VA Page = 0x%x (%d), base_page_size = 0x%x (%d)\n", addr, appID, *fault, key, key, m_config->base_page_size, m_config->base_page_size);
-//
-//    if((*fault) == true && (m_config->page_transfer_time > 0 || m_config->enable_PCIe != 0)) //If PCIe modeling is enabled
-//    {
-//        m_DRAM->insert_page_fault(key,appID);
-//    }
-//
-//    if(ALLOC_DEBUG) printf("Address %x is mapped to %x\n", addr, (((*va_to_pa_mapping)[addr >> m_config->page_size]) << m_config->page_size) | (addr & (m_config->base_page_size-1)) );
-//    return (((*va_to_pa_mapping)[addr >> m_config->page_size]) << m_config->page_size) | (addr & (m_config->base_page_size-1));
-    //mf->set_page_fault(!(assign_va_to_pa(mf))); //assign_va_to_pa return false if there is a page fault
-    //return (*va_to_pa_mapping)[addr];
 }
 
 page * mmu::find_physical_page(mem_fetch * mf)

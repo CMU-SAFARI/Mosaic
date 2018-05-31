@@ -414,10 +414,12 @@ void memory_config::reg_options(class OptionParser * opp)
       "Size of a dram row buffer (factor of 2, 12 means 2^12, default = 4KB)", "12");
   option_parser_register(opp, "-DRAM_size", OPT_UINT32, &DRAM_size,  //new
       "Size of the DRAM", "3221225472");
-  option_parser_register(opp, "-DRAM_fragmentation", OPT_FLOAT, &DRAM_fragmentation,  //new
-      "Initial fragmentation as percent of the DRAM", "0.0");
-  option_parser_register(opp, "-DRAM_fragmentation_pages_per_frame", OPT_UINT32, &DRAM_fragmentation_pages_per_frame,  //new
-      "Number of pages to add to a fragmented frame", "1");
+  option_parser_register(opp, "-DRAM_fragmentation", OPT_UINT32, &DRAM_fragmentation,  //new
+      "DRAM_fragmentation in percentage: fragment these many percent of DRAM (default = 0)", "0");
+  option_parser_register(opp, "-DRAM_pre_populate", OPT_UINT32, &DRAM_pre_populate,  //new
+      "Pre-populate DRAM with fragmentation (default = 0)", "0");
+  option_parser_register(opp, "-DRAM_pre_populate_MOSAIC", OPT_UINT32, &DRAM_pre_populate_MOSAIC,  //new
+      "Pre-populate DRAM with fragmentation with MOSAIC invariant (default = 90 percent)", "90");
   //    option_parser_register(opp, "-tlb_template_bits", OPT_UINT32, &tlb_template_bits,  //new
   //                 "Template bits for all TLB's memory accesses", "4294967296");
   //    option_parser_register(opp, "-page_appID_bits", OPT_UINT32, &page_appID_bits,  //new
@@ -864,7 +866,6 @@ void gpgpu_sim::reinit_clock_domains(void)
 
 bool gpgpu_sim::active()
 {
-  //    gpu_tot_sim_cycle, gpu_sim_cycle, gpu_deadlock, m_memory_config->m_n_mem, icnt_busy(), get_more_cta_left());
 
   if (m_config.gpu_max_cycle_opt && (gpu_tot_sim_cycle + gpu_sim_cycle) >= m_config.gpu_max_cycle_opt)
     return false;
